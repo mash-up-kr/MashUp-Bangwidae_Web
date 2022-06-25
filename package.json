@@ -7,10 +7,21 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
+    "lint-staged": "lint-staged",
+    "postinstall": "husky install",
     "lint:code": "eslint --fix --ext .js,.jsx,.ts,.tsx src",
     "lint:code-fix": "eslint --fix --ext .js,.jsx,.ts,.tsx src",
     "lint:style": "stylelint **/*.(ts|tsx)",
     "lint:style-fix": "stylelint **/*.(ts|tsx) --fix"
+  },
+  "lint-staged": {
+    "@(pages|src)/**/*.(ts|tsx)": [
+      "prettier --write",
+      "eslint --fix"
+    ],
+    "@(pages|src)/**/*.tsx": [
+      "stylelint --fix"
+    ]
   },
   "dependencies": {
     "next": "12.1.6",
@@ -24,8 +35,18 @@
     "@types/react": "18.0.14",
     "@types/react-dom": "18.0.5",
     "@types/styled-components": "^5.1.25",
+    "@typescript-eslint/eslint-plugin": "latest",
+    "@typescript-eslint/parser": "latest",
     "eslint": "8.18.0",
+    "eslint-config-airbnb": "^19.0.4",
+    "eslint-config-airbnb-typescript": "^17.0.0",
     "eslint-config-next": "12.1.6",
+    "eslint-config-prettier": "^8.5.0",
+    "eslint-plugin-import": "latest",
+    "eslint-plugin-jsx-a11y": "latest",
+    "eslint-plugin-react": "latest",
+    "husky": "^8.0.0",
+    "lint-staged": "^13.0.3",
     "postcss": "^8.4.5",
     "postcss-syntax": "^0.36.2",
     "prettier": "^2.7.1",
