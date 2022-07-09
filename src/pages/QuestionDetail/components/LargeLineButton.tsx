@@ -26,7 +26,7 @@ const Button = styled.button<{
   justify-content: center;
   height: 30px;
   ${typography.Caption2_Bold_12}
-  margin: 0 auto;
+  /* margin: 0 auto; */
   padding: 8px 12px;
   color: ${({ theme }) => `${theme.color.basic.White}`};
   background: transparent;
