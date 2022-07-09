@@ -1,5 +1,5 @@
 import axios, { AxiosInstance, AxiosRequestConfig, Method } from 'axios';
-import { HTTP_METHODS } from '@/consts';
+import { HTTP_METHODS } from '@/src/consts';
 
 const axiosInstance: AxiosInstance = axios.create({
   baseURL: '',
