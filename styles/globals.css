@@ -4,6 +4,7 @@
 }
 
 * {
+  box-sizing: border-box;
   font-family: E_SFPro_Regular, K_SpoqaHanSansNeo_Regular, sans-serif;
 }
 
@@ -11,10 +12,18 @@ html,
 body {
   margin: 0;
   padding: 0;
-  font-family: E_SFPro_Regular, K_SpoqaHanSansNeo_Regular, sans-serif;
   color: white;
-  border: 1px solid #353535;
+  font-family: E_SFPro_Regular, K_SpoqaHanSansNeo_Regular, sans-serif;
   background-color: #141414;
+}
+
+button {
+  border: 1px solid #353535;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
 }
 
 @font-face {
@@ -57,13 +66,4 @@ body {
   font-family: E_SFPro_Bold;
   src: url('/fonts/E_SFPro_Bold.woff2') format('woff2');
   unicode-range: var(--en-unicode);
-}
-
-a {
-  color: inherit;
-  text-decoration: none;
-}
-
-* {
-  box-sizing: border-box;
 }
