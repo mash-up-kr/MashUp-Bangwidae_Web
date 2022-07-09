@@ -1,5 +1,5 @@
 function Example() {
-  return <div>Example Page</div>;
+  return <div>Example Pagesss</div>;
 }
 
 export default Example;
