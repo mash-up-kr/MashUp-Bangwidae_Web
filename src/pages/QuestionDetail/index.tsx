@@ -1,5 +1,7 @@
+import { CommentCard } from './components';
+
 function QuestionDetail() {
-  return <div>질문 상세페이지입니다.</div>;
+  return <CommentCard />;
 }
 
 export default QuestionDetail;

@@ -1,2 +1,7 @@
-// eslint-disable-next-line no-restricted-exports
-export { default } from 'pages/QuestionDetail';
+import { QuestionDetail } from '@/src/pages';
+
+const QuestionDetailPage = () => {
+  <QuestionDetail />;
+};
+
+export default QuestionDetailPage;
