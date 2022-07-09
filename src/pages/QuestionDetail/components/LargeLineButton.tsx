@@ -7,10 +7,15 @@ type ButtonType = 'default' | 'primary';
 interface Props {
   buttonType: ButtonType;
   children: ReactNode;
+  onClick: React.MouseEventHandler<HTMLButtonElement>;
 }
 
-function LargeLineButton({ buttonType, children }: Props) {
-  return <Button buttonType={buttonType}>{children}</Button>;
+function LargeLineButton({ buttonType = 'default', onClick, children }: Props) {
+  return (
+    <Button buttonType={buttonType} onClick={onClick}>
+      {children}
+    </Button>
+  );
 }
 
 const Button = styled.button<{
