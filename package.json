@@ -12,7 +12,8 @@
     "lint:code": "eslint --fix --ext .js,.jsx,.ts,.tsx src",
     "lint:code-fix": "eslint --fix --ext .js,.jsx,.ts,.tsx src",
     "lint:style": "stylelint **/*.(ts|tsx)",
-    "lint:style-fix": "stylelint **/*.(ts|tsx) --fix"
+    "lint:style-fix": "stylelint **/*.(ts|tsx) --fix",
+    "ts-lint": "tsc — noEmit — incremental — watch"
   },
   "lint-staged": {
     "@(pages|src)/**/*.(ts|tsx)": [
@@ -39,6 +40,7 @@
     "@types/styled-components": "^5.1.25",
     "@typescript-eslint/eslint-plugin": "latest",
     "@typescript-eslint/parser": "latest",
+    "@yarnpkg/sdks": "^3.0.0-rc.11",
     "eslint": "8.18.0",
     "eslint-config-airbnb": "^19.0.4",
     "eslint-config-airbnb-typescript": "^17.0.0",
