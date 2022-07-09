@@ -1,4 +1,6 @@
+import { ReactNode } from 'react';
 import styled from 'styled-components';
+import { typography } from '@/styles';
 
 type Name = 'chat' | 'hand' | 'heart' | 'share';
 
@@ -6,13 +8,15 @@ export interface IconProps {
   name: Name;
   color: string;
   size: number;
+  children: ReactNode;
   onClick: React.MouseEventHandler<HTMLButtonElement>;
 }
 
-function Icon({ name, color, size, onClick }: IconProps) {
+function Icon({ name, color, size, children, onClick }: IconProps) {
   return (
-    <Button name={name} color={color} size={size} onClick={onClick}>
-      <Img src={`/icons/${name}.svg`} alt={name} />
+    <Button name={name} color={color} onClick={onClick}>
+      <Img src={`/icons/${name}.svg`} size={size} alt={name} />
+      <span>{children}</span>
     </Button>
   );
 }
@@ -21,18 +25,22 @@ export default Icon;
 
 const Button = styled.button<{
   color: string;
-  size: number;
 }>`
-  width: ${({ size }) => `${size}px`};
-  height: ${({ size }) => `${size}px`};
+  display: flex;
+  align-items: center;
+  justify-content: center;
   padding: 0;
   color: ${({ color }) => color};
   background-color: transparent;
   border: 0;
   cursor: pointer;
+  ${typography.Caption2_Bold_12}
 `;
 
-const Img = styled.img`
-  width: 100%;
-  height: 100%;
+const Img = styled.img<{
+  size: number;
+}>`
+  width: ${({ size }) => `${size}px`};
+  height: ${({ size }) => `${size}px`};
+  padding-right: 4px;
 `;
