@@ -1,37 +1,40 @@
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
+import { ReactNode } from 'react';
+import { typography } from '@/styles';
+
+type ButtonType = 'default' | 'primary';
 
 interface Props {
-  borderColor: string;
-  fontColor: string;
-  children: string;
+  buttonType: ButtonType;
+  children: ReactNode;
 }
 
-function LargeLineButton({ borderColor, fontColor, children }: Props) {
-  return (
-    <Button type="button" borderColor={borderColor} fontColor={fontColor}>
-      {children}
-    </Button>
-  );
+function LargeLineButton({ buttonType, children }: Props) {
+  return <Button buttonType={buttonType}>{children}</Button>;
 }
 
-/*
- ** SCSS 변수 적용
- */
 const Button = styled.button<{
-  borderColor?: string;
-  fontColor?: string;
+  buttonType: ButtonType;
 }>`
   display: flex;
   align-items: center;
   justify-content: center;
-  height: 18px;
-  color: ${({ fontColor }) => `${fontColor}`};
-  font-weight: 700;
-  font-size: 12px;
-  line-height: 18px;
+  height: 30px;
+  ${typography.Caption2_Bold_12}
+  margin: 0 auto;
+  padding: 8px 12px;
+  color: ${({ theme }) => `${theme.color.basic.White}`};
   background: transparent;
-  border: ${({ borderColor }) => `1px solid ${borderColor}`};
+  border: ${({ theme }) => `1px solid ${theme.color.gray.Gray700}`};
   border-radius: 40px;
+  cursor: pointer;
+  ${({ buttonType }) =>
+    buttonType === 'primary' &&
+    css`
+      padding: 6px 12px;
+      color: ${({ theme }) => theme.color.primary.Lime300};
+      border: ${({ theme }) => `1px solid ${theme.color.primary.Lime300}`};
+    `}
 `;
 
 export default LargeLineButton;
