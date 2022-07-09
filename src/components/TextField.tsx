@@ -9,25 +9,36 @@ interface TextFieldProps {
   maxLength?: number;
   placeholder?: string;
   hintText?: string;
+  className?: string;
   onChange: (value: string) => void;
 }
 
-function TextField({ value, label, maxLength, placeholder, hintText, onChange }: TextFieldProps) {
+function TextField({
+  value,
+  label,
+  maxLength,
+  placeholder,
+  hintText,
+  className,
+  onChange,
+}: TextFieldProps) {
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     onChange(e.target.value);
   };
 
   return (
-    <Element>
+    <Element className={className}>
       {label && <Label>{label}</Label>}
       <Input value={value} onChange={handleChange} placeholder={placeholder} isError={!!hintText} />
-      {hintText && <HintText>{hintText}</HintText>}
-      {maxLength && (
-        <MaxLength>
-          {value.length}
-          <span>/{maxLength}</span>
-        </MaxLength>
-      )}
+      <BottomSection>
+        <HintText>{hintText}</HintText>
+        {maxLength && (
+          <MaxLength>
+            {value.length}
+            <span>/{maxLength}</span>
+          </MaxLength>
+        )}
+      </BottomSection>
     </Element>
   );
 }
@@ -50,11 +61,13 @@ const Input = styled.input<{ isError?: boolean }>`
   background-color: transparent;
   border: none;
   border-bottom: 1px solid
-    ${({ theme, isError }) => (isError ? theme.color.error.Red500 : theme.color.primary.Lime300)};
+    ${({ theme, isError }) => (isError ? theme.color.error.Red500 : theme.color.gray.Gray800)};
   box-shadow: none;
   caret-color: ${({ theme }) => theme.color.primary.Lime300};
   ${typography.Giant2_Bold_20}
   &:focus {
+    border-bottom: 1px solid
+      ${({ theme, isError }) => (isError ? theme.color.error.Red500 : theme.color.primary.Lime300)};
     outline: none;
   }
   ::placeholder {
@@ -62,17 +75,18 @@ const Input = styled.input<{ isError?: boolean }>`
   }
 `;
 
+const BottomSection = styled.div`
+  display: flex;
+  justify-content: space-between;
+`;
+
 const HintText = styled.div`
-  position: absolute;
-  left: 0;
   margin-top: 7px;
   color: ${({ theme }) => theme.color.error.Red500};
   ${typography.Caption1_Regular_13}
 `;
 
 const MaxLength = styled.div`
-  position: absolute;
-  right: 0;
   margin-top: 7px;
   ${typography.Caption1_Regular_13}
   color: ${({ theme }) => theme.color.gray.Gray500};
