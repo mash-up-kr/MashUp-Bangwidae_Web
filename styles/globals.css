@@ -5,7 +5,7 @@
 
 * {
   box-sizing: border-box;
-  font-family: E_SFPro_Regular, K_SpoqaHanSansNeo_Regular, sans-serif;
+  font-family: E_SFPro_Regular, K_SpoqaHanSansNeo_Regular, Apple SD Sandol Gothic Neo, sans-serif !important;
 }
 
 html,
@@ -13,7 +13,7 @@ body {
   margin: 0;
   padding: 0;
   color: white;
-  font-family: E_SFPro_Regular, K_SpoqaHanSansNeo_Regular, sans-serif;
+  font-family: E_SFPro_Regular, K_SpoqaHanSansNeo_Regular, Apple SD Sandol Gothic Neo, sans-serif;
   background-color: #141414;
 }
 
