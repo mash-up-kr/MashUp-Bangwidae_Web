@@ -16,7 +16,7 @@ function Icon({ name, color, size, children, onClick }: IconProps) {
   return (
     <Button name={name} color={color} onClick={onClick}>
       <Img src={`/icons/${name}.svg`} size={size} alt={name} />
-      <span>{children}</span>
+      <TextContent>{children}</TextContent>
     </Button>
   );
 }
@@ -43,4 +43,9 @@ const Img = styled.img<{
   width: ${({ size }) => `${size}px`};
   height: ${({ size }) => `${size}px`};
   padding-right: 4px;
+`;
+
+const TextContent = styled.span`
+  ${typography.Caption2_Bold_12}
+  font-weight: 400;
 `;
