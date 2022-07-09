@@ -6,10 +6,10 @@ import Flex from '@/src/components/Flex';
 import Tag from '@/src/components/Tag';
 
 function openInquiry() {
-  const TAGS = ['ENFP', '맛집', '쇼핑', '재미'];
+  const TAGS = ['ENFP', '맛집', '쇼핑'];
 
   return (
-    <div>
+    <>
       <Header>
         <span>도리를 찾아서님은,</span>
         <br />
@@ -19,28 +19,30 @@ function openInquiry() {
       </Header>
 
       <Section>
-        <Image src={thumbNail} alt="유저 이미지" width={250} height={250} />
+        <Image src={thumbNail} alt="유저 이미지" width={200} height={200} />
         <Flex direction="column" align="center" style={{ marginTop: 20, width: '200px' }}>
           <Flex justify="center" align="center">
             <Title style={{ paddingTop: 4 }}>도리를 찾아서</Title>
             <Tag style={{ marginLeft: 8 }}>Lv.1</Tag>
           </Flex>
-          <Description>{` 안녕하세요 {userName}입니다 모든 질문 환영해요`}</Description>
+          <Description
+            style={{ color: '#767676', whiteSpace: 'pre-line' }}
+          >{` 안녕하세요 도리를 찾아서입니다.\n모든 질문 환영해요`}</Description>
         </Flex>
       </Section>
 
       <Footer>
-        <button type="button" style={{ width: 90, height: 90 }} />
+        <QuestionButton onClick={() => {}}>질문하기</QuestionButton>
         <Container>
-          <h3 style={{ paddingBottom: 10 }}>성향</h3>
+          <TagTitle style={{ paddingBottom: 10 }}>성향</TagTitle>
           <Flex>
             {TAGS.map((tag) => (
-              <Tag key={tag}>{tag}</Tag>
+              <TendencyTag key={tag}>{tag}</TendencyTag>
             ))}
           </Flex>
         </Container>
       </Footer>
-    </div>
+    </>
   );
 }
 
@@ -68,6 +70,8 @@ const Footer = styled.div`
   bottom: 0;
   display: flex;
 
+  width: 100vw;
+
   margin-bottom: 3vh;
   padding-left: 24px;
 `;
@@ -75,9 +79,17 @@ const Footer = styled.div`
 const Container = styled.div`
   display: flex;
   flex-direction: column;
+  justify-content: center;
+  margin-left: 8px;
 
-  padding-top: 18px;
-  padding-left: 16px;
+  padding: 0 16px;
+  background: ${({ theme }) => theme.color.gray.Gray900};
+  border-radius: 8px;
+`;
+
+const TagTitle = styled.h3`
+  color: ${({ theme }) => theme.color.gray.Gray500};
+  ${typography.Body_Medium_14}
 `;
 
 const StyledSpan = styled.span`
@@ -93,4 +105,33 @@ const Description = styled.p`
   margin-top: 8px;
   ${typography.Body_Regular_14}
   color: ${({ theme }) => theme.color};
+`;
+
+const TendencyTag = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  min-width: 42px;
+  margin-right: 8px;
+
+  padding: 2px 8px;
+  color: ${({ theme }) => theme.color.gray.Gray100};
+
+  font-weight: 700;
+  font-size: 14px;
+  background: ${({ theme }) => theme.color.gray.Gray700};
+
+  border-radius: 4px;
+`;
+
+const QuestionButton = styled.button`
+  width: 22vw;
+  height: 13vh;
+  color: ${({ theme }) => theme.color.primary.Lime300};
+  font-size: ${typography.Body_Bold_14};
+  background: transparent;
+
+  border: 1px solid ${({ theme }) => theme.color.primary.Lime300};
+  border-radius: 10px;
 `;
