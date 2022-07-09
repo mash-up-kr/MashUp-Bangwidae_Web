@@ -34,6 +34,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageLocation": "./",\
           "packageDependencies": [\
             ["@stylelint/postcss-css-in-js", "virtual:1fbd4f2c9aa3a03ac18099f09c5d6be2da6c1cb1010c20668cc6aa6083bebfa409fa9e1becb8a79d1553bc0825388e53284c58854de362db68d1ea8fa75d9d8c#npm:0.37.3"],\
+            ["@types/nanoid", "npm:3.0.0"],\
             ["@types/node", "npm:18.0.0"],\
             ["@types/react", "npm:18.0.14"],\
             ["@types/react-dom", "npm:18.0.5"],\
@@ -52,6 +53,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["eslint-plugin-react", "virtual:1fbd4f2c9aa3a03ac18099f09c5d6be2da6c1cb1010c20668cc6aa6083bebfa409fa9e1becb8a79d1553bc0825388e53284c58854de362db68d1ea8fa75d9d8c#npm:7.30.1"],\
             ["husky", "npm:8.0.1"],\
             ["lint-staged", "npm:13.0.3"],\
+            ["nanoid", "npm:4.0.0"],\
             ["next", "virtual:1fbd4f2c9aa3a03ac18099f09c5d6be2da6c1cb1010c20668cc6aa6083bebfa409fa9e1becb8a79d1553bc0825388e53284c58854de362db68d1ea8fa75d9d8c#npm:12.1.6"],\
             ["postcss", "npm:8.4.14"],\
             ["postcss-syntax", "virtual:1fbd4f2c9aa3a03ac18099f09c5d6be2da6c1cb1010c20668cc6aa6083bebfa409fa9e1becb8a79d1553bc0825388e53284c58854de362db68d1ea8fa75d9d8c#npm:0.36.2"],\
@@ -873,6 +875,16 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageLocation": "./.yarn/cache/@types-minimist-npm-1.2.2-a445de65da-b8da83c66e.zip/node_modules/@types/minimist/",\
           "packageDependencies": [\
             ["@types/minimist", "npm:1.2.2"]\
+          ],\
+          "linkType": "HARD"\
+        }]\
+      ]],\
+      ["@types/nanoid", [\
+        ["npm:3.0.0", {\
+          "packageLocation": "./.yarn/cache/@types-nanoid-npm-3.0.0-4cde7b123c-6e84d71ce2.zip/node_modules/@types/nanoid/",\
+          "packageDependencies": [\
+            ["@types/nanoid", "npm:3.0.0"],\
+            ["nanoid", "npm:4.0.0"]\
           ],\
           "linkType": "HARD"\
         }]\
@@ -5710,6 +5722,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageDependencies": [\
             ["my-next-app", "workspace:."],\
             ["@stylelint/postcss-css-in-js", "virtual:1fbd4f2c9aa3a03ac18099f09c5d6be2da6c1cb1010c20668cc6aa6083bebfa409fa9e1becb8a79d1553bc0825388e53284c58854de362db68d1ea8fa75d9d8c#npm:0.37.3"],\
+            ["@types/nanoid", "npm:3.0.0"],\
             ["@types/node", "npm:18.0.0"],\
             ["@types/react", "npm:18.0.14"],\
             ["@types/react-dom", "npm:18.0.5"],\
@@ -5728,6 +5741,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["eslint-plugin-react", "virtual:1fbd4f2c9aa3a03ac18099f09c5d6be2da6c1cb1010c20668cc6aa6083bebfa409fa9e1becb8a79d1553bc0825388e53284c58854de362db68d1ea8fa75d9d8c#npm:7.30.1"],\
             ["husky", "npm:8.0.1"],\
             ["lint-staged", "npm:13.0.3"],\
+            ["nanoid", "npm:4.0.0"],\
             ["next", "virtual:1fbd4f2c9aa3a03ac18099f09c5d6be2da6c1cb1010c20668cc6aa6083bebfa409fa9e1becb8a79d1553bc0825388e53284c58854de362db68d1ea8fa75d9d8c#npm:12.1.6"],\
             ["postcss", "npm:8.4.14"],\
             ["postcss-syntax", "virtual:1fbd4f2c9aa3a03ac18099f09c5d6be2da6c1cb1010c20668cc6aa6083bebfa409fa9e1becb8a79d1553bc0825388e53284c58854de362db68d1ea8fa75d9d8c#npm:0.36.2"],\
@@ -5764,6 +5778,13 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageLocation": "./.yarn/cache/nanoid-npm-3.3.4-3d250377d6-2fddd6dee9.zip/node_modules/nanoid/",\
           "packageDependencies": [\
             ["nanoid", "npm:3.3.4"]\
+          ],\
+          "linkType": "HARD"\
+        }],\
+        ["npm:4.0.0", {\
+          "packageLocation": "./.yarn/cache/nanoid-npm-4.0.0-924f5c6312-7d5946df5c.zip/node_modules/nanoid/",\
+          "packageDependencies": [\
+            ["nanoid", "npm:4.0.0"]\
           ],\
           "linkType": "HARD"\
         }]\
