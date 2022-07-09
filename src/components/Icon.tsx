@@ -9,12 +9,13 @@ export interface IconProps {
   color: string;
   size: number;
   children: ReactNode;
+  className: string;
   onClick: React.MouseEventHandler<HTMLButtonElement>;
 }
 
-function Icon({ name, color, size, children, onClick }: IconProps) {
+function Icon({ name, color, size, children, className, onClick }: IconProps) {
   return (
-    <Button name={name} color={color} onClick={onClick}>
+    <Button name={name} color={color} onClick={onClick} className={className}>
       <Img src={`/icons/${name}.svg`} size={size} alt={name} />
       <TextContent>{children}</TextContent>
     </Button>
