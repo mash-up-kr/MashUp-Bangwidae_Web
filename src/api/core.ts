@@ -2,7 +2,7 @@ import axios, { AxiosInstance, AxiosRequestConfig, Method } from 'axios';
 import { HTTP_METHODS } from '@/src/consts';
 
 const axiosInstance: AxiosInstance = axios.create({
-  baseURL: '',
+  baseURL: 'http://101.101.210.118:8080/api/v1',
   timeout: 10000,
   headers: { 'Content-Type': 'application/json' },
 });
