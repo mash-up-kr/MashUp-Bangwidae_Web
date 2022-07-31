@@ -15,6 +15,7 @@ function getUserInfo() {
   ];
 
   return {
+    level: 2,
     userId: 1,
     nickname,
     profileDescription: `안녕하세요! 도리를 찾아서입니다:)\n모든 질문 환영해요`,
