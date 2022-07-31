@@ -1,45 +1,27 @@
 function getUserInfo() {
-  const userName = '김동현';
-  const wards = ['커닝시티', '강남구', '송파구'];
+  const nickname = '김동현';
   const tags = ['ENFP', '맛집', '쇼핑', '피망', '피클', '피타고라스'];
-  const questionList = [
+  const questions = [
     {
-      id: 1,
-      title: '비오는 날 음식 추천해주세요!',
-      commnets: [
-        {
-          userName: '김동현',
-          content: '파전에 막걸리 어때요?',
-        },
-      ],
+      questionId: 1,
+      questionContent: '강남에서 뭔일 있었어?',
+      answerContent: '강남에서 연예인 봤잖아!',
     },
     {
-      id: 2,
-      title: '푸바오 TV 좋아요 구독 알림설정까지!',
-      commnets: [
-        {
-          userName: '김동현',
-          content: '푸바오는 최고야',
-        },
-      ],
-    },
-    {
-      id: 3,
-      title: '바푸오 TV 좋아요 구독 알림설정까지!',
-      commnets: [
-        {
-          userName: '푸바오',
-          content: '김동현은 최고야',
-        },
-      ],
+      questionId: 2,
+      questionContent: '비오는 날에는 뭘 먹으면 좋을까?',
+      answerContent: '피자에 맥주가 최고지(?)',
     },
   ];
 
   return {
-    userName,
-    wards,
+    userId: 1,
+    nickname,
+    profileDescription: `안녕하세요! 도리를 찾아서입니다:)\n모든 질문 환영해요`,
+    profileImageUrl: 'https://image.url',
+    representativeWardName: '우리집',
     tags,
-    questionList,
+    questions,
   } as const;
 }
 

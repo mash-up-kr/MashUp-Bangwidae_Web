@@ -9,15 +9,15 @@ import Tag from '@/src/components/Tag';
 import getUserInfo from './remote/getUserInfo';
 
 function OpenInquiry() {
-  const { userName, wards, tags, questionList } = getUserInfo();
+  const { nickname, profileDescription, representativeWardName, tags, questions } = getUserInfo();
 
   return (
     <>
       <Header>
-        <span>{userName}님은,</span>
+        <span>{nickname}님은,</span>
         <br />
         <span style={{ fontWeight: 700 }}>
-          <StyledSpan>{wards[0]}</StyledSpan>에서 도리도리 중!
+          <StyledSpan>{representativeWardName}</StyledSpan>에서 도리도리 중!
         </span>
       </Header>
 
@@ -25,10 +25,10 @@ function OpenInquiry() {
         <Image src={thumbNail} alt="유저 이미지" width={250} height={250} />
         <Flex direction="column" align="center" style={{ marginTop: 20, width: '200px' }}>
           <Flex justify="center" align="center">
-            <Title>도리를 찾아서</Title>
+            <Title>{nickname}</Title>
             <Tag style={{ marginLeft: 8 }}>Lv.1</Tag>
           </Flex>
-          <Description>안녕하세요 도리를 찾아서입니다.모든 질문 환영해요. 반갑습니다</Description>
+          <Description>{profileDescription}</Description>
         </Flex>
       </Section>
 
@@ -43,11 +43,11 @@ function OpenInquiry() {
             <TendencyTag>+{tags.length - 3}</TendencyTag>
           </Flex>
         </Container>
-        {questionList.slice(0, 2).map((question) => (
-          <Link href={`/question-detail?id=${question.id}`}>
+        {questions.slice(0, 2).map((question) => (
+          <Link href={`/question-detail?id=${question.questionId}`}>
             <Container>
-              <TagTitle style={{ paddingBottom: 10 }}>Q. {question.title}</TagTitle>
-              <p>{question.commnets[0].content}</p>
+              <TagTitle style={{ paddingBottom: 10 }}>Q. {question.questionContent}</TagTitle>
+              <p>{question.answerContent}</p>
             </Container>
           </Link>
         ))}
