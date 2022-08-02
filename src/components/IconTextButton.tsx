@@ -17,7 +17,7 @@ export interface IconProps {
   size: number;
   children?: ReactNode;
   className?: string;
-  textPosition?: TextPosition;
+  iconPosition?: TextPosition;
   onClick: React.MouseEventHandler<HTMLButtonElement>;
 }
 
@@ -35,10 +35,10 @@ function IconTextButton({
   size,
   children,
   className,
-  textPosition,
+  iconPosition,
   onClick,
 }: IconProps) {
-  if (textPosition === 'left') {
+  if (iconPosition === 'right') {
     return (
       <Button name={name} color={color} onClick={onClick} className={className}>
         <TextContent>{children}</TextContent>

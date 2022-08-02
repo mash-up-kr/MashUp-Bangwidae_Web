@@ -38,7 +38,7 @@ function QuestionDetail() {
           name="heart"
           color="#DBF87A"
           size={24}
-          textPosition="left"
+          iconPosition="right"
           onClick={() => {}}
         >
           <IconText>1</IconText>
