@@ -29,7 +29,15 @@ const icons = {
   more: <More />,
 };
 
-function Icon({ name, color, size, children, className, textPosition, onClick }: IconProps) {
+function IconTextButton({
+  name,
+  color,
+  size,
+  children,
+  className,
+  textPosition,
+  onClick,
+}: IconProps) {
   if (textPosition === 'left') {
     return (
       <Button name={name} color={color} onClick={onClick} className={className}>
@@ -55,7 +63,7 @@ function Icon({ name, color, size, children, className, textPosition, onClick }:
   );
 }
 
-export default Icon;
+export default IconTextButton;
 
 const SvgWrap = styled.div<{
   size: number;

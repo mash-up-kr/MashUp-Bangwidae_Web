@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { Icon } from '@/src/components';
+import { IconTextButton } from '@/src/components';
 import { typography } from '@/styles';
 
 function QuestionDetail() {
@@ -19,24 +19,30 @@ function QuestionDetail() {
           <LocatedAt>강남구</LocatedAt>
           <CreatedAt>1분 전</CreatedAt>
           <IconPosition>
-            <Icon name="more" color="#767676" size={24} onClick={() => {}} />
+            <IconTextButton name="more" color="#767676" size={24} onClick={() => {}} />
           </IconPosition>
         </FlexRow>
       </FlexRow>
       <CommentContent>니모의 절친 도리를 모른다고??</CommentContent>
       <FlexBetween>
         <FlexRow gap={8}>
-          <Icon color="#767676" size={24} onClick={() => {}}>
+          <IconTextButton color="#767676" size={24} onClick={() => {}}>
             답글 달기
-          </Icon>
+          </IconTextButton>
           <VerticalDivider />
-          <Icon color="#DBF87A" size={24} onClick={() => {}}>
+          <IconTextButton color="#DBF87A" size={24} onClick={() => {}}>
             좋아요
-          </Icon>
+          </IconTextButton>
         </FlexRow>
-        <Icon name="heart" color="#DBF87A" size={24} textPosition="left" onClick={() => {}}>
+        <IconTextButton
+          name="heart"
+          color="#DBF87A"
+          size={24}
+          textPosition="left"
+          onClick={() => {}}
+        >
           <IconText>1</IconText>
-        </Icon>
+        </IconTextButton>
       </FlexBetween>
     </Layout>
   );

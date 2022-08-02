@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { LargeLineButton, Icon } from '@/src/components';
+import { LargeLineButton, IconTextButton } from '@/src/components';
 import { typography } from '@/styles';
 import { CommentItem } from './components';
 
@@ -195,14 +195,14 @@ const MenuGroup = styled.div`
   margin-bottom: 20px;
 `;
 
-const LeftIcon = styled(Icon)`
+const LeftIcon = styled(IconTextButton)`
   display: flex;
   flex-grow: 1;
   justify-content: center;
   height: 24px;
 `;
 
-const CenterIcon = styled(Icon)`
+const CenterIcon = styled(IconTextButton)`
   flex-grow: 1;
   justify-content: center;
   height: 24px;
@@ -210,7 +210,7 @@ const CenterIcon = styled(Icon)`
   border-left: ${({ theme }) => `1px solid ${theme.color.gray.Gray800}`};
 `;
 
-const RightIcon = styled(Icon)`
+const RightIcon = styled(IconTextButton)`
   display: flex;
   flex-grow: 1;
   justify-content: center;
