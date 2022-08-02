@@ -9,7 +9,7 @@ import Share from '../../public/icons/share.svg';
 import More from '../../public/icons/more.svg';
 
 type Name = 'chat' | 'hand' | 'heart' | 'share' | 'more';
-type TextPosition = 'left' | 'right';
+type IconPosition = 'left' | 'right';
 
 export interface IconProps {
   name?: Name;
@@ -17,7 +17,7 @@ export interface IconProps {
   size: number;
   children?: ReactNode;
   className?: string;
-  iconPosition?: TextPosition;
+  iconPosition?: IconPosition;
   onClick: React.MouseEventHandler<HTMLButtonElement>;
 }
 
