@@ -43,7 +43,7 @@ function IconTextButton({
       <Button name={name} color={color} onClick={onClick} className={className}>
         <TextContent>{children}</TextContent>
         {name && (
-          <SvgWrap color={color} size={size} includeText={!!children}>
+          <SvgWrap color={color} size={size} includesText={!!children}>
             {icons[name]}
           </SvgWrap>
         )}
@@ -54,7 +54,7 @@ function IconTextButton({
   return (
     <Button name={name} color={color} onClick={onClick} className={className}>
       {name && (
-        <SvgWrap color={color} size={size} includeText={!!children}>
+        <SvgWrap color={color} size={size} includesText={!!children}>
           {icons[name]}
         </SvgWrap>
       )}
@@ -68,9 +68,9 @@ export default IconTextButton;
 const SvgWrap = styled.div<{
   size: number;
   color: string;
-  includeText: boolean;
+  includesText: boolean;
 }>`
-  padding: ${({ includeText }) => includeText && '0 4px'};
+  padding: ${({ includesText }) => includesText && '0 4px'};
 
   svg {
     width: ${({ size }) => size};
