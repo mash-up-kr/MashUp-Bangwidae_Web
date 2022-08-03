@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import Image from 'next/image';
 import TextField from '@/src/components/TextField';
 import { typography } from '@/styles';
-import { LargeLineButton } from '../QuestionDetail/components';
+import { LargeLineButton } from '@/src/components';
 import myProfile from '@/src/asset/image/myProfile.png';
 
 function MyProfile() {
