@@ -203,6 +203,7 @@ const LeftIcon = styled(IconTextButton)`
 `;
 
 const CenterIcon = styled(IconTextButton)`
+  display: flex;
   flex-grow: 1;
   justify-content: center;
   height: 24px;
