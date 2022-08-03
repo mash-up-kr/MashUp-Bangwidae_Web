@@ -233,7 +233,7 @@ const CommentInputWrapper = styled.div`
   bottom: 0;
   left: 0;
   width: 100%;
-  background-color: #121212;
+  background-color: ${({ theme }) => theme.color.basic.DarkGray};
 `;
 
 const CommentInput = styled.input`
