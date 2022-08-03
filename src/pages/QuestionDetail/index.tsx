@@ -1,9 +1,11 @@
-import styled from 'styled-components';
+import styled, { useTheme } from 'styled-components';
 import { LargeLineButton, IconTextButton } from '@/src/components';
 import { typography } from '@/styles';
 import { CommentItem } from './components';
 
 function QuestionDetail() {
+  const theme = useTheme();
+
   return (
     <Layout>
       {/* Top Section */}
@@ -40,13 +42,13 @@ function QuestionDetail() {
         {/* Menu Group */}
         <MenuGroupPosition>
           <MenuGroup>
-            <LeftIcon name="hand" color="#767676" size={20} onClick={() => {}}>
+            <LeftIcon name="hand" color={theme.color.gray.Gray500} size={20} onClick={() => {}}>
               궁금해요
             </LeftIcon>
-            <CenterIcon name="chat" color="#767676" size={20} onClick={() => {}}>
+            <CenterIcon name="chat" color={theme.color.gray.Gray500} size={20} onClick={() => {}}>
               댓글
             </CenterIcon>
-            <RightIcon name="share" color="#767676" size={20} onClick={() => {}}>
+            <RightIcon name="share" color={theme.color.gray.Gray500} size={20} onClick={() => {}}>
               공유
             </RightIcon>
           </MenuGroup>
