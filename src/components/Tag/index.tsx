@@ -17,17 +17,11 @@ const LevelTag = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-
-  min-width: 43px;
-  min-height: 22px;
-
-  max-height: 20px;
-  margin-right: 8px;
-  padding: 4px 10px;
-  color: ${({ theme }) => theme.color.basic.DarkGray};
+  width: 42px;
+  height: 18px;
+  color: ${({ theme }) => theme.color.gray.Gray800};
   font-weight: 700;
-
-  font-size: 14px;
+  font-size: 12px;
   background-color: ${({ theme }) => theme.color.primary.Lime300};
-  border-radius: 16px;
+  border-radius: 40px;
 `;
