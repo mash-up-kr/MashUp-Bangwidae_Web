@@ -3,7 +3,27 @@ import { LargeLineButton, IconTextButton } from '@/src/components';
 import { typography } from '@/styles';
 import { CommentItem } from './components';
 
-function QuestionDetail() {
+interface QuestionDetailProps {
+  data: {
+    id: string;
+    user: {
+      id: string;
+      tags: string[];
+      nickname: string;
+      profileImageUrl: string;
+    };
+    content: string;
+    likeCount: number;
+    commentCount: number;
+    userLiked: boolean;
+    representativeAddress: string;
+    anonymous: boolean;
+    createdAt: string;
+    updatedAt: string;
+  };
+}
+
+function QuestionDetail({ data }: QuestionDetailProps) {
   const theme = useTheme();
 
   return (
@@ -12,17 +32,17 @@ function QuestionDetail() {
       <TopSection>
         {/* Header */}
         <FlexRow gap={8}>
-          <ProfileImage src="https://picsum.photos/200" />
+          <ProfileImage src={data.user.profileImageUrl} />
           <FlexBetween>
             <FlexColumn gap={6}>
               <FlexRow gap={8}>
-                <Nickname>도리를 찾아서</Nickname>
+                <Nickname>{data.user.nickname}</Nickname>
                 <LevelTag>Lv.1</LevelTag>
               </FlexRow>
               <FlexRow gap={6}>
-                <InterestTag>디즈니</InterestTag>
-                <InterestTag>영화</InterestTag>
-                <InterestTag>애니메이션</InterestTag>
+                {data.user.tags.map((tag) => (
+                  <InterestTag>{tag}</InterestTag>
+                ))}
               </FlexRow>
             </FlexColumn>
             <LargeLineButton buttonType="default" onClick={() => {}}>
@@ -32,21 +52,19 @@ function QuestionDetail() {
         </FlexRow>
         <Divider />
         {/* Content */}
-        <Content>
-          도리를 찾아서가 뭐에요? 뭔지 찾으려 하는뎅 대체 #도리 가 무엇인지 누가 좀 알려줄 분~?
-        </Content>
+        <Content>{data.content}</Content>
         <FlexRow gap={8}>
-          <LocatedAt>강남구</LocatedAt>
-          <CreatedAt>1분 전</CreatedAt>
+          <LocatedAt>{data.representativeAddress}</LocatedAt>
+          <CreatedAt>{data?.createdAt}</CreatedAt>
         </FlexRow>
         {/* Menu Group */}
         <MenuGroupPosition>
           <MenuGroup>
             <LeftIcon name="hand" color={theme.color.gray.Gray500} size={20} onClick={() => {}}>
-              궁금해요
+              {data.likeCount || '궁금해요'}
             </LeftIcon>
             <CenterIcon name="chat" color={theme.color.gray.Gray500} size={20} onClick={() => {}}>
-              댓글
+              {data.commentCount || '댓글'}
             </CenterIcon>
             <RightIcon name="share" color={theme.color.gray.Gray500} size={20} onClick={() => {}}>
               공유
