@@ -2,7 +2,6 @@ import axios, { AxiosInstance, AxiosRequestConfig, Method } from 'axios';
 import { HTTP_METHODS } from '@/src/consts';
 
 const axiosInstance: AxiosInstance = axios.create({
-  baseURL: process.env.AXIOS_BASE_URL,
   timeout: 10000,
   headers: { 'Content-Type': 'application/json' },
 });
@@ -19,6 +18,9 @@ const createApiMethod =
     return _axiosInstance({
       ...config,
       method: methodType,
+      headers: {
+        Authorization: `Bearer ${process.env.NEXT_PUBLIC_MOCK_TOKEN}`,
+      },
     });
   };
 
