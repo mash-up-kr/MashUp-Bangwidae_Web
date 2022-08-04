@@ -141,6 +141,7 @@ const CommentContent = styled.div`
   padding: 10px 0;
   color: white;
   font-size: 14px;
+  word-break: break-word;
 `;
 
 const VerticalDivider = styled.div`

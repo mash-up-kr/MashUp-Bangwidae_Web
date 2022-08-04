@@ -196,7 +196,7 @@ const Content = styled.div`
   font-weight: 400;
   font-size: 16px;
   line-height: 27.2px;
-  word-break: keep-all;
+  word-break: break-word;
 `;
 
 const LocatedAt = styled.div`
