@@ -2,8 +2,23 @@
 export { default } from 'pages/QuestionDetail';
 
 export async function getServerSideProps() {
-  // TODO: Fetch data from external API
-  const { success, data } = {
+  const { success: isFetchingPostSuccess, data: postDetail } = getPostDetail();
+
+  if (!isFetchingPostSuccess) {
+    // TODO: Handle fetching error
+  }
+
+  const { success: isFetchingCommentSuccess, data: commentList } = getCommentList();
+
+  if (!isFetchingCommentSuccess) {
+    // TODO: Handle fetching error
+  }
+
+  return { props: { postDetail, comments: commentList.values } };
+}
+
+function getPostDetail() {
+  return {
     success: true,
     data: {
       id: '62e5408427d0d407aaeedb38',
@@ -24,11 +39,60 @@ export async function getServerSideProps() {
       updatedAt: '2022-07-30T23:30:28.261',
     },
   };
+}
 
-  if (!success) {
-    // TODO: Handle fetching error
-    return { props: { data: null } };
-  }
-
-  return { props: { data } };
+function getCommentList() {
+  return {
+    success: true,
+    data: {
+      values: [
+        {
+          id: '62ebb46d54c86379fc8b15f6',
+          user: {
+            id: '62d7f4776ad96c51d4330ea2',
+            tags: [],
+            nickname: '정종민',
+          },
+          content:
+            'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa',
+          likeCount: 0,
+          userLiked: false,
+          representativeAddress: '관악구',
+          createdAt: '2022-08-04T20:58:37.744',
+          updatedAt: '2022-08-04T20:58:37.744',
+        },
+        {
+          id: '62ebb46d54c86379fc8b15f6',
+          user: {
+            id: '62d7f4776ad96c51d4330ea2',
+            tags: [],
+            nickname: '정종민',
+          },
+          content:
+            'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa',
+          likeCount: 0,
+          userLiked: false,
+          representativeAddress: '관악구',
+          createdAt: '2022-08-04T20:58:37.744',
+          updatedAt: '2022-08-04T20:58:37.744',
+        },
+        {
+          id: '62ebb46d54c86379fc8b15f6',
+          user: {
+            id: '62d7f4776ad96c51d4330ea2',
+            tags: [],
+            nickname: '정종민',
+          },
+          content:
+            'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa',
+          likeCount: 0,
+          userLiked: false,
+          representativeAddress: '관악구',
+          createdAt: '2022-08-04T20:58:37.744',
+          updatedAt: '2022-08-04T20:58:37.744',
+        },
+      ],
+      hasNext: false,
+    },
+  };
 }

@@ -1,8 +1,16 @@
-import styled from 'styled-components';
-import { IconTextButton } from '@/src/components';
+import type { Comment } from 'pages/QuestionDetail';
+import styled, { useTheme } from 'styled-components';
 import { typography } from '@/styles';
+import { IconTextButton } from '@/src/components';
+import { dateTime } from '@/src/utils/DateTime';
 
-function QuestionDetail() {
+interface CommentItemProps {
+  commentDetail: Comment;
+}
+
+function CommentItem({ commentDetail }: CommentItemProps) {
+  const theme = useTheme();
+
   return (
     <Layout>
       <FlexRow gap={8}>
@@ -10,45 +18,45 @@ function QuestionDetail() {
         <FlexBetween>
           <FlexColumn gap={6}>
             <FlexRow gap={8}>
-              <Nickname>도리를 찾아서</Nickname>
+              <Nickname>{commentDetail.user.nickname}</Nickname>
               <LevelTag>Lv.1</LevelTag>
             </FlexRow>
           </FlexColumn>
         </FlexBetween>
         <FlexRow gap={8}>
-          <LocatedAt>강남구</LocatedAt>
-          <CreatedAt>1분 전</CreatedAt>
+          <LocatedAt>{commentDetail.representativeAddress}</LocatedAt>
+          <CreatedAt>{dateTime.fromNow(commentDetail.createdAt)}</CreatedAt>
           <IconPosition>
             <IconTextButton name="more" color="#767676" size={24} onClick={() => {}} />
           </IconPosition>
         </FlexRow>
       </FlexRow>
-      <CommentContent>니모의 절친 도리를 모른다고??</CommentContent>
+      <CommentContent>{commentDetail.content}</CommentContent>
       <FlexBetween>
         <FlexRow gap={8}>
-          <IconTextButton color="#767676" size={24} onClick={() => {}}>
+          <IconTextButton color={theme.color.gray.Gray500} size={24} onClick={() => {}}>
             답글 달기
           </IconTextButton>
           <VerticalDivider />
-          <IconTextButton color="#DBF87A" size={24} onClick={() => {}}>
+          <IconTextButton color={theme.color.gray.Gray500} size={24} onClick={() => {}}>
             좋아요
           </IconTextButton>
         </FlexRow>
         <IconTextButton
           name="heart"
-          color="#DBF87A"
+          color={theme.color.primary.Lime300}
           size={24}
           iconPosition="right"
           onClick={() => {}}
         >
-          <IconText>1</IconText>
+          <IconText>{commentDetail.likeCount}</IconText>
         </IconTextButton>
       </FlexBetween>
     </Layout>
   );
 }
 
-export default QuestionDetail;
+export default CommentItem;
 
 const Layout = styled.div`
   padding: 17px 0;

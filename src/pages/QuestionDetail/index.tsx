@@ -2,9 +2,10 @@ import styled, { useTheme } from 'styled-components';
 import { LargeLineButton, IconTextButton } from '@/src/components';
 import { typography } from '@/styles';
 import { CommentItem } from './components';
+import { dateTime } from '@/src/utils/DateTime';
 
 interface QuestionDetailProps {
-  data: {
+  postDetail: {
     id: string;
     user: {
       id: string;
@@ -21,9 +22,28 @@ interface QuestionDetailProps {
     createdAt: string;
     updatedAt: string;
   };
+  comments: Comment[];
 }
 
-function QuestionDetail({ data }: QuestionDetailProps) {
+export interface Comment {
+  id: string;
+  user: {
+    id: string;
+    tags: string[];
+    nickname: string;
+    profileImageUrl: string;
+  };
+  content: string;
+  likeCount: number;
+  commentCount: number;
+  userLiked: boolean;
+  representativeAddress: string;
+  anonymous: boolean;
+  createdAt: string;
+  updatedAt: string;
+}
+
+function QuestionDetail({ postDetail, comments }: QuestionDetailProps) {
   const theme = useTheme();
 
   return (
@@ -32,16 +52,16 @@ function QuestionDetail({ data }: QuestionDetailProps) {
       <TopSection>
         {/* Header */}
         <FlexRow gap={8}>
-          <ProfileImage src={data.user.profileImageUrl} />
+          <ProfileImage src={postDetail.user.profileImageUrl} />
           <FlexBetween>
             <FlexColumn gap={6}>
               <FlexRow gap={8}>
-                <Nickname>{data.user.nickname}</Nickname>
+                <Nickname>{postDetail.user.nickname}</Nickname>
                 <LevelTag>Lv.1</LevelTag>
               </FlexRow>
               <FlexRow gap={6}>
-                {data.user.tags.map((tag) => (
-                  <InterestTag>{tag}</InterestTag>
+                {postDetail.user.tags.map((tag) => (
+                  <InterestTag key={postDetail.id + tag}>{tag}</InterestTag>
                 ))}
               </FlexRow>
             </FlexColumn>
@@ -52,19 +72,19 @@ function QuestionDetail({ data }: QuestionDetailProps) {
         </FlexRow>
         <Divider />
         {/* Content */}
-        <Content>{data.content}</Content>
+        <Content>{postDetail.content}</Content>
         <FlexRow gap={8}>
-          <LocatedAt>{data.representativeAddress}</LocatedAt>
-          <CreatedAt>{data?.createdAt}</CreatedAt>
+          <LocatedAt>{postDetail.representativeAddress}</LocatedAt>
+          <CreatedAt>{dateTime.fromNow(postDetail.createdAt)}</CreatedAt>
         </FlexRow>
         {/* Menu Group */}
         <MenuGroupPosition>
           <MenuGroup>
             <LeftIcon name="hand" color={theme.color.gray.Gray500} size={20} onClick={() => {}}>
-              {data.likeCount || '궁금해요'}
+              {postDetail.likeCount || '궁금해요'}
             </LeftIcon>
             <CenterIcon name="chat" color={theme.color.gray.Gray500} size={20} onClick={() => {}}>
-              {data.commentCount || '댓글'}
+              {postDetail.commentCount || '댓글'}
             </CenterIcon>
             <RightIcon name="share" color={theme.color.gray.Gray500} size={20} onClick={() => {}}>
               공유
@@ -74,7 +94,9 @@ function QuestionDetail({ data }: QuestionDetailProps) {
       </TopSection>
       {/* Bottom Section */}
       <BottomSection>
-        <CommentItem />
+        {comments.map((commentDetail) => (
+          <CommentItem commentDetail={commentDetail} />
+        ))}
         <CommentInputWrapper>
           <CommentInput type="text" placeholder="댓글을 남겨주세요." />
           <CommentSubmitButton>
