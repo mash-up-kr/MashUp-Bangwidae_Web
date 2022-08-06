@@ -1,14 +1,31 @@
-import type { Comment } from 'pages/QuestionDetail';
 import styled, { useTheme } from 'styled-components';
 import { typography } from '@/styles';
 import { IconTextButton } from '@/src/components';
 import { dateTime } from '@/src/utils/DateTime';
 
 interface CommentItemProps {
-  commentDetail: Comment;
+  comment: Comment;
 }
 
-function CommentItem({ commentDetail }: CommentItemProps) {
+export interface Comment {
+  id: string;
+  user: {
+    id: string;
+    tags: string[];
+    nickname: string;
+    profileImageUrl: string;
+  };
+  content: string;
+  likeCount: number;
+  commentCount: number;
+  userLiked: boolean;
+  representativeAddress: string;
+  anonymous: boolean;
+  createdAt: string;
+  updatedAt: string;
+}
+
+function CommentItem({ comment }: CommentItemProps) {
   const theme = useTheme();
 
   return (
@@ -18,20 +35,20 @@ function CommentItem({ commentDetail }: CommentItemProps) {
         <FlexBetween>
           <FlexColumn gap={6}>
             <FlexRow gap={8}>
-              <Nickname>{commentDetail.user.nickname}</Nickname>
+              <Nickname>{comment.user.nickname}</Nickname>
               <LevelTag>Lv.1</LevelTag>
             </FlexRow>
           </FlexColumn>
         </FlexBetween>
         <FlexRow gap={8}>
-          <LocatedAt>{commentDetail.representativeAddress}</LocatedAt>
-          <CreatedAt>{dateTime.fromNow(commentDetail.createdAt)}</CreatedAt>
+          <LocatedAt>{comment.representativeAddress}</LocatedAt>
+          <CreatedAt>{dateTime.fromNow(comment.createdAt)}</CreatedAt>
           <IconPosition>
             <IconTextButton name="more" color="#767676" size={24} onClick={() => {}} />
           </IconPosition>
         </FlexRow>
       </FlexRow>
-      <CommentContent>{commentDetail.content}</CommentContent>
+      <CommentContent>{comment.content}</CommentContent>
       <FlexBetween>
         <FlexRow gap={8}>
           <IconTextButton color={theme.color.gray.Gray500} size={24} onClick={() => {}}>
@@ -49,7 +66,7 @@ function CommentItem({ commentDetail }: CommentItemProps) {
           iconPosition="right"
           onClick={() => {}}
         >
-          <IconText>{commentDetail.likeCount}</IconText>
+          <IconText>{comment.likeCount}</IconText>
         </IconTextButton>
       </FlexBetween>
     </Layout>

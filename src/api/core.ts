@@ -12,7 +12,7 @@ const createApiMethod =
   (config: AxiosRequestConfig): Promise<any> => {
     _axiosInstance.interceptors.response.use((response) => {
       if (!response.data) return response;
-      return response.data;
+      return response.data.data;
     });
 
     return _axiosInstance({

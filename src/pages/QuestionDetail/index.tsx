@@ -1,50 +1,67 @@
+import type { Comment } from 'pages/QuestionDetail/components/CommentItem';
+import { useQuery, useMutation, useQueryClient } from 'react-query';
 import styled, { useTheme } from 'styled-components';
+import { POST, COMMENT, LIKE, UNLIKE } from 'src/consts/query';
+import { dateTime } from 'src/utils/DateTime';
+import api from 'src/api/core';
 import { LargeLineButton, IconTextButton } from '@/src/components';
 import { typography } from '@/styles';
 import { CommentItem } from './components';
-import { dateTime } from '@/src/utils/DateTime';
+import { getPostDetail, getCommentList, TEST_ID } from '@/pages/question-detail';
 
-interface QuestionDetailProps {
-  postDetail: {
-    id: string;
-    user: {
-      id: string;
-      tags: string[];
-      nickname: string;
-      profileImageUrl: string;
-    };
-    content: string;
-    likeCount: number;
-    commentCount: number;
-    userLiked: boolean;
-    representativeAddress: string;
-    anonymous: boolean;
-    createdAt: string;
-    updatedAt: string;
-  };
-  comments: Comment[];
-}
+const useLikeCountCreator = () => {
+  const queryClient = useQueryClient();
+  return useMutation(
+    [LIKE],
+    () =>
+      api.post({
+        url: `/api/posts/${TEST_ID}/like`,
+      }),
+    {
+      onSuccess: () => queryClient.invalidateQueries(POST),
+    },
+  );
+};
 
-export interface Comment {
-  id: string;
-  user: {
-    id: string;
-    tags: string[];
-    nickname: string;
-    profileImageUrl: string;
-  };
-  content: string;
-  likeCount: number;
-  commentCount: number;
-  userLiked: boolean;
-  representativeAddress: string;
-  anonymous: boolean;
-  createdAt: string;
-  updatedAt: string;
-}
+const useUnlikeCountCreator = () => {
+  const queryClient = useQueryClient();
+  return useMutation(
+    [UNLIKE],
+    () =>
+      api.delete({
+        url: `/api/posts/${TEST_ID}/like`,
+      }),
+    {
+      onSuccess: () => queryClient.invalidateQueries(POST),
+    },
+  );
+};
 
-function QuestionDetail({ postDetail, comments }: QuestionDetailProps) {
+function QuestionDetail() {
   const theme = useTheme();
+
+  const {
+    data: post,
+    isError: isPostError,
+    isLoading: isPostLoading,
+  } = useQuery([POST], getPostDetail);
+
+  const {
+    data: comments,
+    isError: isCommentError,
+    isLoading: isCommentLoading,
+  } = useQuery([COMMENT], getCommentList);
+
+  const { mutate: mutateUnlikeCount } = useUnlikeCountCreator();
+  const { mutate: mutateLikeCount } = useLikeCountCreator();
+
+  const handleLikeButtonClick = () => {
+    // eslint-disable-next-line @typescript-eslint/no-unused-expressions
+    post.userLiked ? mutateUnlikeCount() : mutateLikeCount();
+  };
+
+  if (isPostLoading || isCommentLoading) return <div>Loading</div>;
+  if (isPostError || isCommentError) return <div>Error</div>;
 
   return (
     <Layout>
@@ -52,16 +69,16 @@ function QuestionDetail({ postDetail, comments }: QuestionDetailProps) {
       <TopSection>
         {/* Header */}
         <FlexRow gap={8}>
-          <ProfileImage src={postDetail.user.profileImageUrl} />
+          <ProfileImage src={post.user.profileImageUrl} />
           <FlexBetween>
             <FlexColumn gap={6}>
               <FlexRow gap={8}>
-                <Nickname>{postDetail.user.nickname}</Nickname>
+                <Nickname>{post.user.nickname}</Nickname>
                 <LevelTag>Lv.1</LevelTag>
               </FlexRow>
               <FlexRow gap={6}>
-                {postDetail.user.tags.map((tag) => (
-                  <InterestTag key={postDetail.id + tag}>{tag}</InterestTag>
+                {post.user.tags.map((tag: string) => (
+                  <InterestTag key={post.id + tag}>{tag}</InterestTag>
                 ))}
               </FlexRow>
             </FlexColumn>
@@ -72,19 +89,24 @@ function QuestionDetail({ postDetail, comments }: QuestionDetailProps) {
         </FlexRow>
         <Divider />
         {/* Content */}
-        <Content>{postDetail.content}</Content>
+        <Content>{post.content}</Content>
         <FlexRow gap={8}>
-          <LocatedAt>{postDetail.representativeAddress}</LocatedAt>
-          <CreatedAt>{dateTime.fromNow(postDetail.createdAt)}</CreatedAt>
+          <LocatedAt>{post.representativeAddress}</LocatedAt>
+          <CreatedAt>{dateTime.fromNow(post.createdAt)}</CreatedAt>
         </FlexRow>
         {/* Menu Group */}
         <MenuGroupPosition>
           <MenuGroup>
-            <LeftIcon name="hand" color={theme.color.gray.Gray500} size={20} onClick={() => {}}>
-              {postDetail.likeCount || '궁금해요'}
+            <LeftIcon
+              name="hand"
+              color={post.userLiked ? theme.color.primary.Lime300 : theme.color.gray.Gray500}
+              size={20}
+              onClick={handleLikeButtonClick}
+            >
+              {post.likeCount === 0 ? '궁금해요' : post.likeCount}
             </LeftIcon>
             <CenterIcon name="chat" color={theme.color.gray.Gray500} size={20} onClick={() => {}}>
-              {postDetail.commentCount || '댓글'}
+              {post.commentCount || '댓글'}
             </CenterIcon>
             <RightIcon name="share" color={theme.color.gray.Gray500} size={20} onClick={() => {}}>
               공유
@@ -94,8 +116,8 @@ function QuestionDetail({ postDetail, comments }: QuestionDetailProps) {
       </TopSection>
       {/* Bottom Section */}
       <BottomSection>
-        {comments.map((commentDetail) => (
-          <CommentItem commentDetail={commentDetail} />
+        {comments?.values.map((comment: Comment) => (
+          <CommentItem comment={comment} />
         ))}
         <CommentInputWrapper>
           <CommentInput type="text" placeholder="댓글을 남겨주세요." />
