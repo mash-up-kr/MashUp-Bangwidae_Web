@@ -1,4 +1,4 @@
-import { ReactNode } from 'react';
+import { CSSProperties, ReactNode } from 'react';
 import styled from 'styled-components';
 import typography from '@/styles/typography';
 
@@ -7,11 +7,12 @@ interface Props {
   bottom?: ReactNode;
   withBackground?: boolean;
   onClick?: () => void;
+  style?: CSSProperties;
 }
 
-function TwoLayerContainer({ top, bottom, onClick, withBackground = false }: Props) {
+function TwoLayerContainer({ top, bottom, onClick, withBackground = false, style }: Props) {
   return (
-    <Container onClick={onClick} withBackground={withBackground}>
+    <Container onClick={onClick} withBackground={withBackground} style={style}>
       <div>{top}</div>
       <div>{bottom}</div>
     </Container>
