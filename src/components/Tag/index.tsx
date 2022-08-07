@@ -2,26 +2,43 @@
 import { CSSProperties, ReactNode } from 'react';
 import styled from 'styled-components';
 
+type TagType = 'fulfilled' | 'outline';
+
 interface Props {
   children: ReactNode;
   style?: CSSProperties;
+  type?: TagType;
+  color?: string;
+  backgroundColor?: string;
 }
 
-function Tag({ children, style }: Props) {
-  return <LevelTag style={{ ...style }}>{children}</LevelTag>;
+function Tag({
+  type = 'fulfilled',
+  color = 'black',
+  backgroundColor = '#DBF87A',
+  style,
+  children,
+}: Props) {
+  return (
+    <CustomTag type={type} color={color} backgroundColor={backgroundColor} style={{ ...style }}>
+      {children}
+    </CustomTag>
+  );
 }
 
 export default Tag;
 
-const LevelTag = styled.div`
+const CustomTag = styled.div<{ type: TagType; backgroundColor: string }>`
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 42px;
   height: 18px;
-  color: ${({ theme }) => theme.color.gray.Gray800};
+  padding: 0 10px;
+  color: ${({ color }) => color};
   font-weight: 700;
   font-size: 12px;
-  background-color: ${({ theme }) => theme.color.primary.Lime300};
+  background-color: ${({ type, backgroundColor }) =>
+    type === 'fulfilled' ? backgroundColor : 'transparent'};
+  border: ${({ type, color }) => (type === 'fulfilled' ? 'none' : `1px solid ${color}`)};
   border-radius: 40px;
 `;
