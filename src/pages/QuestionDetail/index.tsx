@@ -1,13 +1,13 @@
 import type { Comment } from 'pages/QuestionDetail/components/CommentItem';
 import { useQuery, useMutation, useQueryClient } from 'react-query';
-import { useState } from 'react';
+import { useState, ChangeEvent } from 'react';
 import styled, { useTheme } from 'styled-components';
 import { POST, COMMENTS, LIKE, UNLIKE } from 'src/consts/query';
 import { dateTime } from 'src/utils/DateTime';
 import api from 'src/api/core';
 import { LargeLineButton, IconTextButton } from '@/src/components';
 import { typography } from '@/styles';
-import { CommentItem } from './components';
+import { CommentItem, PopupMenu } from './components';
 import { getPostDetail, getCommentList, TEST_ID } from '@/pages/question-detail';
 
 const useLikeCountCreator = () => {
@@ -79,8 +79,8 @@ function QuestionDetail() {
     post.userLiked ? mutateUnlikeCount() : mutateLikeCount();
   };
 
-  const handleCommentInputChange = ({ target }) => {
-    setCommentInput(target.value);
+  const handleCommentInputChange = (e: ChangeEvent<HTMLInputElement>) => {
+    setCommentInput(e.target.value);
   };
 
   const handleCommentInputSubmit = () => {
@@ -162,6 +162,7 @@ function QuestionDetail() {
           </CommentSubmitButton>
         </CommentInputWrapper>
       </BottomSection>
+      <PopupMenu />
     </Layout>
   );
 }
