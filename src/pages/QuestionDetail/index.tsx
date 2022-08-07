@@ -1,7 +1,7 @@
 import type { Comment } from 'pages/QuestionDetail/components/CommentItem';
 import { useQuery, useMutation, useQueryClient } from 'react-query';
 import styled, { useTheme } from 'styled-components';
-import { POST, COMMENT, LIKE, UNLIKE } from 'src/consts/query';
+import { POST, COMMENTS, LIKE, UNLIKE } from 'src/consts/query';
 import { dateTime } from 'src/utils/DateTime';
 import api from 'src/api/core';
 import { LargeLineButton, IconTextButton } from '@/src/components';
@@ -50,7 +50,7 @@ function QuestionDetail() {
     data: comments,
     isError: isCommentError,
     isLoading: isCommentLoading,
-  } = useQuery([COMMENT], getCommentList);
+  } = useQuery([COMMENTS], getCommentList);
 
   const { mutate: mutateUnlikeCount } = useUnlikeCountCreator();
   const { mutate: mutateLikeCount } = useLikeCountCreator();

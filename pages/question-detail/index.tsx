@@ -1,6 +1,6 @@
 import api from 'src/api/core';
 import { dehydrate, QueryClient } from 'react-query';
-import { POST, COMMENT } from 'src/consts/query';
+import { POST, COMMENTS } from 'src/consts/query';
 
 const { NEXT_PUBLIC_ORIGIN } = process.env;
 const FETCHING_COMMENT_SIZE = 10;
@@ -8,7 +8,7 @@ const FETCHING_COMMENT_SIZE = 10;
 export async function getServerSideProps() {
   const queryClient = new QueryClient();
   await queryClient.prefetchQuery([POST], getPostDetail);
-  await queryClient.prefetchQuery([COMMENT], getCommentList);
+  await queryClient.prefetchQuery([COMMENTS], getCommentList);
 
   return {
     props: {
