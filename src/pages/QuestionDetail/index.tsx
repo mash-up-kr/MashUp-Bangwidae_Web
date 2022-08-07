@@ -1,5 +1,6 @@
 import type { Comment } from 'pages/QuestionDetail/components/CommentItem';
 import { useQuery, useMutation, useQueryClient } from 'react-query';
+import { useState } from 'react';
 import styled, { useTheme } from 'styled-components';
 import { POST, COMMENTS, LIKE, UNLIKE } from 'src/consts/query';
 import { dateTime } from 'src/utils/DateTime';
@@ -37,8 +38,25 @@ const useUnlikeCountCreator = () => {
   );
 };
 
+const useCommentCreator = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation(
+    ['COMMENT_CREATE'],
+    (data: { content: string; latitude: number; longitude: number }) =>
+      api.post({
+        url: `/api/posts/${TEST_ID}/comment`,
+        data,
+      }),
+    {
+      onSuccess: () => queryClient.invalidateQueries(COMMENTS),
+    },
+  );
+};
+
 function QuestionDetail() {
   const theme = useTheme();
+  const [commentInput, setCommentInput] = useState('');
 
   const {
     data: post,
@@ -54,10 +72,21 @@ function QuestionDetail() {
 
   const { mutate: mutateUnlikeCount } = useUnlikeCountCreator();
   const { mutate: mutateLikeCount } = useLikeCountCreator();
+  const { mutate: mutateCommentCreate } = useCommentCreator();
 
   const handleLikeButtonClick = () => {
     // eslint-disable-next-line @typescript-eslint/no-unused-expressions
     post.userLiked ? mutateUnlikeCount() : mutateLikeCount();
+  };
+
+  const handleCommentInputChange = ({ target }) => {
+    setCommentInput(target.value);
+  };
+
+  const handleCommentInputSubmit = () => {
+    const { latitude, longitude } = post;
+    mutateCommentCreate({ content: commentInput, latitude, longitude });
+    setCommentInput('');
   };
 
   if (isPostLoading || isCommentLoading) return <div>Loading</div>;
@@ -78,7 +107,7 @@ function QuestionDetail() {
               </FlexRow>
               <FlexRow gap={6}>
                 {post.user.tags.map((tag: string) => (
-                  <InterestTag key={post.id + tag}>{tag}</InterestTag>
+                  <InterestTag key={tag}>{tag}</InterestTag>
                 ))}
               </FlexRow>
             </FlexColumn>
@@ -117,11 +146,16 @@ function QuestionDetail() {
       {/* Bottom Section */}
       <BottomSection>
         {comments?.values.map((comment: Comment) => (
-          <CommentItem comment={comment} />
+          <CommentItem key={comment.id} comment={comment} />
         ))}
         <CommentInputWrapper>
-          <CommentInput type="text" placeholder="댓글을 남겨주세요." />
-          <CommentSubmitButton>
+          <CommentInput
+            type="text"
+            placeholder="댓글을 남겨주세요."
+            value={commentInput}
+            onChange={handleCommentInputChange}
+          />
+          <CommentSubmitButton onClick={handleCommentInputSubmit}>
             <LargeLineButton buttonType="primary" onClick={() => {}}>
               등록
             </LargeLineButton>
