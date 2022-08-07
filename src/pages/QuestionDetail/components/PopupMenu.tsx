@@ -46,9 +46,14 @@ const Button = styled.button`
   cursor: pointer;
   border: none;
   border-bottom: 1px solid #444445;
+
+  &:hover {
+    background: #49494b;
+  }
 `;
 
 const CancelButton = styled.button`
+  ${typography.Title2_Regular_16}
   margin: 12px auto 10px auto;
   width: 100%;
   color: #438ff7;
@@ -56,5 +61,8 @@ const CancelButton = styled.button`
   border-radius: 12px;
   height: 50px;
   border: none;
-  ${typography.Title2_Regular_16}
+
+  &:hover {
+    background: #49494b;
+  }
 `;
