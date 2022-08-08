@@ -23,17 +23,29 @@ function Portal({ children, elementId }: Props) {
   return ReactDOM.createPortal(children, element);
 }
 
-export default function PopupMenu() {
+interface PopupButton {
+  name: string;
+  onClick: React.MouseEventHandler;
+}
+
+interface PopupMenuProps {
+  buttons: PopupButton[];
+  onCancelButtonClick: React.MouseEventHandler;
+}
+
+export default function PopupMenu({ buttons, onCancelButtonClick }: PopupMenuProps) {
   return (
     <Portal elementId="modal-root">
       <Overlay />
       <Layout>
         <ButtonsLayout>
-          <Button>수정하기</Button>
-          <Button>삭제하기</Button>
-          <Button>익명으로 변경</Button>
+          {buttons.map((button) => (
+            <Button key={button.name} onClick={button.onClick}>
+              {button.name}
+            </Button>
+          ))}
         </ButtonsLayout>
-        <CancelButton>취소</CancelButton>
+        <CancelButton onClick={onCancelButtonClick}>취소</CancelButton>
       </Layout>
     </Portal>
   );

@@ -54,6 +54,33 @@ const useCommentCreator = () => {
   );
 };
 
+const POPUP_MENU_BUTTONS = {
+  MY: [
+    {
+      name: '수정하기',
+      onClick: () => {},
+    },
+    {
+      name: '삭제하기',
+      onClick: () => {},
+    },
+    {
+      name: '익명으로 변경',
+      onClick: () => {},
+    },
+  ],
+  OTHERS: [
+    {
+      name: '신고하기',
+      onClick: () => {},
+    },
+    {
+      name: '대댓글 쓰기',
+      onClick: () => {},
+    },
+  ],
+};
+
 function QuestionDetail() {
   const theme = useTheme();
   const [commentInput, setCommentInput] = useState('');
@@ -162,7 +189,7 @@ function QuestionDetail() {
           </CommentSubmitButton>
         </CommentInputWrapper>
       </BottomSection>
-      <PopupMenu />
+      <PopupMenu buttons={POPUP_MENU_BUTTONS.MY} onCancelButtonClick={() => {}} />
     </Layout>
   );
 }
