@@ -1,2 +1,2 @@
 /* eslint-disable import/prefer-default-export */
-export { default as LargeLineButton } from './LargeLineButton';
+export { default as CommentItem } from './CommentItem';

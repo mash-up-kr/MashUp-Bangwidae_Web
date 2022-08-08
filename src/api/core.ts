@@ -2,9 +2,8 @@ import axios, { AxiosInstance, AxiosRequestConfig, Method } from 'axios';
 import { HTTP_METHODS } from '@/src/consts';
 
 const axiosInstance: AxiosInstance = axios.create({
-  baseURL: '',
   timeout: 10000,
-  headers: { 'Content-Type': 'application/json' },
+  headers: { 'Content-Type': 'application/json', 'Cache-Control': 'no-cache' },
 });
 
 const createApiMethod =
@@ -12,13 +11,18 @@ const createApiMethod =
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   (config: AxiosRequestConfig): Promise<any> => {
     _axiosInstance.interceptors.response.use((response) => {
-      if (!response.data) return response;
-      return response.data;
+      if (!response.data) {
+        return response;
+      }
+      return response.data.data;
     });
 
     return _axiosInstance({
       ...config,
       method: methodType,
+      headers: {
+        Authorization: `Bearer ${process.env.NEXT_PUBLIC_MOCK_TOKEN}`,
+      },
     });
   };
 

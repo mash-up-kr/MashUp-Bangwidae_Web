@@ -2,7 +2,7 @@ import { ChangeEvent, ReactNode, useCallback, useEffect, useRef, useState } from
 import styled from 'styled-components';
 import TextField from '@/src/components/TextField';
 import { typography } from '@/styles';
-import { LargeLineButton } from '../QuestionDetail/components';
+import { LargeLineButton } from '@/src/components';
 
 function MyProfile() {
   const [myInfo, setMyInfo] = useState('');
