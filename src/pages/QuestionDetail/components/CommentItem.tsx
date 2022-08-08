@@ -1,3 +1,4 @@
+import React from 'react';
 import { useQueryClient, useMutation } from 'react-query';
 import api from 'src/api/core';
 import styled, { useTheme } from 'styled-components';
@@ -8,6 +9,7 @@ import { dateTime } from '@/src/utils/DateTime';
 
 interface CommentItemProps {
   comment: Comment;
+  onMenuClick: React.MouseEventHandler;
 }
 
 export interface Comment {
@@ -56,7 +58,7 @@ const useUnlikeCountCreator = (commentId: string) => {
   );
 };
 
-function CommentItem({ comment }: CommentItemProps) {
+function CommentItem({ comment, onMenuClick }: CommentItemProps) {
   const theme = useTheme();
   const { mutate: mutateLikeCount } = useLikeCountCreator(comment.id);
   const { mutate: mutateUnlikeCount } = useUnlikeCountCreator(comment.id);
@@ -82,7 +84,7 @@ function CommentItem({ comment }: CommentItemProps) {
           <LocatedAt>{comment.representativeAddress}</LocatedAt>
           <CreatedAt>{dateTime.fromNow(comment.createdAt)}</CreatedAt>
           <IconPosition>
-            <IconTextButton name="more" color="#767676" size={24} onClick={() => {}} />
+            <IconTextButton name="more" color="#767676" size={24} onClick={onMenuClick} />
           </IconPosition>
         </FlexRow>
       </FlexRow>
@@ -171,8 +173,8 @@ const LevelTag = styled.div`
 const LocatedAt = styled.div`
   color: ${({ theme }) => theme.color.gray.Gray600};
   font-weight: 400;
-  ${typography.Caption2_Regular_12}
 
+  ${typography.Caption2_Regular_12}
   ::after {
     height: 10px;
     margin-left: 10px;

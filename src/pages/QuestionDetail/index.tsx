@@ -84,6 +84,7 @@ const POPUP_MENU_BUTTONS = {
 function QuestionDetail() {
   const theme = useTheme();
   const [commentInput, setCommentInput] = useState('');
+  const [isPopupOpen, setIsPopupOpen] = useState(false);
 
   const {
     data: post,
@@ -114,6 +115,10 @@ function QuestionDetail() {
     const { latitude, longitude } = post;
     mutateCommentCreate({ content: commentInput, latitude, longitude });
     setCommentInput('');
+  };
+
+  const togglePopupMenu = () => {
+    setIsPopupOpen((value) => !value);
   };
 
   if (isPostLoading || isCommentLoading) return <div>Loading</div>;
@@ -173,7 +178,7 @@ function QuestionDetail() {
       {/* Bottom Section */}
       <BottomSection>
         {comments?.values.map((comment: Comment) => (
-          <CommentItem key={comment.id} comment={comment} />
+          <CommentItem key={comment.id} comment={comment} onMenuClick={togglePopupMenu} />
         ))}
         <CommentInputWrapper>
           <CommentInput
@@ -189,7 +194,7 @@ function QuestionDetail() {
           </CommentSubmitButton>
         </CommentInputWrapper>
       </BottomSection>
-      <PopupMenu buttons={POPUP_MENU_BUTTONS.MY} onCancelButtonClick={() => {}} />
+      {isPopupOpen && <PopupMenu buttons={POPUP_MENU_BUTTONS.MY} onClose={togglePopupMenu} />}
     </Layout>
   );
 }

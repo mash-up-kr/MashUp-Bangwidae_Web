@@ -30,13 +30,13 @@ interface PopupButton {
 
 interface PopupMenuProps {
   buttons: PopupButton[];
-  onCancelButtonClick: React.MouseEventHandler;
+  onClose: React.MouseEventHandler;
 }
 
-export default function PopupMenu({ buttons, onCancelButtonClick }: PopupMenuProps) {
+export default function PopupMenu({ buttons, onClose }: PopupMenuProps) {
   return (
     <Portal elementId="modal-root">
-      <Overlay />
+      <Overlay onClick={onClose} />
       <Layout>
         <ButtonsLayout>
           {buttons.map((button) => (
@@ -45,7 +45,7 @@ export default function PopupMenu({ buttons, onCancelButtonClick }: PopupMenuPro
             </Button>
           ))}
         </ButtonsLayout>
-        <CancelButton onClick={onCancelButtonClick}>취소</CancelButton>
+        <CancelButton onClick={onClose}>취소</CancelButton>
       </Layout>
     </Portal>
   );
