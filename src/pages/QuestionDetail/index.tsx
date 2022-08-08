@@ -1,6 +1,6 @@
 import type { Comment } from 'pages/QuestionDetail/components/CommentItem';
 import { useQuery, useMutation, useQueryClient } from 'react-query';
-import { useState, ChangeEvent } from 'react';
+import { useState, ChangeEvent, MouseEvent, useRef } from 'react';
 import styled, { useTheme } from 'styled-components';
 import { POST, COMMENTS, LIKE, UNLIKE } from 'src/consts/query';
 import { dateTime } from 'src/utils/DateTime';
@@ -54,37 +54,33 @@ const useCommentCreator = () => {
   );
 };
 
-const POPUP_MENU_BUTTONS = {
-  MY: [
+const useCommentUpdater = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation(
+    ['COMMENT_UPDATE'],
+    (data: { commentId: string; content: string; latitude: number; longitude: number }) =>
+      api.patch({
+        url: `/api/comments/${data.commentId}`,
+        data: {
+          content: data.content,
+          latitude: data.latitude,
+          longitude: data.longitude,
+        },
+      }),
     {
-      name: '수정하기',
-      onClick: () => {},
+      onSuccess: () => queryClient.invalidateQueries(COMMENTS),
     },
-    {
-      name: '삭제하기',
-      onClick: () => {},
-    },
-    {
-      name: '익명으로 변경',
-      onClick: () => {},
-    },
-  ],
-  OTHERS: [
-    {
-      name: '신고하기',
-      onClick: () => {},
-    },
-    {
-      name: '대댓글 쓰기',
-      onClick: () => {},
-    },
-  ],
+  );
 };
 
 function QuestionDetail() {
   const theme = useTheme();
   const [commentInput, setCommentInput] = useState('');
   const [isPopupOpen, setIsPopupOpen] = useState(false);
+  const [selectedCommentId, setSelectedCommentId] = useState('');
+  const [commentReplyTargetUserName, setCommentReplyTargetUserName] = useState('');
+  const commentInputElement = useRef<HTMLInputElement>(null);
 
   const {
     data: post,
@@ -101,6 +97,7 @@ function QuestionDetail() {
   const { mutate: mutateUnlikeCount } = useUnlikeCountCreator();
   const { mutate: mutateLikeCount } = useLikeCountCreator();
   const { mutate: mutateCommentCreate } = useCommentCreator();
+  const { mutate: mutateCommentUpdate } = useCommentUpdater();
 
   const handleLikeButtonClick = () => {
     // eslint-disable-next-line @typescript-eslint/no-unused-expressions
@@ -112,13 +109,68 @@ function QuestionDetail() {
   };
 
   const handleCommentInputSubmit = () => {
+    const isCreating = !selectedCommentId;
+    const isUpdating = !isCreating;
     const { latitude, longitude } = post;
-    mutateCommentCreate({ content: commentInput, latitude, longitude });
+
+    if (isCreating) {
+      mutateCommentCreate({ content: commentInput, latitude, longitude });
+    } else if (isUpdating) {
+      mutateCommentUpdate({
+        commentId: selectedCommentId,
+        content: commentInput,
+        latitude,
+        longitude,
+      });
+    }
     setCommentInput('');
+  };
+
+  const handleCommentKebabMenuClick = (event: MouseEvent, commentId: string) => {
+    togglePopupMenu();
+    setSelectedCommentId(commentId);
   };
 
   const togglePopupMenu = () => {
     setIsPopupOpen((value) => !value);
+  };
+
+  const handleCommentEditButtonClick = () => {
+    togglePopupMenu();
+    if (!commentInputElement.current) return;
+    commentInputElement.current.focus();
+    const selectedComment = comments.values.find(
+      ({ id }: { id: string }) => id === selectedCommentId,
+    );
+    setCommentReplyTargetUserName(selectedComment.user.nickname);
+    setCommentInput(selectedComment.content);
+  };
+
+  const POPUP_MENU_BUTTONS = {
+    MY: [
+      {
+        name: '수정하기',
+        onClick: handleCommentEditButtonClick,
+      },
+      {
+        name: '삭제하기',
+        onClick: () => {},
+      },
+      {
+        name: '익명으로 변경',
+        onClick: () => {},
+      },
+    ],
+    OTHERS: [
+      {
+        name: '신고하기',
+        onClick: () => {},
+      },
+      {
+        name: '대댓글 쓰기',
+        onClick: () => {},
+      },
+    ],
   };
 
   if (isPostLoading || isCommentLoading) return <div>Loading</div>;
@@ -177,21 +229,31 @@ function QuestionDetail() {
       </TopSection>
       {/* Bottom Section */}
       <BottomSection>
-        {comments?.values.map((comment: Comment) => (
-          <CommentItem key={comment.id} comment={comment} onMenuClick={togglePopupMenu} />
+        {comments?.values.map((commentItem: Comment) => (
+          <CommentItem
+            key={commentItem.id}
+            comment={commentItem}
+            onMenuClick={handleCommentKebabMenuClick}
+          />
         ))}
         <CommentInputWrapper>
-          <CommentInput
-            type="text"
-            placeholder="댓글을 남겨주세요."
-            value={commentInput}
-            onChange={handleCommentInputChange}
-          />
-          <CommentSubmitButton onClick={handleCommentInputSubmit}>
-            <LargeLineButton buttonType="primary" onClick={() => {}}>
-              등록
-            </LargeLineButton>
-          </CommentSubmitButton>
+          {commentReplyTargetUserName && (
+            <CommentInputInfo> {`> ${commentReplyTargetUserName}에 답글 달기`}</CommentInputInfo>
+          )}
+          <FlexRow gap={0}>
+            <CommentInput
+              type="text"
+              placeholder="댓글을 남겨주세요."
+              value={commentInput}
+              onChange={handleCommentInputChange}
+              ref={commentInputElement}
+            />
+            <CommentSubmitButton onClick={handleCommentInputSubmit}>
+              <LargeLineButton buttonType="primary" onClick={() => {}}>
+                등록
+              </LargeLineButton>
+            </CommentSubmitButton>
+          </FlexRow>
         </CommentInputWrapper>
       </BottomSection>
       {isPopupOpen && <PopupMenu buttons={POPUP_MENU_BUTTONS.MY} onClose={togglePopupMenu} />}
@@ -364,7 +426,15 @@ const CommentInputWrapper = styled.div`
   bottom: 0;
   left: 0;
   width: 100%;
+  padding-top: 12px;
   background-color: ${({ theme }) => theme.color.basic.DarkGray};
+`;
+
+const CommentInputInfo = styled.div`
+  margin-left: 30px;
+  height: 12px;
+  color: ${({ theme }) => theme.color.secondary01.Blue300};
+  ${typography.Body_Regular_14}
 `;
 
 const CommentInput = styled.input`
@@ -376,20 +446,18 @@ const CommentInput = styled.input`
   border: none;
   ${typography.Title2_Regular_16}
   caret-color: ${({ theme }) => theme.color.primary.Lime300};
+
   &:focus {
     outline: none;
   }
+
   ::placeholder {
     color: ${({ theme }) => theme.color.gray.Gray700};
   }
 `;
 
 const CommentSubmitButton = styled.div`
-  position: absolute;
-  top: 0;
-  right: 0;
   margin-right: 30px;
-  transform: translateY(50%);
 `;
 
 export default QuestionDetail;

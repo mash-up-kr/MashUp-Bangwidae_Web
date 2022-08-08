@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { MouseEvent } from 'react';
 import { useQueryClient, useMutation } from 'react-query';
 import api from 'src/api/core';
 import styled, { useTheme } from 'styled-components';
@@ -9,7 +9,7 @@ import { dateTime } from '@/src/utils/DateTime';
 
 interface CommentItemProps {
   comment: Comment;
-  onMenuClick: React.MouseEventHandler;
+  onMenuClick: (event: MouseEvent, selectedId: string) => void;
 }
 
 export interface Comment {
@@ -84,7 +84,12 @@ function CommentItem({ comment, onMenuClick }: CommentItemProps) {
           <LocatedAt>{comment.representativeAddress}</LocatedAt>
           <CreatedAt>{dateTime.fromNow(comment.createdAt)}</CreatedAt>
           <IconPosition>
-            <IconTextButton name="more" color="#767676" size={24} onClick={onMenuClick} />
+            <IconTextButton
+              name="more"
+              color="#767676"
+              size={24}
+              onClick={(event) => onMenuClick(event, comment.id)}
+            />
           </IconPosition>
         </FlexRow>
       </FlexRow>
