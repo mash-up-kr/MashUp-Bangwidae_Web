@@ -3,7 +3,7 @@ import { HTTP_METHODS } from '@/src/consts';
 
 const axiosInstance: AxiosInstance = axios.create({
   timeout: 10000,
-  headers: { 'Content-Type': 'application/json' },
+  headers: { 'Content-Type': 'application/json', 'Cache-Control': 'no-cache' },
 });
 
 const createApiMethod =
@@ -11,7 +11,9 @@ const createApiMethod =
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   (config: AxiosRequestConfig): Promise<any> => {
     _axiosInstance.interceptors.response.use((response) => {
-      if (!response.data) return response;
+      if (!response.data) {
+        return response;
+      }
       return response.data.data;
     });
 
