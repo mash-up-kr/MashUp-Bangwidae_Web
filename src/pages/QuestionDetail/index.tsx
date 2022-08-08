@@ -74,6 +74,22 @@ const useCommentUpdater = () => {
   );
 };
 
+const useCommentDeleter = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation(
+    ['COMMENT_DELETE'],
+    (data: { commentId: string }) =>
+      api.delete({
+        url: `/api/comments/${data.commentId}`,
+        data,
+      }),
+    {
+      onSuccess: () => queryClient.invalidateQueries(COMMENTS),
+    },
+  );
+};
+
 function QuestionDetail() {
   const theme = useTheme();
   const [commentInput, setCommentInput] = useState('');
@@ -98,6 +114,7 @@ function QuestionDetail() {
   const { mutate: mutateLikeCount } = useLikeCountCreator();
   const { mutate: mutateCommentCreate } = useCommentCreator();
   const { mutate: mutateCommentUpdate } = useCommentUpdater();
+  const { mutate: mutateCommentDelete } = useCommentDeleter();
 
   const handleLikeButtonClick = () => {
     // eslint-disable-next-line @typescript-eslint/no-unused-expressions
@@ -146,6 +163,11 @@ function QuestionDetail() {
     setCommentInput(selectedComment.content);
   };
 
+  const handleCommentDeleteButtonClick = () => {
+    togglePopupMenu();
+    mutateCommentDelete({ commentId: selectedCommentId });
+  };
+
   const POPUP_MENU_BUTTONS = {
     MY: [
       {
@@ -154,7 +176,7 @@ function QuestionDetail() {
       },
       {
         name: '삭제하기',
-        onClick: () => {},
+        onClick: handleCommentDeleteButtonClick,
       },
       {
         name: '익명으로 변경',
