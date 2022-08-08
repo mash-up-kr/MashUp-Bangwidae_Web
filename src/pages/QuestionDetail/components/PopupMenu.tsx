@@ -1,22 +1,57 @@
 import styled from 'styled-components';
+import React, { useEffect, useState, ReactNode } from 'react';
+import ReactDOM from 'react-dom';
 import { typography } from '@/styles';
+
+interface Props {
+  children: ReactNode;
+  elementId: string;
+}
+
+// TODO: 별도 컴포넌트로 분리
+function Portal({ children, elementId }: Props) {
+  const [element, setElement] = useState<HTMLElement | null>(null);
+
+  useEffect(() => {
+    setElement(document.getElementById(elementId));
+  }, []);
+
+  if (!element) {
+    return null;
+  }
+
+  return ReactDOM.createPortal(children, element);
+}
 
 export default function PopupMenu() {
   return (
-    <Layout>
-      <ButtonsLayout>
-        <Button>수정하기</Button>
-        <Button>삭제하기</Button>
-        <Button>익명으로 변경</Button>
-      </ButtonsLayout>
-      <CancelButton>취소</CancelButton>
-    </Layout>
+    <Portal elementId="modal-root">
+      <Overlay />
+      <Layout>
+        <ButtonsLayout>
+          <Button>수정하기</Button>
+          <Button>삭제하기</Button>
+          <Button>익명으로 변경</Button>
+        </ButtonsLayout>
+        <CancelButton>취소</CancelButton>
+      </Layout>
+    </Portal>
   );
 }
+
+const Overlay = styled.div`
+  position: fixed;
+  z-index: 999;
+  width: 100%;
+  height: 100vh;
+  background: ${({ theme }) => theme.color.basic.Black};
+  opacity: 70%;
+`;
 
 const Layout = styled.div`
   position: fixed;
   bottom: 0;
+  z-index: 1000;
   width: 100%;
   padding: 0 10px;
   border: 0;
