@@ -1,4 +1,3 @@
-/* eslint-disable react/require-default-props */
 import { ChangeEvent } from 'react';
 import styled from 'styled-components';
 import { typography } from '@/styles';
@@ -10,9 +9,11 @@ interface TextFieldProps {
   placeholder?: string;
   hintText?: string;
   className?: string;
+  disabled?: boolean;
   onChange: (value: string) => void;
 }
 
+// TODO: default인 경우 text 길이 값도 색상 Gray700
 function TextField({
   value,
   label,
@@ -20,6 +21,7 @@ function TextField({
   placeholder,
   hintText,
   className,
+  disabled = false,
   onChange,
 }: TextFieldProps) {
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -29,7 +31,13 @@ function TextField({
   return (
     <Element className={className}>
       {label && <Label>{label}</Label>}
-      <Input value={value} onChange={handleChange} placeholder={placeholder} isError={!!hintText} />
+      <Input
+        value={value}
+        onChange={handleChange}
+        placeholder={placeholder}
+        isError={!!hintText}
+        disabled={disabled}
+      />
       <BottomSection>
         <HintText>{hintText}</HintText>
         {maxLength && (
