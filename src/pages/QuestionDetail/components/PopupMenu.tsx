@@ -3,13 +3,14 @@ import React, { useEffect, useState, ReactNode } from 'react';
 import ReactDOM from 'react-dom';
 import { typography } from '@/styles';
 
-interface Props {
+// TODO: 공통 컴포넌트로 분리
+interface PortalProps {
   children: ReactNode;
   elementId: string;
 }
 
-// TODO: 별도 컴포넌트로 분리
-function Portal({ children, elementId }: Props) {
+// TODO: 공통 컴포넌트로 분리
+function Portal({ children, elementId }: PortalProps) {
   const [element, setElement] = useState<HTMLElement | null>(null);
 
   useEffect(() => {
@@ -23,26 +24,19 @@ function Portal({ children, elementId }: Props) {
   return ReactDOM.createPortal(children, element);
 }
 
-interface PopupButton {
-  name: string;
-  onClick: React.MouseEventHandler;
-}
-
 interface PopupMenuProps {
-  buttons: PopupButton[];
+  children: ReactNode;
   onClose: React.MouseEventHandler;
 }
 
-export default function PopupMenu({ buttons, onClose }: PopupMenuProps) {
+export default function PopupMenu({ children, onClose }: PopupMenuProps) {
   return (
     <Portal elementId="modal-root">
       <Overlay onClick={onClose} />
       <Layout>
         <ButtonsLayout>
-          {buttons.map((button) => (
-            <Button key={button.name} onClick={button.onClick}>
-              {button.name}
-            </Button>
+          {React.Children.map(children, (child) => (
+            <Button key={new Date().getTime()}>{child}</Button>
           ))}
         </ButtonsLayout>
         <CancelButton onClick={onClose}>취소</CancelButton>
