@@ -2127,6 +2127,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@types/form-data@npm:^2.5.0":
+  version: 2.5.0
+  resolution: "@types/form-data@npm:2.5.0"
+  dependencies:
+    form-data: "*"
+  checksum: c3f6c8932726970d49d67a23410d5eef0e1ad0be418163ccc3d73a4cbaa0dcd71e0e29acbe2779aab85ed8f47cb0e8f6b67028480da3b0f7d074c5a3416b2400
+  languageName: node
+  linkType: hard
+
 "@types/glob@npm:^7.1.1":
   version: 7.2.0
   resolution: "@types/glob@npm:7.2.0"
@@ -4705,7 +4714,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"form-data@npm:^4.0.0":
+"form-data@npm:*, form-data@npm:^4.0.0":
   version: 4.0.0
   resolution: "form-data@npm:4.0.0"
   dependencies:
@@ -6476,6 +6485,7 @@ __metadata:
   dependencies:
     "@stylelint/postcss-css-in-js": ^0.37.2
     "@svgr/webpack": ^6.3.1
+    "@types/form-data": ^2.5.0
     "@types/nanoid": ^3.0.0
     "@types/node": 18.0.0
     "@types/react": 18.0.14
@@ -6493,6 +6503,7 @@ __metadata:
     eslint-plugin-import: latest
     eslint-plugin-jsx-a11y: latest
     eslint-plugin-react: latest
+    form-data: ^4.0.0
     husky: ^8.0.0
     lint-staged: ^13.0.3
     nanoid: ^4.0.0
