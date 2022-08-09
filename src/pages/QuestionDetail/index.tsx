@@ -1,94 +1,20 @@
-import type { Comment } from 'pages/QuestionDetail/components/CommentItem';
-import { useQuery, useMutation, useQueryClient } from 'react-query';
 import { useState, ChangeEvent, MouseEvent, useRef } from 'react';
 import styled, { useTheme } from 'styled-components';
-import { POST, COMMENTS, LIKE, UNLIKE } from 'src/consts/query';
+import { useQuery } from 'react-query';
+import type { Comment } from 'pages/QuestionDetail/components/CommentItem';
+import { POST, COMMENTS } from 'src/consts/query';
 import { dateTime } from 'src/utils/DateTime';
-import api from 'src/api/core';
 import { LargeLineButton, IconTextButton } from '@/src/components';
 import { typography } from '@/styles';
 import { CommentItem, PopupMenu } from './components';
-import { getPostDetail, getCommentList, TEST_ID } from '@/pages/question-detail';
-
-const useLikeCountCreator = () => {
-  const queryClient = useQueryClient();
-  return useMutation(
-    [LIKE],
-    () =>
-      api.post({
-        url: `/api/posts/${TEST_ID}/like`,
-      }),
-    {
-      onSuccess: () => queryClient.invalidateQueries(POST),
-    },
-  );
-};
-
-const useUnlikeCountCreator = () => {
-  const queryClient = useQueryClient();
-  return useMutation(
-    [UNLIKE],
-    () =>
-      api.delete({
-        url: `/api/posts/${TEST_ID}/like`,
-      }),
-    {
-      onSuccess: () => queryClient.invalidateQueries(POST),
-    },
-  );
-};
-
-const useCommentCreator = () => {
-  const queryClient = useQueryClient();
-
-  return useMutation(
-    ['COMMENT_CREATE'],
-    (data: { content: string; latitude: number; longitude: number }) =>
-      api.post({
-        url: `/api/posts/${TEST_ID}/comment`,
-        data,
-      }),
-    {
-      onSuccess: () => queryClient.invalidateQueries(COMMENTS),
-    },
-  );
-};
-
-const useCommentUpdater = () => {
-  const queryClient = useQueryClient();
-
-  return useMutation(
-    ['COMMENT_UPDATE'],
-    (data: { commentId: string; content: string; latitude: number; longitude: number }) =>
-      api.patch({
-        url: `/api/comments/${data.commentId}`,
-        data: {
-          content: data.content,
-          latitude: data.latitude,
-          longitude: data.longitude,
-        },
-      }),
-    {
-      onSuccess: () => queryClient.invalidateQueries(COMMENTS),
-    },
-  );
-};
-
-const useCommentDeleter = () => {
-  const queryClient = useQueryClient();
-
-  return useMutation(
-    ['COMMENT_DELETE'],
-    (data: { commentId: string }) =>
-      api.delete({
-        url: `/api/comments/${data.commentId}`,
-        data,
-      }),
-    {
-      onSuccess: () => queryClient.invalidateQueries(COMMENTS),
-    },
-  );
-};
+import { getPostDetail, getCommentList } from '@/pages/question-detail';
+import {
+  useLikeCountCreator,
+  useUnlikeCountCreator,
+  useCommentCreator,
+  useCommentUpdater,
+  useCommentDeleter,
+} from './mutations';
 
 function QuestionDetail() {
   const theme = useTheme();
@@ -117,8 +43,8 @@ function QuestionDetail() {
   const { mutate: mutateCommentDelete } = useCommentDeleter();
 
   const handleLikeButtonClick = () => {
-    // eslint-disable-next-line @typescript-eslint/no-unused-expressions
-    post.userLiked ? mutateUnlikeCount() : mutateLikeCount();
+    if (post.userLiked) mutateUnlikeCount();
+    else mutateLikeCount();
   };
 
   const handleCommentInputChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -130,16 +56,20 @@ function QuestionDetail() {
     const isUpdating = !isCreating;
     const { latitude, longitude } = post;
 
-    if (isCreating) {
-      mutateCommentCreate({ content: commentInput, latitude, longitude });
-    } else if (isUpdating) {
-      mutateCommentUpdate({
-        commentId: selectedCommentId,
-        content: commentInput,
-        latitude,
-        longitude,
-      });
-    }
+    const commentDataToCreate = {
+      content: commentInput,
+      latitude,
+      longitude,
+    };
+    const commentDataToUpdate = {
+      commentId: selectedCommentId,
+      content: commentInput,
+      latitude,
+      longitude,
+    };
+
+    if (isCreating) mutateCommentCreate(commentDataToCreate);
+    if (isUpdating) mutateCommentUpdate(commentDataToUpdate);
     setCommentInput('');
   };
 
@@ -166,33 +96,6 @@ function QuestionDetail() {
   const handleCommentDeleteButtonClick = () => {
     togglePopupMenu();
     mutateCommentDelete({ commentId: selectedCommentId });
-  };
-
-  const POPUP_MENU_BUTTONS = {
-    MY: [
-      {
-        name: '수정하기',
-        onClick: handleCommentEditButtonClick,
-      },
-      {
-        name: '삭제하기',
-        onClick: handleCommentDeleteButtonClick,
-      },
-      {
-        name: '익명으로 변경',
-        onClick: () => {},
-      },
-    ],
-    OTHERS: [
-      {
-        name: '신고하기',
-        onClick: () => {},
-      },
-      {
-        name: '대댓글 쓰기',
-        onClick: () => {},
-      },
-    ],
   };
 
   if (isPostLoading || isCommentLoading) return <div>Loading</div>;
@@ -278,7 +181,13 @@ function QuestionDetail() {
           </FlexRow>
         </CommentInputWrapper>
       </BottomSection>
-      {isPopupOpen && <PopupMenu buttons={POPUP_MENU_BUTTONS.MY} onClose={togglePopupMenu} />}
+      {isPopupOpen && (
+        <PopupMenu onClose={togglePopupMenu}>
+          <span onClick={handleCommentEditButtonClick}>수정하기</span>
+          <span onClick={handleCommentDeleteButtonClick}>삭제하기</span>
+          <span onClick={() => {}}>익명으로 변경</span>
+        </PopupMenu>
+      )}
     </Layout>
   );
 }
@@ -376,7 +285,6 @@ const LocatedAt = styled.div`
   color: ${({ theme }) => theme.color.gray.Gray600};
   font-weight: 400;
   ${typography.Caption2_Regular_12}
-
   ::after {
     height: 10px;
     margin-left: 10px;
