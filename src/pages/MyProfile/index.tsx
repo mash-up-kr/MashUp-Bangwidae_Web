@@ -1,38 +1,87 @@
 import { ChangeEvent, ReactNode, useCallback, useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
+import { useQuery } from 'react-query';
+import axios from 'axios';
+import FormData from 'form-data';
 import TextField from '@/src/components/TextField';
 import { typography } from '@/styles';
 import { LargeLineButton } from '@/src/components';
+import {
+  getMyWardList,
+  getProfileImg,
+  getProfileInfo,
+  QUERY_KEYS,
+} from '@/pages/setting/my-profile';
+import { useProfileImageResetter, useProfileInfoUpdater } from './mutations';
+
+// eslint-disable-next-line @typescript-eslint/naming-convention
+type MY_PROFILE_INPUT_TYPE = 'description' | 'interests';
 
 function MyProfile() {
-  const [myInfo, setMyInfo] = useState('');
-  const [myInterests, setMyInterests] = useState('');
-  const [interestList, setInterestList] = useState<string[]>([]);
-  const [profileUrl, setProfileUrl] = useState<string>();
-  const [, setProfile] = useState<File>();
-  const [previewUrl, setPreviewUrl] = useState<string>();
-  const [wardList, setWardList] = useState<string[]>([]);
+  const { data: profileInfo } = useQuery(QUERY_KEYS.MY_PROFILE, getProfileInfo);
+  const { data: wardList } = useQuery(QUERY_KEYS.WARD_LIST, getMyWardList);
+  const { data: imageUrl } = useQuery(QUERY_KEYS.OPEN_INQUIRY, getProfileImg);
 
+  const [profileInfoValue, setProfileInfoValue] = useState<Record<MY_PROFILE_INPUT_TYPE, string>>({
+    description: '',
+    interests: '',
+  });
+  const [interestList, setInterestList] = useState<string[]>([]);
+  const [profileImage, setProfileImage] = useState<{ file?: Blob; url?: string }>({
+    file: undefined,
+    url: undefined,
+  });
   const imageInput = useRef<HTMLInputElement>(null);
 
+  const updateProfileImage = async () => {
+    if (profileImage.file) {
+      // FIXME: react-qeury로 변경 필요
+      const formData = new FormData();
+      formData.append('image', profileImage.file);
+      await axios.post(`${process.env.NEXT_PUBLIC_ORIGIN}/api/user/profile/image`, formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+          'Cache-Control': 'no-cache',
+          Authorization: `Bearer ${process.env.NEXT_PUBLIC_MOCK_TOKEN}`,
+        },
+      });
+      return;
+    }
+    submitProfileDefaultImg();
+  };
+
+  const { mutate: submitProfileInfo } = useProfileInfoUpdater(
+    {
+      description: profileInfoValue.description,
+      tags: interestList,
+    },
+    updateProfileImage,
+  );
+  const { mutate: submitProfileDefaultImg } = useProfileImageResetter();
+
   useEffect(() => {
-    setInterestList(['MBTI', '연애']);
-    setWardList(['강남구', '집안', '동대문구']);
-  }, []);
+    setProfileInfoValue({ description: profileInfo?.profileDescription || '', interests: '' });
+    setInterestList(profileInfo?.tags || []);
+    setProfileImage({ url: imageUrl?.user.profileImageUrl });
+  }, [profileInfo, wardList, imageUrl, setProfileInfoValue, setInterestList, setProfileImage]);
 
-  const handleMyInfoChange = useCallback(
-    (value: string) => {
-      setMyInfo(value);
+  const handleChange = useCallback(
+    (key: MY_PROFILE_INPUT_TYPE) => (value: string) => {
+      setProfileInfoValue({
+        ...profileInfoValue,
+        [key]: value,
+      });
     },
-    [setMyInfo],
+    [profileInfoValue, setProfileInfoValue],
   );
 
-  const handleMyInterestsChange = useCallback(
-    (value: string) => {
-      setMyInterests(value);
-    },
-    [setMyInterests],
-  );
+  const handleTagAdd = useCallback(() => {
+    if (!profileInfoValue.interests) {
+      return;
+    }
+    setInterestList([...interestList, profileInfoValue.interests]);
+    setProfileInfoValue({ ...profileInfoValue, interests: '' });
+  }, [interestList, setInterestList, profileInfoValue.interests]);
 
   const handleTagRemove = useCallback(
     (index: number) => () => {
@@ -56,56 +105,84 @@ function MyProfile() {
       }
       const reader = new FileReader();
       reader.onloadend = () => {
-        setProfile(file);
-        setPreviewUrl(reader.result as string);
+        setProfileImage({
+          file,
+          url: reader.result as string,
+        });
       };
       reader.readAsDataURL(file);
     },
-    [setProfile, setPreviewUrl],
+    [setProfileImage],
   );
 
-  const handleImageCancelClick = useCallback(() => {
-    setPreviewUrl(undefined);
-    setProfileUrl(undefined);
-  }, [setPreviewUrl, setProfileUrl]);
+  const handleProfileImageReset = useCallback(() => {
+    setProfileImage({ file: undefined, url: undefined });
+  }, [setProfileImage]);
+
+  const handleSubmit = () => {
+    submitProfileInfo();
+  };
 
   return (
     <Wrapper>
       <div>
         <SubTitle>프로필 사진</SubTitle>
         <ProfileWrapper>
-          {profileUrl || previewUrl ? (
+          {profileImage.url ? (
             <ImgWrapper>
-              <StyledImg src={previewUrl ?? profileUrl} alt="내 프로필" width={100} height={100} />
-              <ImgCancelSvg onClick={handleImageCancelClick} />
+              <StyledImg src={profileImage.url} alt="내 프로필" width={100} height={100} />
+              <ImgCancelSvg onClick={handleProfileImageReset} />
             </ImgWrapper>
           ) : (
             <StyledImg src="/images/myProfile.png" alt="기본 프로필" width={100} height={100} />
           )}
-          <FileInput type="file" ref={imageInput} onChange={handleProfileChange} />
+          <FileInput
+            type="file"
+            accept={'image/*'}
+            ref={imageInput}
+            onChange={handleProfileChange}
+          />
           <LargeLineButton buttonType="default" onClick={handleProfileUpload}>
             사진 변경하기
           </LargeLineButton>
         </ProfileWrapper>
         <StyledTextField
-          value={myInfo}
-          onChange={handleMyInfoChange}
+          value={profileInfoValue.description}
+          onChange={handleChange('description')}
           label="내 소개"
           maxLength={10}
           marginBottom={43}
-          hintText={myInfo.length > 10 ? '내 소개는 10자 이내로 입력해주세요.' : undefined}
+          hintText={
+            profileInfoValue.description.length > 10
+              ? '내 소개는 10자 이내로 입력해주세요.'
+              : undefined
+          }
         />
-        {/* TODO: TextField hintText 없이도 error 표출 필요 */}
-        <StyledTextField
-          value={myInterests}
-          onChange={handleMyInterestsChange}
-          label={`관심 분야${interestList.length}/3`}
-          maxLength={10}
-          marginBottom={33}
-          disabled={interestList.length >= 3}
-          hintText={myInterests.length > 10 ? '관심 분야는 10자 이내로 입력해주세요.' : undefined}
-        />
-        {/* TODO: UI 정해지면 관심분야 등록버튼 추가 필요 */}
+        <InterestsWrapper>
+          <StyledTextField
+            value={profileInfoValue.interests}
+            onChange={handleChange('interests')}
+            label={`관심 분야 ${interestList.length}/3`}
+            maxLength={10}
+            disabled={interestList.length >= 3}
+            hintText={
+              profileInfoValue.interests.length > 10
+                ? '관심 분야는 10자 이내로 입력해주세요.'
+                : undefined
+            }
+          />
+          <ConfirmButton
+            buttonType={profileInfoValue.interests ? 'primary' : 'default'}
+            disabled={
+              profileInfoValue.interests.length === 0 ||
+              interestList.length >= 3 ||
+              profileInfoValue.interests.length > 10
+            }
+            onClick={handleTagAdd}
+          >
+            등록
+          </ConfirmButton>
+        </InterestsWrapper>
         <TagGroupWrapper>
           {interestList.map((interest, index) => (
             <Tag key={interest} onClick={handleTagRemove(index)}>
@@ -113,19 +190,23 @@ function MyProfile() {
             </Tag>
           ))}
         </TagGroupWrapper>
-        {wardList.length > 0 && (
+        {wardList?.length > 0 && (
           <>
             <WardTitle>내 대표 와드</WardTitle>
             <TagGroupWrapper>
-              {wardList.map((ward) => (
-                <Tag key={ward}>{ward}</Tag>
+              {wardList.map((ward: { id: string; name: string }) => (
+                <Tag key={ward.id}>{ward.name}</Tag>
               ))}
             </TagGroupWrapper>
           </>
         )}
       </div>
       {/* TODO: disabled 조건 확인 필요 */}
-      <StyledButton type="button" disabled={interestList.length === 0 || myInfo.length > 10}>
+      <StyledButton
+        type="button"
+        disabled={interestList.length === 0 || profileInfoValue.description.length > 10}
+        onClick={handleSubmit}
+      >
         프로필 변경하기
       </StyledButton>
       {interestList.length === 0 && <SnackBar text="관심 분야를 작성해주세요!" />}
@@ -224,7 +305,7 @@ const ImgCancelSvg = styled(CancelSvg)`
 
 const StyledButton = styled.button`
   width: 100%;
-  height: 54px;
+  min-height: 54px;
   background-color: ${({ theme }) => theme.color.primary.Lime300};
   border: none;
   border-radius: 10px;
@@ -235,11 +316,12 @@ const StyledButton = styled.button`
   }
 `;
 
-const StyledTextField = styled(TextField)<{ marginBottom: number }>`
-  margin-bottom: ${({ marginBottom }) => `${marginBottom}px`};
+const StyledTextField = styled(TextField)<{ marginBottom?: number }>`
+  flex: 1;
+  margin-bottom: ${({ marginBottom }) => `${marginBottom ?? '0'}px`};
 `;
 
-const StyledTag = styled.button`
+const StyledTag = styled.div`
   min-height: 34px;
   padding: 7px 12px;
   color: ${({ theme }) => theme.color.basic.White};
@@ -250,6 +332,7 @@ const StyledTag = styled.button`
 
 const TagGroupWrapper = styled.div`
   display: flex;
+  flex-wrap: wrap;
 `;
 const TagWrapper = styled.div`
   position: relative;
@@ -292,4 +375,16 @@ const SnackBarWrapper = styled.div<{ isVisible: boolean }>`
 
 const FileInput = styled.input`
   display: none;
+`;
+
+const InterestsWrapper = styled.div`
+  display: flex;
+  align-items: end;
+  justify-content: space-between;
+  margin-bottom: 33px;
+`;
+
+const ConfirmButton = styled(LargeLineButton)`
+  margin-bottom: 25px;
+  margin-left: 20px;
 `;
