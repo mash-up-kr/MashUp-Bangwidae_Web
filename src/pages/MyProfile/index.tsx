@@ -1,4 +1,4 @@
-import { ChangeEvent, ReactNode, useCallback, useEffect, useRef, useState } from 'react';
+import { ChangeEvent, useCallback, useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
 import { useQuery } from 'react-query';
 import axios from 'axios';
@@ -15,6 +15,7 @@ import {
 } from '@/pages/setting/my-profile';
 import { useProfileImageResetter, useProfileInfoUpdater } from './mutations';
 import SnackBar from '@/src/components/SnackBar';
+import LineChip from '@/src/components/LineChip';
 
 // eslint-disable-next-line @typescript-eslint/naming-convention
 type MY_PROFILE_INPUT_TYPE = 'description' | 'interests';
@@ -189,9 +190,9 @@ function MyProfile() {
         </InterestsWrapper>
         <TagGroupWrapper>
           {interestList.map((interest, index) => (
-            <Tag key={interest} onClick={handleTagRemove(index)}>
+            <LineChip key={interest} onClick={handleTagRemove(index)}>
               {interest}
-            </Tag>
+            </LineChip>
           ))}
         </TagGroupWrapper>
         {wardList?.length > 0 && (
@@ -199,7 +200,7 @@ function MyProfile() {
             <WardTitle>내 대표 와드</WardTitle>
             <TagGroupWrapper>
               {wardList.map((ward: { id: string; name: string }) => (
-                <Tag key={ward.id}>{ward.name}</Tag>
+                <LineChip key={ward.id}>{ward.name}</LineChip>
               ))}
             </TagGroupWrapper>
           </>
@@ -215,28 +216,6 @@ function MyProfile() {
       </StyledButton>
       {interestList.length === 0 && <SnackBar text="관심 분야를 작성해주세요!" />}
     </Wrapper>
-  );
-}
-
-// Tag Component
-interface TagProps {
-  children: ReactNode;
-  onClick?: () => void;
-}
-
-function Tag({ children, onClick }: TagProps) {
-  const handleClick = () => {
-    onClick?.();
-  };
-  return (
-    <TagWrapper>
-      {onClick && (
-        <TagCancelSvg onClick={handleClick}>
-          <Cancel />
-        </TagCancelSvg>
-      )}
-      <StyledTag>{children}</StyledTag>
-    </TagWrapper>
   );
 }
 
@@ -292,28 +271,9 @@ const StyledTextField = styled(TextField)<{ marginBottom?: number }>`
   margin-bottom: ${({ marginBottom }) => `${marginBottom ?? '0'}px`};
 `;
 
-const StyledTag = styled.div`
-  min-height: 34px;
-  padding: 7px 12px;
-  color: ${({ theme }) => theme.color.basic.White};
-  background: transparent;
-  border: 1px solid;
-  border-radius: 40px;
-`;
-
 const TagGroupWrapper = styled.div`
   display: flex;
   flex-wrap: wrap;
-`;
-const TagWrapper = styled.div`
-  position: relative;
-  margin-right: 10px;
-`;
-
-const TagCancelSvg = styled.i`
-  position: absolute;
-  top: -6px;
-  right: -6px;
 `;
 
 const StyledImg = styled.img`
