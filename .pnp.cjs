@@ -67,6 +67,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["react-is", "npm:18.2.0"],\
             ["react-query", "virtual:1fbd4f2c9aa3a03ac18099f09c5d6be2da6c1cb1010c20668cc6aa6083bebfa409fa9e1becb8a79d1553bc0825388e53284c58854de362db68d1ea8fa75d9d8c#npm:3.39.1"],\
             ["react-slick", "virtual:1fbd4f2c9aa3a03ac18099f09c5d6be2da6c1cb1010c20668cc6aa6083bebfa409fa9e1becb8a79d1553bc0825388e53284c58854de362db68d1ea8fa75d9d8c#npm:0.29.0"],\
+            ["slick-carousel", "virtual:1fbd4f2c9aa3a03ac18099f09c5d6be2da6c1cb1010c20668cc6aa6083bebfa409fa9e1becb8a79d1553bc0825388e53284c58854de362db68d1ea8fa75d9d8c#npm:1.8.1"],\
             ["styled-components", "virtual:1fbd4f2c9aa3a03ac18099f09c5d6be2da6c1cb1010c20668cc6aa6083bebfa409fa9e1becb8a79d1553bc0825388e53284c58854de362db68d1ea8fa75d9d8c#npm:5.3.5"],\
             ["stylelint", "npm:14.9.1"],\
             ["stylelint-config-prettier", "virtual:1fbd4f2c9aa3a03ac18099f09c5d6be2da6c1cb1010c20668cc6aa6083bebfa409fa9e1becb8a79d1553bc0825388e53284c58854de362db68d1ea8fa75d9d8c#npm:9.0.3"],\
@@ -8701,6 +8702,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["react-is", "npm:18.2.0"],\
             ["react-query", "virtual:1fbd4f2c9aa3a03ac18099f09c5d6be2da6c1cb1010c20668cc6aa6083bebfa409fa9e1becb8a79d1553bc0825388e53284c58854de362db68d1ea8fa75d9d8c#npm:3.39.1"],\
             ["react-slick", "virtual:1fbd4f2c9aa3a03ac18099f09c5d6be2da6c1cb1010c20668cc6aa6083bebfa409fa9e1becb8a79d1553bc0825388e53284c58854de362db68d1ea8fa75d9d8c#npm:0.29.0"],\
+            ["slick-carousel", "virtual:1fbd4f2c9aa3a03ac18099f09c5d6be2da6c1cb1010c20668cc6aa6083bebfa409fa9e1becb8a79d1553bc0825388e53284c58854de362db68d1ea8fa75d9d8c#npm:1.8.1"],\
             ["styled-components", "virtual:1fbd4f2c9aa3a03ac18099f09c5d6be2da6c1cb1010c20668cc6aa6083bebfa409fa9e1becb8a79d1553bc0825388e53284c58854de362db68d1ea8fa75d9d8c#npm:5.3.5"],\
             ["stylelint", "npm:14.9.1"],\
             ["stylelint-config-prettier", "virtual:1fbd4f2c9aa3a03ac18099f09c5d6be2da6c1cb1010c20668cc6aa6083bebfa409fa9e1becb8a79d1553bc0825388e53284c58854de362db68d1ea8fa75d9d8c#npm:9.0.3"],\
@@ -10509,6 +10511,28 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["slice-ansi", "npm:5.0.0"],\
             ["ansi-styles", "npm:6.1.0"],\
             ["is-fullwidth-code-point", "npm:4.0.0"]\
+          ],\
+          "linkType": "HARD"\
+        }]\
+      ]],\
+      ["slick-carousel", [\
+        ["npm:1.8.1", {\
+          "packageLocation": "./.yarn/cache/slick-carousel-npm-1.8.1-8382d373c2-acaad391e4.zip/node_modules/slick-carousel/",\
+          "packageDependencies": [\
+            ["slick-carousel", "npm:1.8.1"]\
+          ],\
+          "linkType": "SOFT"\
+        }],\
+        ["virtual:1fbd4f2c9aa3a03ac18099f09c5d6be2da6c1cb1010c20668cc6aa6083bebfa409fa9e1becb8a79d1553bc0825388e53284c58854de362db68d1ea8fa75d9d8c#npm:1.8.1", {\
+          "packageLocation": "./.yarn/__virtual__/slick-carousel-virtual-7ed1131d5a/0/cache/slick-carousel-npm-1.8.1-8382d373c2-acaad391e4.zip/node_modules/slick-carousel/",\
+          "packageDependencies": [\
+            ["slick-carousel", "virtual:1fbd4f2c9aa3a03ac18099f09c5d6be2da6c1cb1010c20668cc6aa6083bebfa409fa9e1becb8a79d1553bc0825388e53284c58854de362db68d1ea8fa75d9d8c#npm:1.8.1"],\
+            ["@types/jquery", null],\
+            ["jquery", null]\
+          ],\
+          "packagePeers": [\
+            "@types/jquery",\
+            "jquery"\
           ],\
           "linkType": "HARD"\
         }]\
