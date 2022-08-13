@@ -1,4 +1,4 @@
-import styled from 'styled-components';
+import styled, { keyframes } from 'styled-components';
 import React, { useEffect, useState, ReactNode } from 'react';
 import ReactDOM from 'react-dom';
 import { typography } from '@/styles';
@@ -27,13 +27,14 @@ function Portal({ children, elementId }: PortalProps) {
 interface PopupMenuProps {
   children: ReactNode;
   onClose: React.MouseEventHandler;
+  isBeforeClose: boolean;
 }
 
-export default function PopupMenu({ children, onClose }: PopupMenuProps) {
+export default function PopupMenu({ children, onClose, isBeforeClose }: PopupMenuProps) {
   return (
     <Portal elementId="modal-root">
-      <Overlay onClick={onClose} />
-      <Layout>
+      <Overlay onClick={onClose} isBeforeClose={isBeforeClose} />
+      <Layout isBeforeClose={isBeforeClose}>
         <ButtonsLayout>
           {React.Children.map(children, (child) => (
             <Button key={new Date().getTime()}>{child}</Button>
@@ -45,22 +46,48 @@ export default function PopupMenu({ children, onClose }: PopupMenuProps) {
   );
 }
 
-const Overlay = styled.div`
+/* Slide Animation */
+const slideUp = keyframes`
+  from {
+    transform: translateY(222px);
+  }
+`;
+
+/* Slide Animation */
+const slideDown = keyframes`
+  from {
+    transform: translateY(0);
+  }
+  to {
+    transform: translateY(222px);
+  }
+`;
+
+const Overlay = styled.div<{
+  isBeforeClose: boolean;
+}>`
   position: fixed;
   z-index: 999;
   width: 100%;
   height: 100vh;
   background: ${({ theme }) => theme.color.basic.Black};
+  visibility: ${({ isBeforeClose }) => (isBeforeClose ? 'hidden' : 'visible')};
   opacity: 70%;
 `;
 
-const Layout = styled.div`
+const Layout = styled.div<{
+  isBeforeClose: boolean;
+}>`
   position: fixed;
   bottom: 0;
   z-index: 1000;
   width: 100%;
   padding: 0 10px;
   border: 0;
+  animation-name: ${({ isBeforeClose }) => (isBeforeClose ? slideDown : slideUp)};
+  /* Slide Animation */
+  animation-duration: 0.2s;
+  animation-timing-function: ease-out;
 `;
 
 const ButtonsLayout = styled.div`
