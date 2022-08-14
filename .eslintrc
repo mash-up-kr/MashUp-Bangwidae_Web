@@ -27,6 +27,7 @@
     "@typescript-eslint/no-use-before-define": "off",
     "import/extensions": "off",
     "jsx-a11y/control-has-associated-label": "off",
-    "react/require-default-props": "off"
+    "react/require-default-props": "off",
+    "label-has-associated-control": "off"
   }
 }
