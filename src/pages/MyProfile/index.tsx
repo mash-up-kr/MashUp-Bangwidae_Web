@@ -16,19 +16,6 @@ import RadioButton from '@/src/components/RadioButton';
 type MyProfileInputType = 'description' | 'interests' | 'representativeWardId';
 const NOT_APPLICABLE = 'notApplicable';
 
-// TODO
-// 관심분야 3개 모두 지정한 경우 → input 히든 처리 O
-// 변경하기 완료 후 snackbar 표출
-// snackbar 꺼진 뒤 콜백받도록 수정
-// 대표와드 설정 api O
-// 대표와드 표출 O
-// radio button 컴포넌트 생성 O
-// radio button 컴포넌트 적용 O
-// LineChip active 색상 필요 X
-// api response 변경에 따른 대응(profileurl, default_image) O
-// 후순위 작업
-// input 0인 경우 텍스트 색상 변경
-// input error처리 에러메세지없는 경우도 가능하게 처리
 function MyProfile() {
   const { data: profileInfo } = useQuery(QUERY_KEYS.MY_PROFILE, getProfileInfo);
   const { data: wardList } = useQuery(QUERY_KEYS.WARD_LIST, getMyWardList);
@@ -43,7 +30,10 @@ function MyProfile() {
     file: undefined,
     url: undefined,
   });
+  const [snackBarText, setSnackBarText] = useState<string>();
   const imageInput = useRef<HTMLInputElement>(null);
+
+  const handleComplete = () => setSnackBarText('변경 완료!');
 
   const updateProfileImage = async () => {
     if (profileImage.file) {
@@ -59,7 +49,9 @@ function MyProfile() {
       });
       return;
     }
-    submitProfileDefaultImg();
+    if (profileImage.url === undefined) {
+      submitProfileDefaultImg();
+    }
   };
 
   const { mutate: submitProfileInfo } = useProfileInfoUpdater(
@@ -71,9 +63,9 @@ function MyProfile() {
           ? null
           : profileInfoValue.representativeWardId,
     },
-    updateProfileImage,
+    !!profileImage.file || profileImage.url === undefined ? updateProfileImage : handleComplete,
   );
-  const { mutate: submitProfileDefaultImg } = useProfileImageResetter();
+  const { mutate: submitProfileDefaultImg } = useProfileImageResetter(handleComplete);
 
   useEffect(() => {
     // FIXME: api response name -> id 변경 요청 후 제거
@@ -113,6 +105,9 @@ function MyProfile() {
       const list = interestList;
       list.splice(index, 1);
       setInterestList([...list]);
+      if (list.length === 0) {
+        setSnackBarText('관심 분야를 작성해주세요!');
+      }
     },
     [interestList, setInterestList],
   );
@@ -251,7 +246,7 @@ function MyProfile() {
       >
         프로필 변경하기
       </StyledButton>
-      {interestList.length === 0 && <SnackBar text="관심 분야를 작성해주세요!" />}
+      {snackBarText && <SnackBar onClose={() => setSnackBarText(undefined)} text={snackBarText} />}
     </Wrapper>
   );
 }
