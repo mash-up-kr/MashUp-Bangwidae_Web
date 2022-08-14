@@ -13,8 +13,7 @@ import SnackBar from '@/src/components/SnackBar';
 import LineChip from '@/src/components/LineChip';
 import RadioButton from '@/src/components/RadioButton';
 
-// eslint-disable-next-line @typescript-eslint/naming-convention
-type MY_PROFILE_INPUT_TYPE = 'description' | 'interests' | 'representativeWardId';
+type MyProfileInputType = 'description' | 'interests' | 'representativeWardId';
 const NOT_APPLICABLE = 'notApplicable';
 
 // TODO
@@ -34,7 +33,7 @@ function MyProfile() {
   const { data: profileInfo } = useQuery(QUERY_KEYS.MY_PROFILE, getProfileInfo);
   const { data: wardList } = useQuery(QUERY_KEYS.WARD_LIST, getMyWardList);
 
-  const [profileInfoValue, setProfileInfoValue] = useState<Record<MY_PROFILE_INPUT_TYPE, string>>({
+  const [profileInfoValue, setProfileInfoValue] = useState<Record<MyProfileInputType, string>>({
     description: '',
     interests: '',
     representativeWardId: NOT_APPLICABLE,
@@ -92,7 +91,7 @@ function MyProfile() {
   }, [profileInfo, wardList, setProfileInfoValue, setInterestList, setProfileImage]);
 
   const handleChange = useCallback(
-    (key: MY_PROFILE_INPUT_TYPE) => (value: string) => {
+    (key: MyProfileInputType) => (value: string) => {
       setProfileInfoValue({
         ...profileInfoValue,
         [key]: value,
