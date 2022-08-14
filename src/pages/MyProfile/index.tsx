@@ -11,19 +11,25 @@ import { getMyWardList, getProfileInfo, QUERY_KEYS } from '@/pages/setting/my-pr
 import { useProfileImageResetter, useProfileInfoUpdater } from './mutations';
 import SnackBar from '@/src/components/SnackBar';
 import LineChip from '@/src/components/LineChip';
+import RadioButton from '@/src/components/RadioButton';
 
 // eslint-disable-next-line @typescript-eslint/naming-convention
-type MY_PROFILE_INPUT_TYPE = 'description' | 'interests';
+type MY_PROFILE_INPUT_TYPE = 'description' | 'interests' | 'representativeWardId';
+const NOT_APPLICABLE = 'notApplicable';
 
 // TODO
 // 관심분야 3개 모두 지정한 경우 → input 히든 처리 O
 // 변경하기 완료 후 snackbar 표출
 // snackbar 꺼진 뒤 콜백받도록 수정
-// 대표와드 설정 api
-// 대표와드 표출
-// radio button 컴포넌트 생성
-// radio button 컴포넌트 적용
-// LineChip active 색상 필요
+// 대표와드 설정 api O
+// 대표와드 표출 O
+// radio button 컴포넌트 생성 O
+// radio button 컴포넌트 적용 O
+// LineChip active 색상 필요 X
+// api response 변경에 따른 대응(profileurl, default_image) O
+// 후순위 작업
+// input 0인 경우 텍스트 색상 변경
+// input error처리 에러메세지없는 경우도 가능하게 처리
 function MyProfile() {
   const { data: profileInfo } = useQuery(QUERY_KEYS.MY_PROFILE, getProfileInfo);
   const { data: wardList } = useQuery(QUERY_KEYS.WARD_LIST, getMyWardList);
@@ -31,6 +37,7 @@ function MyProfile() {
   const [profileInfoValue, setProfileInfoValue] = useState<Record<MY_PROFILE_INPUT_TYPE, string>>({
     description: '',
     interests: '',
+    representativeWardId: NOT_APPLICABLE,
   });
   const [interestList, setInterestList] = useState<string[]>([]);
   const [profileImage, setProfileImage] = useState<{ file?: Blob; url?: string }>({
@@ -60,13 +67,26 @@ function MyProfile() {
     {
       description: profileInfoValue.description,
       tags: interestList,
+      representativeWardId:
+        profileInfoValue.representativeWardId === NOT_APPLICABLE
+          ? null
+          : profileInfoValue.representativeWardId,
     },
     updateProfileImage,
   );
   const { mutate: submitProfileDefaultImg } = useProfileImageResetter();
 
   useEffect(() => {
-    setProfileInfoValue({ description: profileInfo?.profileDescription || '', interests: '' });
+    // FIXME: api response name -> id 변경 요청 후 제거
+    const representativeWardId = wardList?.find(
+      (ward: { name: string }) => ward.name === profileInfo?.representativeWardName,
+    )?.id;
+
+    setProfileInfoValue({
+      description: profileInfo?.profileDescription || '',
+      interests: '',
+      representativeWardId: representativeWardId ?? NOT_APPLICABLE,
+    });
     setInterestList(profileInfo?.tags || []);
     setProfileImage({ url: profileInfo?.profileImageUrl });
   }, [profileInfo, wardList, setProfileInfoValue, setInterestList, setProfileImage]);
@@ -209,11 +229,18 @@ function MyProfile() {
         {wardList?.length > 0 && (
           <>
             <WardTitle>내 대표 와드</WardTitle>
-            <TagGroupWrapper>
-              {wardList.map((ward: { id: string; name: string }) => (
-                <LineChip key={ward.id}>{ward.name}</LineChip>
-              ))}
-            </TagGroupWrapper>
+            <RadioButton
+              options={[
+                { key: NOT_APPLICABLE, value: NOT_APPLICABLE, text: '해당없음' },
+                ...wardList.map((ward: { id: string; name: string }) => ({
+                  key: ward.id,
+                  value: ward.id,
+                  text: ward.name,
+                })),
+              ]}
+              value={profileInfoValue.representativeWardId}
+              onChange={handleChange('representativeWardId')}
+            />
           </>
         )}
       </div>

@@ -3,7 +3,7 @@ import api from 'src/api/core';
 import { QUERY_KEYS } from '@/pages/setting/my-profile';
 
 export const useProfileInfoUpdater = (
-  data: { description: string; tags: string[] },
+  data: { description: string; tags: string[]; representativeWardId: string | null },
   onSubmit: () => void,
 ) =>
   useMutation(
