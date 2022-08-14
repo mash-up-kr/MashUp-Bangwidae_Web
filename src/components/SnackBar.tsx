@@ -4,16 +4,22 @@ import { typography } from '@/styles';
 
 interface SnackBarProps {
   text: string;
+  onClose?: () => void;
 }
 
-function SnackBar({ text }: SnackBarProps) {
+function SnackBar({ text, onClose }: SnackBarProps) {
   const [isVisible, setIsVisible] = useState(false);
   useEffect(() => {
-    setIsVisible(true);
+    setTimeout(() => {
+      setIsVisible(true);
+    }, 100);
     setTimeout(() => {
       setIsVisible(false);
+      setTimeout(() => {
+        onClose?.();
+      }, 800);
     }, 3000);
-  }, []);
+  }, [setIsVisible]);
   return <Wrapper isVisible={isVisible}>{text}</Wrapper>;
 }
 
@@ -23,7 +29,7 @@ const Wrapper = styled.div<{ isVisible: boolean }>`
   position: absolute;
   bottom: 104px;
   left: calc(50% - 115px);
-  width: 230px;
+  min-width: 230px;
   height: 38px;
   padding: 10px 32px;
   color: ${({ theme }) => theme.color.basic.White};
@@ -32,6 +38,6 @@ const Wrapper = styled.div<{ isVisible: boolean }>`
   background-color: rgba(37, 37, 37, 0.8);
   border-radius: 4px;
   opacity: ${({ isVisible }) => (isVisible ? 0.95 : 0)};
-  transition: opacity 1s;
+  transition: opacity 0.5s;
   ${typography.Caption1_Regular_13}
 `;
