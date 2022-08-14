@@ -163,31 +163,32 @@ function MyProfile() {
               : undefined
           }
         />
-        <InterestsWrapper>
-          <StyledTextField
-            value={profileInfoValue.interests}
-            onChange={handleChange('interests')}
-            label={`관심 분야 ${interestList.length}/3`}
-            maxLength={10}
-            disabled={interestList.length >= 3}
-            hintText={
-              profileInfoValue.interests.length > 10
-                ? '관심 분야는 10자 이내로 입력해주세요.'
-                : undefined
-            }
-          />
-          <ConfirmButton
-            buttonType={profileInfoValue.interests ? 'primary' : 'default'}
-            disabled={
-              profileInfoValue.interests.length === 0 ||
-              interestList.length >= 3 ||
-              profileInfoValue.interests.length > 10
-            }
-            onClick={handleTagAdd}
-          >
-            등록
-          </ConfirmButton>
-        </InterestsWrapper>
+        <SubTitle
+          marginBottom={interestList.length < 3 ? 0 : 22}
+        >{`관심 분야 ${interestList.length}/3`}</SubTitle>
+        {interestList.length < 3 && (
+          <InterestsWrapper>
+            <StyledTextField
+              value={profileInfoValue.interests}
+              onChange={handleChange('interests')}
+              maxLength={10}
+              hintText={
+                profileInfoValue.interests.length > 10
+                  ? '관심 분야는 10자 이내로 입력해주세요.'
+                  : undefined
+              }
+            />
+            <ConfirmButton
+              buttonType={profileInfoValue.interests ? 'primary' : 'default'}
+              disabled={
+                profileInfoValue.interests.length === 0 || profileInfoValue.interests.length > 10
+              }
+              onClick={handleTagAdd}
+            >
+              등록
+            </ConfirmButton>
+          </InterestsWrapper>
+        )}
         <TagGroupWrapper>
           {interestList.map((interest, index) => (
             <LineChip key={interest} onClick={handleTagRemove(index)}>
@@ -229,8 +230,8 @@ const Wrapper = styled.div`
   padding: 28px 30px 20px;
 `;
 
-const SubTitle = styled.div`
-  margin-bottom: 15px;
+const SubTitle = styled.div<{ marginBottom?: number }>`
+  margin-bottom: ${({ marginBottom }) => marginBottom ?? 15}px;
   color: ${({ theme }) => theme.color.gray.Gray400};
   ${typography.Body_Medium_14}
 `;
