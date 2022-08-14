@@ -16,8 +16,7 @@ const TEST_USER_ID = '62d7f4776ad96c51d4330ea2';
 export async function getServerSideProps() {
   const queryClient = new QueryClient();
   await queryClient.prefetchQuery([QUERY_KEYS.MY_PROFILE], getProfileInfo);
-  await queryClient.prefetchQuery([QUERY_KEYS.OPEN_INQUIRY], getMyWardList);
-  await queryClient.prefetchQuery([QUERY_KEYS.WARD_LIST], getProfileImg);
+  await queryClient.prefetchQuery([QUERY_KEYS.WARD_LIST], getMyWardList);
 
   return {
     props: {
@@ -36,10 +35,6 @@ export function getMyWardList() {
   return api.get({
     url: `/api/ward`,
   });
-}
-
-export function getProfileImg() {
-  return api.get({ url: `/api/user/${TEST_USER_ID}/link-share` });
 }
 
 // eslint-disable-next-line no-restricted-exports

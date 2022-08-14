@@ -7,12 +7,7 @@ import Cancel from 'public/icons/cancel.svg';
 import TextField from '@/src/components/TextField';
 import { typography } from '@/styles';
 import { LargeLineButton } from '@/src/components';
-import {
-  getMyWardList,
-  getProfileImg,
-  getProfileInfo,
-  QUERY_KEYS,
-} from '@/pages/setting/my-profile';
+import { getMyWardList, getProfileInfo, QUERY_KEYS } from '@/pages/setting/my-profile';
 import { useProfileImageResetter, useProfileInfoUpdater } from './mutations';
 import SnackBar from '@/src/components/SnackBar';
 import LineChip from '@/src/components/LineChip';
@@ -20,10 +15,18 @@ import LineChip from '@/src/components/LineChip';
 // eslint-disable-next-line @typescript-eslint/naming-convention
 type MY_PROFILE_INPUT_TYPE = 'description' | 'interests';
 
+// TODO
+// 관심분야 3개 모두 지정한 경우 → input 히든 처리 O
+// 변경하기 완료 후 snackbar 표출
+// snackbar 꺼진 뒤 콜백받도록 수정
+// 대표와드 설정 api
+// 대표와드 표출
+// radio button 컴포넌트 생성
+// radio button 컴포넌트 적용
+// LineChip active 색상 필요
 function MyProfile() {
   const { data: profileInfo } = useQuery(QUERY_KEYS.MY_PROFILE, getProfileInfo);
   const { data: wardList } = useQuery(QUERY_KEYS.WARD_LIST, getMyWardList);
-  const { data: imageUrl } = useQuery(QUERY_KEYS.OPEN_INQUIRY, getProfileImg);
 
   const [profileInfoValue, setProfileInfoValue] = useState<Record<MY_PROFILE_INPUT_TYPE, string>>({
     description: '',
@@ -65,8 +68,8 @@ function MyProfile() {
   useEffect(() => {
     setProfileInfoValue({ description: profileInfo?.profileDescription || '', interests: '' });
     setInterestList(profileInfo?.tags || []);
-    setProfileImage({ url: imageUrl?.user.profileImageUrl });
-  }, [profileInfo, wardList, imageUrl, setProfileInfoValue, setInterestList, setProfileImage]);
+    setProfileImage({ url: profileInfo?.profileImageUrl });
+  }, [profileInfo, wardList, setProfileInfoValue, setInterestList, setProfileImage]);
 
   const handleChange = useCallback(
     (key: MY_PROFILE_INPUT_TYPE) => (value: string) => {
@@ -134,12 +137,19 @@ function MyProfile() {
           {profileImage.url ? (
             <ImgWrapper>
               <StyledImg src={profileImage.url} alt="내 프로필" width={100} height={100} />
-              <ImgCancelSvg onClick={handleProfileImageReset}>
-                <Cancel />
-              </ImgCancelSvg>
+              {!profileImage.url.includes('DEFAULT_IMAGE') && (
+                <ImgCancelSvg onClick={handleProfileImageReset}>
+                  <Cancel />
+                </ImgCancelSvg>
+              )}
             </ImgWrapper>
           ) : (
-            <StyledImg src="/images/myProfile.png" alt="기본 프로필" width={100} height={100} />
+            <StyledImg
+              src="https://dori-dori-bucket.kr.object.ncloudstorage.com/PROFILE/DEFAULT_IMAGE.png"
+              alt="기본 프로필"
+              width={100}
+              height={100}
+            />
           )}
           <FileInput
             type="file"
