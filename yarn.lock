@@ -3678,6 +3678,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"dayjs@npm:^1.11.4":
+  version: 1.11.4
+  resolution: "dayjs@npm:1.11.4"
+  checksum: 478c8a2db9e3fc752db9f02ef23f00e12308eebbeb85569913731ea78e8d5616f2335e14f25af48e9f16bbcbd796653092eca4d2f42c0218a948402c31735f59
+  languageName: node
+  linkType: hard
+
 "debug@npm:^2.2.0, debug@npm:^2.3.3, debug@npm:^2.6.9":
   version: 2.6.9
   resolution: "debug@npm:2.6.9"
@@ -6485,6 +6492,7 @@ __metadata:
     "@typescript-eslint/parser": latest
     "@yarnpkg/sdks": ^3.0.0-rc.11
     axios: ^0.27.2
+    dayjs: ^1.11.4
     eslint: 8.18.0
     eslint-config-airbnb: ^19.0.4
     eslint-config-airbnb-typescript: ^17.0.0
