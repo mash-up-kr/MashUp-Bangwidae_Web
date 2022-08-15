@@ -9,8 +9,8 @@ import { typography } from '@/styles';
 import { CommentItem, PopupMenu } from './components';
 import { getPostDetail, getCommentList } from '@/pages/question-detail';
 import {
-  useLikeCountCreator,
-  useUnlikeCountCreator,
+  usePostLikeCreator,
+  usePostUnlikeCreator,
   useCommentCreator,
   useCommentUpdater,
   useCommentDeleter,
@@ -36,8 +36,8 @@ function QuestionDetail() {
     isLoading: isCommentLoading,
   } = useQuery([COMMENTS], getCommentList);
 
-  const { mutate: mutateUnlikeCount } = useUnlikeCountCreator();
-  const { mutate: mutateLikeCount } = useLikeCountCreator();
+  const { mutate: mutateUnlikeCount } = usePostUnlikeCreator();
+  const { mutate: mutateLikeCount } = usePostLikeCreator();
   const { mutate: mutateCommentCreate } = useCommentCreator();
   const { mutate: mutateCommentUpdate } = useCommentUpdater();
   const { mutate: mutateCommentDelete } = useCommentDeleter();

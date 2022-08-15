@@ -1,8 +1,6 @@
 import React, { MouseEvent } from 'react';
-import { useQueryClient, useMutation } from 'react-query';
-import api from 'src/api/core';
 import styled, { useTheme } from 'styled-components';
-import { COMMENTS, COMMENT_LIKE, COMMENT_UNLIKE } from 'src/consts/query';
+import { useCommentLikeCreator, useCommentUnlikeCreator } from 'pages/QuestionDetail/mutations';
 import { typography } from '@/styles';
 import { IconTextButton } from '@/src/components';
 import { dateTime } from '@/src/utils/DateTime';
@@ -30,38 +28,10 @@ export interface Comment {
   updatedAt: string;
 }
 
-const useLikeCountCreator = (commentId: string) => {
-  const queryClient = useQueryClient();
-  return useMutation(
-    [COMMENT_LIKE],
-    () =>
-      api.post({
-        url: `/api/comments/${commentId}/like`,
-      }),
-    {
-      onSuccess: () => queryClient.invalidateQueries(COMMENTS),
-    },
-  );
-};
-
-const useUnlikeCountCreator = (commentId: string) => {
-  const queryClient = useQueryClient();
-  return useMutation(
-    [COMMENT_UNLIKE],
-    () =>
-      api.delete({
-        url: `/api/comments/${commentId}/like`,
-      }),
-    {
-      onSuccess: () => queryClient.invalidateQueries(COMMENTS),
-    },
-  );
-};
-
 function CommentItem({ comment, onMenuClick }: CommentItemProps) {
   const theme = useTheme();
-  const { mutate: mutateLikeCount } = useLikeCountCreator(comment.id);
-  const { mutate: mutateUnlikeCount } = useUnlikeCountCreator(comment.id);
+  const { mutate: mutateLikeCount } = useCommentLikeCreator(comment.id);
+  const { mutate: mutateUnlikeCount } = useCommentUnlikeCreator(comment.id);
 
   const handleLikeButtonClick = () => {
     // eslint-disable-next-line @typescript-eslint/no-unused-expressions

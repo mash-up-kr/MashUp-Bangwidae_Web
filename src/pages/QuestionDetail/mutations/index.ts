@@ -1,9 +1,9 @@
-import { COMMENTS, LIKE, POST, UNLIKE } from 'src/consts/query';
+import { COMMENTS, LIKE, POST, UNLIKE, COMMENT_LIKE, COMMENT_UNLIKE } from 'src/consts/query';
 import api from 'src/api/core';
 import { useMutation, useQueryClient } from 'react-query';
 import { TEST_ID } from '@/pages/question-detail';
 
-export const useLikeCountCreator = () => {
+export const usePostLikeCreator = () => {
   const queryClient = useQueryClient();
   return useMutation(
     [LIKE],
@@ -17,7 +17,7 @@ export const useLikeCountCreator = () => {
   );
 };
 
-export const useUnlikeCountCreator = () => {
+export const usePostUnlikeCreator = () => {
   const queryClient = useQueryClient();
   return useMutation(
     [UNLIKE],
@@ -76,6 +76,34 @@ export const useCommentDeleter = () => {
       api.delete({
         url: `/api/comments/${data.commentId}`,
         data,
+      }),
+    {
+      onSuccess: () => queryClient.invalidateQueries(COMMENTS),
+    },
+  );
+};
+
+export const useCommentLikeCreator = (commentId: string) => {
+  const queryClient = useQueryClient();
+  return useMutation(
+    [COMMENT_LIKE],
+    () =>
+      api.post({
+        url: `/api/comments/${commentId}/like`,
+      }),
+    {
+      onSuccess: () => queryClient.invalidateQueries(COMMENTS),
+    },
+  );
+};
+
+export const useCommentUnlikeCreator = (commentId: string) => {
+  const queryClient = useQueryClient();
+  return useMutation(
+    [COMMENT_UNLIKE],
+    () =>
+      api.delete({
+        url: `/api/comments/${commentId}/like`,
       }),
     {
       onSuccess: () => queryClient.invalidateQueries(COMMENTS),
