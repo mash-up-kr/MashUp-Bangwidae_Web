@@ -1926,6 +1926,28 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@splinetool/react-spline@npm:^2.2.1":
+  version: 2.2.1
+  resolution: "@splinetool/react-spline@npm:2.2.1"
+  dependencies:
+    react-merge-refs: ^1.1.0
+  peerDependencies:
+    "@splinetool/runtime": "*"
+    react: ">=17.0.0"
+    react-dom: ">=17.0.0"
+  checksum: 8223318ab0392a45fc8123c14e1d718efdac239d6cd5a04923097d2597fdfc2e0460caba8cb77b268a1911439b4a17f68340321f912d74387c725fab73871f19
+  languageName: node
+  linkType: hard
+
+"@splinetool/runtime@npm:^0.9.95":
+  version: 0.9.95
+  resolution: "@splinetool/runtime@npm:0.9.95"
+  dependencies:
+    on-change: ^4.0.0
+  checksum: 3ca63b400634c4ab01cfa84e2e7e61e8506b69138f349f4570c2d3bc01abd86aa53c4eed9a986b614b628662300272f78719089f539f6a57aa04407bb96d8d15
+  languageName: node
+  linkType: hard
+
 "@stylelint/postcss-css-in-js@npm:^0.37.2":
   version: 0.37.3
   resolution: "@stylelint/postcss-css-in-js@npm:0.37.3"
@@ -6522,6 +6544,8 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "my-next-app@workspace:."
   dependencies:
+    "@splinetool/react-spline": ^2.2.1
+    "@splinetool/runtime": ^0.9.95
     "@stylelint/postcss-css-in-js": ^0.37.2
     "@svgr/webpack": ^6.3.1
     "@types/form-data": ^2.5.0
@@ -6888,6 +6912,13 @@ __metadata:
   version: 1.0.0
   resolution: "oblivious-set@npm:1.0.0"
   checksum: f31740ea9c3a8242ad2324e4ebb9a35359fbc2e6e7131731a0fc1c8b7b1238eb07e4c8c631a38535243a7b8e3042b7e89f7dc2a95d2989afd6f80bd5793b0aab
+  languageName: node
+  linkType: hard
+
+"on-change@npm:^4.0.0":
+  version: 4.0.1
+  resolution: "on-change@npm:4.0.1"
+  checksum: 23038d603859eafcd8e7ecd7ab682551e2c33c6e12e90dc53c83e453dcb263f5b36c24a945d3e91805273804a2bd6b78f9f91c9bb05dd11771fa626a05d8fb18
   languageName: node
   linkType: hard
 
@@ -7456,6 +7487,13 @@ __metadata:
   version: 18.2.0
   resolution: "react-is@npm:18.2.0"
   checksum: e72d0ba81b5922759e4aff17e0252bd29988f9642ed817f56b25a3e217e13eea8a7f2322af99a06edb779da12d5d636e9fda473d620df9a3da0df2a74141d53e
+  languageName: node
+  linkType: hard
+
+"react-merge-refs@npm:^1.1.0":
+  version: 1.1.0
+  resolution: "react-merge-refs@npm:1.1.0"
+  checksum: 90884352999002d868ab9f1bcfe3222fb0f2178ed629f1da7e98e5a9b02a2c96b4aa72800db92aabd69d2483211b4be57a2088e89a11a0b660e7ada744d4ddf7
   languageName: node
   linkType: hard
 
