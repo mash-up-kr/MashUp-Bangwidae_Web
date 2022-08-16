@@ -35,6 +35,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageDependencies": [\
             ["@stylelint/postcss-css-in-js", "virtual:1fbd4f2c9aa3a03ac18099f09c5d6be2da6c1cb1010c20668cc6aa6083bebfa409fa9e1becb8a79d1553bc0825388e53284c58854de362db68d1ea8fa75d9d8c#npm:0.37.3"],\
             ["@svgr/webpack", "npm:6.3.1"],\
+            ["@types/form-data", "npm:2.5.0"],\
             ["@types/nanoid", "npm:3.0.0"],\
             ["@types/node", "npm:18.0.0"],\
             ["@types/react", "npm:18.0.14"],\
@@ -53,6 +54,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["eslint-plugin-import", "virtual:1fbd4f2c9aa3a03ac18099f09c5d6be2da6c1cb1010c20668cc6aa6083bebfa409fa9e1becb8a79d1553bc0825388e53284c58854de362db68d1ea8fa75d9d8c#npm:2.26.0"],\
             ["eslint-plugin-jsx-a11y", "virtual:1fbd4f2c9aa3a03ac18099f09c5d6be2da6c1cb1010c20668cc6aa6083bebfa409fa9e1becb8a79d1553bc0825388e53284c58854de362db68d1ea8fa75d9d8c#npm:6.6.0"],\
             ["eslint-plugin-react", "virtual:1fbd4f2c9aa3a03ac18099f09c5d6be2da6c1cb1010c20668cc6aa6083bebfa409fa9e1becb8a79d1553bc0825388e53284c58854de362db68d1ea8fa75d9d8c#npm:7.30.1"],\
+            ["form-data", "npm:4.0.0"],\
             ["husky", "npm:8.0.1"],\
             ["lint-staged", "npm:13.0.3"],\
             ["nanoid", "npm:4.0.0"],\
@@ -3430,6 +3432,16 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageLocation": "./.yarn/cache/@types-emscripten-npm-1.39.6-c9c4021365-437f2f9cdf.zip/node_modules/@types/emscripten/",\
           "packageDependencies": [\
             ["@types/emscripten", "npm:1.39.6"]\
+          ],\
+          "linkType": "HARD"\
+        }]\
+      ]],\
+      ["@types/form-data", [\
+        ["npm:2.5.0", {\
+          "packageLocation": "./.yarn/cache/@types-form-data-npm-2.5.0-499e3e2b06-c3f6c89327.zip/node_modules/@types/form-data/",\
+          "packageDependencies": [\
+            ["@types/form-data", "npm:2.5.0"],\
+            ["form-data", "npm:4.0.0"]\
           ],\
           "linkType": "HARD"\
         }]\
@@ -8627,6 +8639,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["my-next-app", "workspace:."],\
             ["@stylelint/postcss-css-in-js", "virtual:1fbd4f2c9aa3a03ac18099f09c5d6be2da6c1cb1010c20668cc6aa6083bebfa409fa9e1becb8a79d1553bc0825388e53284c58854de362db68d1ea8fa75d9d8c#npm:0.37.3"],\
             ["@svgr/webpack", "npm:6.3.1"],\
+            ["@types/form-data", "npm:2.5.0"],\
             ["@types/nanoid", "npm:3.0.0"],\
             ["@types/node", "npm:18.0.0"],\
             ["@types/react", "npm:18.0.14"],\
@@ -8645,6 +8658,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["eslint-plugin-import", "virtual:1fbd4f2c9aa3a03ac18099f09c5d6be2da6c1cb1010c20668cc6aa6083bebfa409fa9e1becb8a79d1553bc0825388e53284c58854de362db68d1ea8fa75d9d8c#npm:2.26.0"],\
             ["eslint-plugin-jsx-a11y", "virtual:1fbd4f2c9aa3a03ac18099f09c5d6be2da6c1cb1010c20668cc6aa6083bebfa409fa9e1becb8a79d1553bc0825388e53284c58854de362db68d1ea8fa75d9d8c#npm:6.6.0"],\
             ["eslint-plugin-react", "virtual:1fbd4f2c9aa3a03ac18099f09c5d6be2da6c1cb1010c20668cc6aa6083bebfa409fa9e1becb8a79d1553bc0825388e53284c58854de362db68d1ea8fa75d9d8c#npm:7.30.1"],\
+            ["form-data", "npm:4.0.0"],\
             ["husky", "npm:8.0.1"],\
             ["lint-staged", "npm:13.0.3"],\
             ["nanoid", "npm:4.0.0"],\
