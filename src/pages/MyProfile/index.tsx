@@ -63,7 +63,7 @@ function MyProfile() {
   const { mutate: submitProfileDefaultImg } = useProfileImageResetter();
 
   useEffect(() => {
-    setProfileInfoValue({ description: profileInfo?.profileDescription || '', interests: '' });
+    setProfileInfoValue({ description: profileInfo?.profileDescription ?? '', interests: '' });
     setInterestList(profileInfo?.tags || []);
     setProfileImage({ url: imageUrl?.user.profileImageUrl });
   }, [profileInfo, wardList, imageUrl, setProfileInfoValue, setInterestList, setProfileImage]);
