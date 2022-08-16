@@ -1,10 +1,105 @@
+import { useState, ChangeEvent, MouseEvent, useRef } from 'react';
 import styled, { useTheme } from 'styled-components';
+import { useQuery } from 'react-query';
+import type { Comment } from 'pages/QuestionDetail/components/CommentItem';
+import { POST, COMMENTS } from 'src/consts/query';
+import { dateTime } from 'src/utils/DateTime';
 import { LargeLineButton, IconTextButton } from '@/src/components';
 import { typography } from '@/styles';
-import { CommentItem } from './components';
+import { CommentItem, PopupMenu } from './components';
+import { getPostDetail, getCommentList } from '@/pages/question-detail';
+import {
+  usePostLikeCreator,
+  usePostUnlikeCreator,
+  useCommentCreator,
+  useCommentUpdater,
+  useCommentDeleter,
+} from './mutations';
 
 function QuestionDetail() {
   const theme = useTheme();
+  const [commentInput, setCommentInput] = useState('');
+  const [isPopupOpen, setIsPopupOpen] = useState(false);
+  const [selectedCommentId, setSelectedCommentId] = useState('');
+  const [commentReplyTargetUserName, setCommentReplyTargetUserName] = useState('');
+  const commentInputElement = useRef<HTMLInputElement>(null);
+
+  const {
+    data: post,
+    isError: isPostError,
+    isLoading: isPostLoading,
+  } = useQuery([POST], getPostDetail);
+
+  const {
+    data: comments,
+    isError: isCommentError,
+    isLoading: isCommentLoading,
+  } = useQuery([COMMENTS], getCommentList);
+
+  const { mutate: mutateUnlikeCount } = usePostUnlikeCreator();
+  const { mutate: mutateLikeCount } = usePostLikeCreator();
+  const { mutate: mutateCommentCreate } = useCommentCreator();
+  const { mutate: mutateCommentUpdate } = useCommentUpdater();
+  const { mutate: mutateCommentDelete } = useCommentDeleter();
+
+  const handleLikeButtonClick = () => {
+    if (post.userLiked) mutateUnlikeCount();
+    else mutateLikeCount();
+  };
+
+  const handleCommentInputChange = (e: ChangeEvent<HTMLInputElement>) => {
+    setCommentInput(e.target.value);
+  };
+
+  const handleCommentInputSubmit = () => {
+    const isCreating = !selectedCommentId;
+    const isUpdating = !isCreating;
+    const { latitude, longitude } = post;
+
+    const commentDataToCreate = {
+      content: commentInput,
+      latitude,
+      longitude,
+    };
+    const commentDataToUpdate = {
+      commentId: selectedCommentId,
+      content: commentInput,
+      latitude,
+      longitude,
+    };
+
+    if (isCreating) mutateCommentCreate(commentDataToCreate);
+    if (isUpdating) mutateCommentUpdate(commentDataToUpdate);
+    setCommentInput('');
+  };
+
+  const handleCommentKebabMenuClick = (event: MouseEvent, commentId: string) => {
+    togglePopupMenu();
+    setSelectedCommentId(commentId);
+  };
+
+  const togglePopupMenu = () => {
+    setIsPopupOpen((value) => !value);
+  };
+
+  const handleCommentEditButtonClick = () => {
+    togglePopupMenu();
+    if (!commentInputElement.current) return;
+    commentInputElement.current.focus();
+    const selectedComment = comments.values.find(
+      ({ id }: { id: string }) => id === selectedCommentId,
+    );
+    setCommentReplyTargetUserName(selectedComment.user.nickname);
+    setCommentInput(selectedComment.content);
+  };
+
+  const handleCommentDeleteButtonClick = () => {
+    togglePopupMenu();
+    mutateCommentDelete({ commentId: selectedCommentId });
+  };
+
+  if (isPostLoading || isCommentLoading) return <div>Loading</div>;
+  if (isPostError || isCommentError) return <div>Error</div>;
 
   return (
     <Layout>
@@ -12,17 +107,17 @@ function QuestionDetail() {
       <TopSection>
         {/* Header */}
         <FlexRow gap={8}>
-          <ProfileImage src="https://picsum.photos/200" />
+          <ProfileImage src={post.user.profileImageUrl} />
           <FlexBetween>
             <FlexColumn gap={6}>
               <FlexRow gap={8}>
-                <Nickname>도리를 찾아서</Nickname>
+                <Nickname>{post.user.nickname}</Nickname>
                 <LevelTag>Lv.1</LevelTag>
               </FlexRow>
               <FlexRow gap={6}>
-                <InterestTag>디즈니</InterestTag>
-                <InterestTag>영화</InterestTag>
-                <InterestTag>애니메이션</InterestTag>
+                {post.user.tags.map((tag: string) => (
+                  <InterestTag key={tag}>{tag}</InterestTag>
+                ))}
               </FlexRow>
             </FlexColumn>
             <LargeLineButton buttonType="default" onClick={() => {}}>
@@ -32,21 +127,24 @@ function QuestionDetail() {
         </FlexRow>
         <Divider />
         {/* Content */}
-        <Content>
-          도리를 찾아서가 뭐에요? 뭔지 찾으려 하는뎅 대체 #도리 가 무엇인지 누가 좀 알려줄 분~?
-        </Content>
+        <Content>{post.content}</Content>
         <FlexRow gap={8}>
-          <LocatedAt>강남구</LocatedAt>
-          <CreatedAt>1분 전</CreatedAt>
+          <LocatedAt>{post.representativeAddress}</LocatedAt>
+          <CreatedAt>{dateTime.fromNow(post.createdAt)}</CreatedAt>
         </FlexRow>
         {/* Menu Group */}
         <MenuGroupPosition>
           <MenuGroup>
-            <LeftIcon name="hand" color={theme.color.gray.Gray500} size={20} onClick={() => {}}>
-              궁금해요
+            <LeftIcon
+              name="hand"
+              color={post.userLiked ? theme.color.primary.Lime300 : theme.color.gray.Gray500}
+              size={20}
+              onClick={handleLikeButtonClick}
+            >
+              {post.likeCount === 0 ? '궁금해요' : post.likeCount}
             </LeftIcon>
             <CenterIcon name="chat" color={theme.color.gray.Gray500} size={20} onClick={() => {}}>
-              댓글
+              {post.commentCount || '댓글'}
             </CenterIcon>
             <RightIcon name="share" color={theme.color.gray.Gray500} size={20} onClick={() => {}}>
               공유
@@ -56,16 +154,40 @@ function QuestionDetail() {
       </TopSection>
       {/* Bottom Section */}
       <BottomSection>
-        <CommentItem />
+        {comments?.values.map((commentItem: Comment) => (
+          <CommentItem
+            key={commentItem.id}
+            comment={commentItem}
+            onMenuClick={handleCommentKebabMenuClick}
+          />
+        ))}
         <CommentInputWrapper>
-          <CommentInput type="text" placeholder="댓글을 남겨주세요." />
-          <CommentSubmitButton>
-            <LargeLineButton buttonType="primary" onClick={() => {}}>
-              등록
-            </LargeLineButton>
-          </CommentSubmitButton>
+          {commentReplyTargetUserName && (
+            <CommentInputInfo> {`> ${commentReplyTargetUserName}에 답글 달기`}</CommentInputInfo>
+          )}
+          <FlexRow gap={0}>
+            <CommentInput
+              type="text"
+              placeholder="댓글을 남겨주세요."
+              value={commentInput}
+              onChange={handleCommentInputChange}
+              ref={commentInputElement}
+            />
+            <CommentSubmitButton onClick={handleCommentInputSubmit}>
+              <LargeLineButton buttonType="primary" onClick={() => {}}>
+                등록
+              </LargeLineButton>
+            </CommentSubmitButton>
+          </FlexRow>
         </CommentInputWrapper>
       </BottomSection>
+      {isPopupOpen && (
+        <PopupMenu onClose={togglePopupMenu}>
+          <span onClick={handleCommentEditButtonClick}>수정하기</span>
+          <span onClick={handleCommentDeleteButtonClick}>삭제하기</span>
+          <span onClick={() => {}}>익명으로 변경</span>
+        </PopupMenu>
+      )}
     </Layout>
   );
 }
@@ -156,14 +278,13 @@ const Content = styled.div`
   font-weight: 400;
   font-size: 16px;
   line-height: 27.2px;
-  word-break: keep-all;
+  word-break: break-word;
 `;
 
 const LocatedAt = styled.div`
   color: ${({ theme }) => theme.color.gray.Gray600};
   font-weight: 400;
   ${typography.Caption2_Regular_12}
-
   ::after {
     height: 10px;
     margin-left: 10px;
@@ -235,7 +356,15 @@ const CommentInputWrapper = styled.div`
   bottom: 0;
   left: 0;
   width: 100%;
+  padding-top: 12px;
   background-color: ${({ theme }) => theme.color.basic.DarkGray};
+`;
+
+const CommentInputInfo = styled.div`
+  margin-left: 30px;
+  height: 12px;
+  color: ${({ theme }) => theme.color.secondary01.Blue300};
+  ${typography.Body_Regular_14}
 `;
 
 const CommentInput = styled.input`
@@ -247,20 +376,18 @@ const CommentInput = styled.input`
   border: none;
   ${typography.Title2_Regular_16}
   caret-color: ${({ theme }) => theme.color.primary.Lime300};
+
   &:focus {
     outline: none;
   }
+
   ::placeholder {
     color: ${({ theme }) => theme.color.gray.Gray700};
   }
 `;
 
 const CommentSubmitButton = styled.div`
-  position: absolute;
-  top: 0;
-  right: 0;
   margin-right: 30px;
-  transform: translateY(50%);
 `;
 
 export default QuestionDetail;
