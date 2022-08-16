@@ -1,6 +1,6 @@
 :root {
   --korean-unicode: U+AC00-D7A3;
-  --en-unicode: U+0041-005A, U+0061-007A;
+  --en-num-unicode: U+0041-005A, U+0061-007A, U+0030-0039;
 }
 
 * {
@@ -51,19 +51,19 @@ a {
   font-weight: 400;
   font-family: E_SFPro_Regular;
   src: url('/fonts/E_SFPro_Regular.woff2') format('woff2');
-  unicode-range: var(--en-unicode);
+  unicode-range: var(--en-num-unicode);
 }
 
 @font-face {
   font-weight: 500;
   font-family: E_SFPro_Medium;
   src: url('/fonts/E_SFPro_Medium.woff2') format('woff2');
-  unicode-range: var(--en-unicode);
+  unicode-range: var(--en-num-unicode);
 }
 
 @font-face {
   font-weight: 700;
   font-family: E_SFPro_Bold;
   src: url('/fonts/E_SFPro_Bold.woff2') format('woff2');
-  unicode-range: var(--en-unicode);
+  unicode-range: var(--en-num-unicode);
 }
