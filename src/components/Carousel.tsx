@@ -13,7 +13,7 @@ function Carousel({ children, className, settings }: CarouselProps) {
   return (
     <Slider
       {...settings}
-      className={` ${className}`}
+      className={className}
       speed={500}
       arrows={false}
       slidesToShow={1}
