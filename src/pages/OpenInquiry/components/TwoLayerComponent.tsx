@@ -26,9 +26,10 @@ export const Container = styled.div<{ withBackground: boolean }>`
   flex-direction: column;
   flex-shrink: 0;
   justify-content: center;
-  width: 228px;
+  min-width: 228px;
+  height: 90px;
   margin-left: 8px;
-  padding: 0 16px;
+  padding: 18px 16px;
   background: ${({ withBackground, theme }) =>
     withBackground ? theme.color.gray.Gray900 : 'transparent'};
   border-radius: 8px;

@@ -12,6 +12,7 @@ import {
   Section,
   StyledSpan,
   Title,
+  StyledCarousel,
 } from './components/styledComponent';
 import QuestionContainer from './components/QuestionContainer';
 import TendencyContainer from './components/TendencyContainer';
@@ -48,15 +49,17 @@ function OpenInquiry() {
 
       <Footer>
         <QuestionButton onClick={() => {}}>질문하기</QuestionButton>
-        <TendencyContainer title="성향" tags={tags} />
-        {questions.map(({ questionId, questionContent, answerContent }) => (
-          <QuestionContainer
-            key={questionId}
-            id={questionId}
-            title={questionContent}
-            content={answerContent}
-          />
-        ))}
+        <StyledCarousel>
+          <TendencyContainer title="성향" tags={tags} />
+          {questions.map(({ questionId, questionContent, answerContent }) => (
+            <QuestionContainer
+              key={questionId}
+              id={questionId}
+              title={questionContent}
+              content={answerContent}
+            />
+          ))}
+        </StyledCarousel>
       </Footer>
     </>
   );
