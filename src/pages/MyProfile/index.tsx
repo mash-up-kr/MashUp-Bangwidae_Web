@@ -7,34 +7,33 @@ import Cancel from 'public/icons/cancel.svg';
 import TextField from '@/src/components/TextField';
 import { typography } from '@/styles';
 import { LargeLineButton } from '@/src/components';
-import {
-  getMyWardList,
-  getProfileImg,
-  getProfileInfo,
-  QUERY_KEYS,
-} from '@/pages/setting/my-profile';
+import { getMyWardList, getProfileInfo, QUERY_KEYS } from '@/pages/setting/my-profile';
 import { useProfileImageResetter, useProfileInfoUpdater } from './mutations';
 import SnackBar from '@/src/components/SnackBar';
 import LineChip from '@/src/components/LineChip';
+import RadioButton from '@/src/components/RadioButton';
 
-// eslint-disable-next-line @typescript-eslint/naming-convention
-type MY_PROFILE_INPUT_TYPE = 'description' | 'interests';
+type MyProfileInputType = 'description' | 'interests' | 'representativeWardId';
+const NOT_APPLICABLE = 'notApplicable';
 
 function MyProfile() {
   const { data: profileInfo } = useQuery(QUERY_KEYS.MY_PROFILE, getProfileInfo);
   const { data: wardList } = useQuery(QUERY_KEYS.WARD_LIST, getMyWardList);
-  const { data: imageUrl } = useQuery(QUERY_KEYS.OPEN_INQUIRY, getProfileImg);
 
-  const [profileInfoValue, setProfileInfoValue] = useState<Record<MY_PROFILE_INPUT_TYPE, string>>({
+  const [profileInfoValue, setProfileInfoValue] = useState<Record<MyProfileInputType, string>>({
     description: '',
     interests: '',
+    representativeWardId: NOT_APPLICABLE,
   });
   const [interestList, setInterestList] = useState<string[]>([]);
   const [profileImage, setProfileImage] = useState<{ file?: Blob; url?: string }>({
     file: undefined,
     url: undefined,
   });
+  const [snackBarText, setSnackBarText] = useState<string>();
   const imageInput = useRef<HTMLInputElement>(null);
+
+  const handleComplete = () => setSnackBarText('변경 완료!');
 
   const updateProfileImage = async () => {
     if (profileImage.file) {
@@ -50,26 +49,41 @@ function MyProfile() {
       });
       return;
     }
-    submitProfileDefaultImg();
+    if (profileImage.url === undefined) {
+      submitProfileDefaultImg();
+    }
   };
 
   const { mutate: submitProfileInfo } = useProfileInfoUpdater(
     {
       description: profileInfoValue.description,
       tags: interestList,
+      representativeWardId:
+        profileInfoValue.representativeWardId === NOT_APPLICABLE
+          ? null
+          : profileInfoValue.representativeWardId,
     },
-    updateProfileImage,
+    !!profileImage.file || profileImage.url === undefined ? updateProfileImage : handleComplete,
   );
-  const { mutate: submitProfileDefaultImg } = useProfileImageResetter();
+  const { mutate: submitProfileDefaultImg } = useProfileImageResetter(handleComplete);
 
   useEffect(() => {
-    setProfileInfoValue({ description: profileInfo?.profileDescription ?? '', interests: '' });
+    // FIXME: api response name -> id 변경 요청 후 제거
+    const representativeWardId = wardList?.find(
+      (ward: { name: string }) => ward.name === profileInfo?.representativeWardName,
+    )?.id;
+
+    setProfileInfoValue({
+      description: profileInfo?.profileDescription ?? '',
+      interests: '',
+      representativeWardId: representativeWardId ?? NOT_APPLICABLE,
+    });
     setInterestList(profileInfo?.tags || []);
-    setProfileImage({ url: imageUrl?.user.profileImageUrl });
-  }, [profileInfo, wardList, imageUrl, setProfileInfoValue, setInterestList, setProfileImage]);
+    setProfileImage({ url: profileInfo?.profileImageUrl });
+  }, [profileInfo, wardList, setProfileInfoValue, setInterestList, setProfileImage]);
 
   const handleChange = useCallback(
-    (key: MY_PROFILE_INPUT_TYPE) => (value: string) => {
+    (key: MyProfileInputType) => (value: string) => {
       setProfileInfoValue({
         ...profileInfoValue,
         [key]: value,
@@ -91,6 +105,9 @@ function MyProfile() {
       const list = interestList;
       list.splice(index, 1);
       setInterestList([...list]);
+      if (list.length === 0) {
+        setSnackBarText('관심 분야를 작성해주세요!');
+      }
     },
     [interestList, setInterestList],
   );
@@ -134,12 +151,19 @@ function MyProfile() {
           {profileImage.url ? (
             <ImgWrapper>
               <StyledImg src={profileImage.url} alt="내 프로필" width={100} height={100} />
-              <ImgCancelSvg onClick={handleProfileImageReset}>
-                <Cancel />
-              </ImgCancelSvg>
+              {!profileImage.url.includes('DEFAULT_IMAGE') && (
+                <ImgCancelSvg onClick={handleProfileImageReset}>
+                  <Cancel />
+                </ImgCancelSvg>
+              )}
             </ImgWrapper>
           ) : (
-            <StyledImg src="/images/myProfile.png" alt="기본 프로필" width={100} height={100} />
+            <StyledImg
+              src="https://dori-dori-bucket.kr.object.ncloudstorage.com/PROFILE/DEFAULT_IMAGE.png"
+              alt="기본 프로필"
+              width={100}
+              height={100}
+            />
           )}
           <FileInput
             type="file"
@@ -163,31 +187,32 @@ function MyProfile() {
               : undefined
           }
         />
-        <InterestsWrapper>
-          <StyledTextField
-            value={profileInfoValue.interests}
-            onChange={handleChange('interests')}
-            label={`관심 분야 ${interestList.length}/3`}
-            maxLength={10}
-            disabled={interestList.length >= 3}
-            hintText={
-              profileInfoValue.interests.length > 10
-                ? '관심 분야는 10자 이내로 입력해주세요.'
-                : undefined
-            }
-          />
-          <ConfirmButton
-            buttonType={profileInfoValue.interests ? 'primary' : 'default'}
-            disabled={
-              profileInfoValue.interests.length === 0 ||
-              interestList.length >= 3 ||
-              profileInfoValue.interests.length > 10
-            }
-            onClick={handleTagAdd}
-          >
-            등록
-          </ConfirmButton>
-        </InterestsWrapper>
+        <SubTitle
+          marginBottom={interestList.length < 3 ? 0 : 22}
+        >{`관심 분야 ${interestList.length}/3`}</SubTitle>
+        {interestList.length < 3 && (
+          <InterestsWrapper>
+            <StyledTextField
+              value={profileInfoValue.interests}
+              onChange={handleChange('interests')}
+              maxLength={10}
+              hintText={
+                profileInfoValue.interests.length > 10
+                  ? '관심 분야는 10자 이내로 입력해주세요.'
+                  : undefined
+              }
+            />
+            <ConfirmButton
+              buttonType={profileInfoValue.interests ? 'primary' : 'default'}
+              disabled={
+                profileInfoValue.interests.length === 0 || profileInfoValue.interests.length > 10
+              }
+              onClick={handleTagAdd}
+            >
+              등록
+            </ConfirmButton>
+          </InterestsWrapper>
+        )}
         <TagGroupWrapper>
           {interestList.map((interest, index) => (
             <LineChip key={interest} onClick={handleTagRemove(index)}>
@@ -198,11 +223,18 @@ function MyProfile() {
         {wardList?.length > 0 && (
           <>
             <WardTitle>내 대표 와드</WardTitle>
-            <TagGroupWrapper>
-              {wardList.map((ward: { id: string; name: string }) => (
-                <LineChip key={ward.id}>{ward.name}</LineChip>
-              ))}
-            </TagGroupWrapper>
+            <RadioButton
+              options={[
+                { key: NOT_APPLICABLE, value: NOT_APPLICABLE, text: '해당없음' },
+                ...wardList.map((ward: { id: string; name: string }) => ({
+                  key: ward.id,
+                  value: ward.id,
+                  text: ward.name,
+                })),
+              ]}
+              value={profileInfoValue.representativeWardId}
+              onChange={handleChange('representativeWardId')}
+            />
           </>
         )}
       </div>
@@ -214,7 +246,7 @@ function MyProfile() {
       >
         프로필 변경하기
       </StyledButton>
-      {interestList.length === 0 && <SnackBar text="관심 분야를 작성해주세요!" />}
+      {snackBarText && <SnackBar onClose={() => setSnackBarText(undefined)} text={snackBarText} />}
     </Wrapper>
   );
 }
@@ -229,8 +261,8 @@ const Wrapper = styled.div`
   padding: 28px 30px 20px;
 `;
 
-const SubTitle = styled.div`
-  margin-bottom: 15px;
+const SubTitle = styled.div<{ marginBottom?: number }>`
+  margin-bottom: ${({ marginBottom }) => marginBottom ?? 15}px;
   color: ${({ theme }) => theme.color.gray.Gray400};
   ${typography.Body_Medium_14}
 `;

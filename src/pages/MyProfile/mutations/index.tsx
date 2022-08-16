@@ -3,8 +3,8 @@ import api from 'src/api/core';
 import { QUERY_KEYS } from '@/pages/setting/my-profile';
 
 export const useProfileInfoUpdater = (
-  data: { description: string; tags: string[] },
-  onSubmit: () => void,
+  data: { description: string; tags: string[]; representativeWardId: string | null },
+  onComplete: () => void,
 ) =>
   useMutation(
     [QUERY_KEYS.UPDATE_PROFILE],
@@ -15,7 +15,7 @@ export const useProfileInfoUpdater = (
       }),
     {
       onSuccess: () => {
-        onSubmit();
+        onComplete();
       },
     },
   );
@@ -33,7 +33,7 @@ export const useProfileInfoUpdater = (
 //         },
 //         // transformRequest: () => ({
 //         //   data: formData,
-//         //   heades: {
+//         //   headers: {
 //         //     'Content-Type': 'multipart/form-data',
 //         //   },
 //         // }),
@@ -46,7 +46,7 @@ export const useProfileInfoUpdater = (
 //   );
 // };
 
-export const useProfileImageResetter = () => {
+export const useProfileImageResetter = (onComplete: () => void) => {
   const queryClient = useQueryClient();
   return useMutation(
     [QUERY_KEYS.RESET_PROFILE_IMAGE],
@@ -57,6 +57,7 @@ export const useProfileImageResetter = () => {
     {
       onSuccess: () => {
         queryClient.invalidateQueries(QUERY_KEYS.MY_PROFILE);
+        onComplete();
       },
     },
   );
