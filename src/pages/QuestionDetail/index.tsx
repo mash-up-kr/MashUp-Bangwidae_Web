@@ -23,7 +23,7 @@ function QuestionDetail() {
   const [selectedCommentId, setSelectedCommentId] = useState('');
   const [commentReplyTargetUserName, setCommentReplyTargetUserName] = useState('');
   const commentInputElement = useRef<HTMLInputElement>(null);
-  const { isTargetOpen, setIsTargetOpen, isBeforeTargetClose } = useTranslateAnimation(0.2);
+  const { isTargetOpen, changeTargetOpenState, isBeforeTargetClose } = useTranslateAnimation(0.2);
 
   const {
     data: post,
@@ -80,8 +80,8 @@ function QuestionDetail() {
   };
 
   const togglePopupMenu = () => {
-    if (isTargetOpen) setIsTargetOpen(false);
-    else setIsTargetOpen(true);
+    if (isTargetOpen) changeTargetOpenState(false);
+    else changeTargetOpenState(true);
   };
 
   const handleCommentEditButtonClick = () => {

@@ -19,5 +19,5 @@ export function useTranslateAnimation(closeAnimationDuration: number) {
     }, adjustedCloseAnimationDuration);
   };
 
-  return { isTargetOpen, setIsTargetOpen: onTranslate, isBeforeTargetClose };
+  return { isTargetOpen, changeTargetOpenState: onTranslate, isBeforeTargetClose };
 }
