@@ -82,7 +82,7 @@ const Layout = styled.div<{
   bottom: 0;
   z-index: 1000;
   width: 100%;
-  padding: 0 10px;
+  padding: 0 8px;
   border: 0;
   animation-name: ${({ isBeforeClose }) => (isBeforeClose ? slideDown : slideUp)};
   /* Slide Animation */
@@ -105,32 +105,32 @@ const Button = styled.button`
     border-radius: 0 0 12px 12px;
   }
 
-  ${typography.Title2_Regular_16}
+  ${typography.Title1_Regular_18}
   width: 100%;
   margin: 0 auto;
-  background: #262627;
-  color: #438ff7;
-  height: 50px;
+  background: ${({ theme }) => theme.color.gray.Gray700};
+  color: ${({ theme }) => theme.color.primary.Lime300};
+  height: 58px;
   cursor: pointer;
   border: none;
   border-bottom: 1px solid #444445;
 
   &:hover {
-    background: #49494b;
+    background: ${({ theme }) => theme.color.gray.Gray600};
   }
 `;
 
 const CancelButton = styled.button`
-  ${typography.Title2_Regular_16}
-  margin: 12px auto 10px auto;
+  ${typography.Title1_Regular_18}
+  margin: 8px auto;
   width: 100%;
-  color: #438ff7;
-  background: #262627;
+  color: ${({ theme }) => theme.color.primary.Lime300};
+  background: ${({ theme }) => theme.color.gray.Gray700};
   border-radius: 12px;
-  height: 50px;
+  height: 58px;
   border: none;
 
   &:hover {
-    background: #49494b;
+    background: ${({ theme }) => theme.color.gray.Gray600};
   }
 `;
