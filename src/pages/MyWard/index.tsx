@@ -1,11 +1,9 @@
 /* eslint-disable react/no-unused-prop-types */
 import { useQuery } from 'react-query';
-import styled from 'styled-components';
 import Flex from '@/src/components/Flex';
 import WardInfoContainer from './components/WardInfoContainer';
 import { getMyWard } from '@/pages/my-ward';
-import { Footer } from '../OpenInquiry/components/styledComponent';
-import Carousel from '@/src/components/Carousel';
+import { Footer, StyledCarousel } from '../OpenInquiry/components/styledComponent';
 
 interface Ward {
   id: string;
@@ -36,10 +34,6 @@ function MyWard() {
 }
 
 export default MyWard;
-
-export const StyledCarousel = styled(Carousel)`
-  width: calc(100% - 16px);
-`;
 
 // <button onClick={() => setIsOpen(true)}>모달 테스트를 위한 버튼</button>
 // {isOpen && (

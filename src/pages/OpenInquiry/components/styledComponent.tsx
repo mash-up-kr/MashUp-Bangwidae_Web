@@ -31,7 +31,7 @@ export const Footer = styled.div`
   margin-bottom: 3vh;
   padding-left: 24px;
 
-  overflow: scroll;
+  overflow: hidden;
 `;
 
 export const ContainerTitle = styled.div`
@@ -89,5 +89,6 @@ export const QuestionButton = styled.button`
 `;
 
 export const StyledCarousel = styled(Carousel)`
-  width: calc(100% - 90px);
+  width: calc(100% - 16px);
+  white-space: no-wrap;
 `;
