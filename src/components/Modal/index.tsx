@@ -42,6 +42,7 @@ const ModalWrapper = styled.div`
   display: flex;
   width: 100vw;
   height: 100vh;
+  background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5));
 `;
 
 const ModalContent = styled.div`
