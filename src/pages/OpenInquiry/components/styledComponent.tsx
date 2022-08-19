@@ -1,5 +1,6 @@
 import styled from 'styled-components';
 import { typography } from '@/styles';
+import Carousel from '@/src/components/Carousel';
 
 export const Header = styled.div`
   margin-top: 32px;
@@ -85,4 +86,8 @@ export const QuestionButton = styled.button`
   background: transparent;
   border: 1px solid ${({ theme }) => theme.color.primary.Lime300};
   border-radius: 10px;
+`;
+
+export const StyledCarousel = styled(Carousel)`
+  width: calc(100% - 90px);
 `;
