@@ -20,7 +20,7 @@ function WardInfoContainer({ type, location, remainDays }: Props) {
     <Wrapper>
       <Flex style={{ height: 150 }}>
         <Flex direction="column">
-          <Flex style={{ marginBottom: 16 }}>
+          <Flex style={{ marginBottom: 16, flexShrink: 0 }}>
             <Tag type="outline" color={colorTheme.color.primary.Lime300}>
               {remainDays}
             </Tag>
@@ -33,7 +33,7 @@ function WardInfoContainer({ type, location, remainDays }: Props) {
             <p style={{ fontSize: 24, fontWeight: 700 }}>{locationName}</p>
           </Flex>
         </Flex>
-        <Flex align="center" style={{ height: '100%' }}>
+        <Flex align="center" style={{ height: '100%', flexShrink: 0 }}>
           <Image src={thumbNail} width={94} height={94} />
         </Flex>
       </Flex>
@@ -58,8 +58,10 @@ export default WardInfoContainer;
 const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
+  flex-shrink: 0;
   width: 280px;
   height: 194px;
+  margin-right: 16px;
   padding: 16px;
   background-color: ${({ theme }) => theme.color.gray.Gray800};
   border-radius: 16px;
