@@ -19,7 +19,7 @@ function WardInfoContainer({ type, location, remainDays, onAdd }: Props) {
 
   return (
     <Wrapper>
-      <Flex style={{ height: 150 }}>
+      <Flex>
         <Flex direction="column">
           <Flex style={{ marginBottom: 16, flexShrink: 0 }}>
             <Tag type="outline" color={colorTheme.color.primary.Lime300}>
@@ -40,7 +40,7 @@ function WardInfoContainer({ type, location, remainDays, onAdd }: Props) {
       </Flex>
 
       {type === 'new' ? (
-        <Button withBackground style={{ marginTop: 8 }} onClick={onAdd}>
+        <Button withBackground style={{ marginTop: 16, flexShrink: 0 }} onClick={onAdd}>
           와드로 설정
         </Button>
       ) : (
