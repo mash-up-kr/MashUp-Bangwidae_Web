@@ -10,9 +10,10 @@ interface Props {
   type: 'new' | 'existing';
   remainDays: string;
   location: string; // 별명 또는 현재 위치를 해당 인자로 넘깁니다.
+  onAdd?: () => void;
 }
 
-function WardInfoContainer({ type, location, remainDays }: Props) {
+function WardInfoContainer({ type, location, remainDays, onAdd }: Props) {
   const titlePrefix = type === 'new' ? '지금 여기는' : '와드를 심어놓은';
   const locationName = type === 'new' ? `${location}!` : location;
 
@@ -39,7 +40,7 @@ function WardInfoContainer({ type, location, remainDays }: Props) {
       </Flex>
 
       {type === 'new' ? (
-        <Button withBackground style={{ marginTop: 8 }}>
+        <Button withBackground style={{ marginTop: 8 }} onClick={onAdd}>
           와드로 설정
         </Button>
       ) : (
