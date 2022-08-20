@@ -28,7 +28,6 @@ export const Container = styled.div<{ withBackground: boolean }>`
   justify-content: center;
   min-width: 228px;
   height: 90px;
-  margin-left: 8px;
   padding: 18px 16px;
   background: ${({ withBackground, theme }) =>
     withBackground ? theme.color.gray.Gray900 : 'transparent'};
