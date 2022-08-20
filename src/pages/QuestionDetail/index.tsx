@@ -22,7 +22,6 @@ function QuestionDetail() {
   const theme = useTheme();
   const [commentInput, setCommentInput] = useState('');
   const [selectedCommentId, setSelectedCommentId] = useState('');
-  const [commentReplyTargetUserName, setCommentReplyTargetUserName] = useState('');
   const commentInputElement = useRef<HTMLInputElement>(null);
   const { isTargetOpen, changeTargetOpenState, isBeforeTargetClose } = useTranslateAnimation(0.2);
 
@@ -92,7 +91,6 @@ function QuestionDetail() {
     const selectedComment = comments.values.find(
       ({ id }: { id: string }) => id === selectedCommentId,
     );
-    setCommentReplyTargetUserName(selectedComment.user.nickname);
     setCommentInput(selectedComment.content);
   };
 
@@ -185,9 +183,6 @@ function QuestionDetail() {
           />
         ))}
         <CommentInputWrapper>
-          {commentReplyTargetUserName && (
-            <CommentInputInfo> {`> ${commentReplyTargetUserName}에 답글 달기`}</CommentInputInfo>
-          )}
           <FlexRow gap={0}>
             <CommentInput
               type="text"
@@ -379,15 +374,7 @@ const CommentInputWrapper = styled.div`
   bottom: 0;
   left: 0;
   width: 100%;
-  padding-top: 12px;
   background-color: ${({ theme }) => theme.color.basic.DarkGray};
-`;
-
-const CommentInputInfo = styled.div`
-  margin-left: 30px;
-  height: 12px;
-  color: ${({ theme }) => theme.color.secondary01.Blue300};
-  ${typography.Body_Regular_14}
 `;
 
 const CommentInput = styled.input`
