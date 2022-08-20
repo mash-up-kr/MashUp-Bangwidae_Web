@@ -33,6 +33,8 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
         [null, {\
           "packageLocation": "./",\
           "packageDependencies": [\
+            ["@splinetool/react-spline", "virtual:1fbd4f2c9aa3a03ac18099f09c5d6be2da6c1cb1010c20668cc6aa6083bebfa409fa9e1becb8a79d1553bc0825388e53284c58854de362db68d1ea8fa75d9d8c#npm:2.2.1"],\
+            ["@splinetool/runtime", "npm:0.9.95"],\
             ["@stylelint/postcss-css-in-js", "virtual:1fbd4f2c9aa3a03ac18099f09c5d6be2da6c1cb1010c20668cc6aa6083bebfa409fa9e1becb8a79d1553bc0825388e53284c58854de362db68d1ea8fa75d9d8c#npm:0.37.3"],\
             ["@svgr/webpack", "npm:6.3.1"],\
             ["@types/form-data", "npm:2.5.0"],\
@@ -3072,6 +3074,47 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageLocation": "./.yarn/cache/@sindresorhus-is-npm-4.6.0-7cad05c55e-83839f13da.zip/node_modules/@sindresorhus/is/",\
           "packageDependencies": [\
             ["@sindresorhus/is", "npm:4.6.0"]\
+          ],\
+          "linkType": "HARD"\
+        }]\
+      ]],\
+      ["@splinetool/react-spline", [\
+        ["npm:2.2.1", {\
+          "packageLocation": "./.yarn/cache/@splinetool-react-spline-npm-2.2.1-89feaf45d9-8223318ab0.zip/node_modules/@splinetool/react-spline/",\
+          "packageDependencies": [\
+            ["@splinetool/react-spline", "npm:2.2.1"]\
+          ],\
+          "linkType": "SOFT"\
+        }],\
+        ["virtual:1fbd4f2c9aa3a03ac18099f09c5d6be2da6c1cb1010c20668cc6aa6083bebfa409fa9e1becb8a79d1553bc0825388e53284c58854de362db68d1ea8fa75d9d8c#npm:2.2.1", {\
+          "packageLocation": "./.yarn/__virtual__/@splinetool-react-spline-virtual-22dd63f3cb/0/cache/@splinetool-react-spline-npm-2.2.1-89feaf45d9-8223318ab0.zip/node_modules/@splinetool/react-spline/",\
+          "packageDependencies": [\
+            ["@splinetool/react-spline", "virtual:1fbd4f2c9aa3a03ac18099f09c5d6be2da6c1cb1010c20668cc6aa6083bebfa409fa9e1becb8a79d1553bc0825388e53284c58854de362db68d1ea8fa75d9d8c#npm:2.2.1"],\
+            ["@splinetool/runtime", "npm:0.9.95"],\
+            ["@types/react", "npm:18.0.14"],\
+            ["@types/react-dom", "npm:18.0.5"],\
+            ["@types/splinetool__runtime", null],\
+            ["react", "npm:18.2.0"],\
+            ["react-dom", "virtual:1fbd4f2c9aa3a03ac18099f09c5d6be2da6c1cb1010c20668cc6aa6083bebfa409fa9e1becb8a79d1553bc0825388e53284c58854de362db68d1ea8fa75d9d8c#npm:18.2.0"],\
+            ["react-merge-refs", "npm:1.1.0"]\
+          ],\
+          "packagePeers": [\
+            "@splinetool/runtime",\
+            "@types/react-dom",\
+            "@types/react",\
+            "@types/splinetool__runtime",\
+            "react-dom",\
+            "react"\
+          ],\
+          "linkType": "HARD"\
+        }]\
+      ]],\
+      ["@splinetool/runtime", [\
+        ["npm:0.9.95", {\
+          "packageLocation": "./.yarn/cache/@splinetool-runtime-npm-0.9.95-f27c355602-3ca63b4006.zip/node_modules/@splinetool/runtime/",\
+          "packageDependencies": [\
+            ["@splinetool/runtime", "npm:0.9.95"],\
+            ["on-change", "npm:4.0.1"]\
           ],\
           "linkType": "HARD"\
         }]\
@@ -8689,6 +8732,8 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageLocation": "./",\
           "packageDependencies": [\
             ["my-next-app", "workspace:."],\
+            ["@splinetool/react-spline", "virtual:1fbd4f2c9aa3a03ac18099f09c5d6be2da6c1cb1010c20668cc6aa6083bebfa409fa9e1becb8a79d1553bc0825388e53284c58854de362db68d1ea8fa75d9d8c#npm:2.2.1"],\
+            ["@splinetool/runtime", "npm:0.9.95"],\
             ["@stylelint/postcss-css-in-js", "virtual:1fbd4f2c9aa3a03ac18099f09c5d6be2da6c1cb1010c20668cc6aa6083bebfa409fa9e1becb8a79d1553bc0825388e53284c58854de362db68d1ea8fa75d9d8c#npm:0.37.3"],\
             ["@svgr/webpack", "npm:6.3.1"],\
             ["@types/form-data", "npm:2.5.0"],\
@@ -9078,6 +9123,15 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageLocation": "./.yarn/cache/oblivious-set-npm-1.0.0-8e7336b241-f31740ea9c.zip/node_modules/oblivious-set/",\
           "packageDependencies": [\
             ["oblivious-set", "npm:1.0.0"]\
+          ],\
+          "linkType": "HARD"\
+        }]\
+      ]],\
+      ["on-change", [\
+        ["npm:4.0.1", {\
+          "packageLocation": "./.yarn/cache/on-change-npm-4.0.1-f3a0b5ff59-23038d6038.zip/node_modules/on-change/",\
+          "packageDependencies": [\
+            ["on-change", "npm:4.0.1"]\
           ],\
           "linkType": "HARD"\
         }]\
@@ -9843,6 +9897,15 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageLocation": "./.yarn/cache/react-is-npm-18.2.0-0cc5edb910-e72d0ba81b.zip/node_modules/react-is/",\
           "packageDependencies": [\
             ["react-is", "npm:18.2.0"]\
+          ],\
+          "linkType": "HARD"\
+        }]\
+      ]],\
+      ["react-merge-refs", [\
+        ["npm:1.1.0", {\
+          "packageLocation": "./.yarn/cache/react-merge-refs-npm-1.1.0-26c3215fdd-9088435299.zip/node_modules/react-merge-refs/",\
+          "packageDependencies": [\
+            ["react-merge-refs", "npm:1.1.0"]\
           ],\
           "linkType": "HARD"\
         }]\

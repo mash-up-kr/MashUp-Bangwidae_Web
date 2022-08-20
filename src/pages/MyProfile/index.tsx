@@ -68,15 +68,10 @@ function MyProfile() {
   const { mutate: submitProfileDefaultImg } = useProfileImageResetter(handleComplete);
 
   useEffect(() => {
-    // FIXME: api response name -> id 변경 요청 후 제거
-    const representativeWardId = wardList?.find(
-      (ward: { name: string }) => ward.name === profileInfo?.representativeWardName,
-    )?.id;
-
     setProfileInfoValue({
       description: profileInfo?.profileDescription ?? '',
       interests: '',
-      representativeWardId: representativeWardId ?? NOT_APPLICABLE,
+      representativeWardId: profileInfo?.representativeWard?.id ?? NOT_APPLICABLE,
     });
     setInterestList(profileInfo?.tags || []);
     setProfileImage({ url: profileInfo?.profileImageUrl });

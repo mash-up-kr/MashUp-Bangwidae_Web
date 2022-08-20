@@ -11,8 +11,6 @@ export const QUERY_KEYS = {
   RESET_PROFILE_IMAGE: 'myProfile/image/reset',
 };
 
-const TEST_USER_ID = '62d7f4776ad96c51d4330ea2';
-
 export async function getServerSideProps() {
   const queryClient = new QueryClient();
   await queryClient.prefetchQuery([QUERY_KEYS.MY_PROFILE], getProfileInfo);
@@ -27,7 +25,7 @@ export async function getServerSideProps() {
 
 export function getProfileInfo() {
   return api.get({
-    url: `/api/user/${TEST_USER_ID}/info`,
+    url: `/api/user/me`,
   });
 }
 
