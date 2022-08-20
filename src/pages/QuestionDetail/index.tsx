@@ -378,12 +378,6 @@ const CommentList = styled.div`
   height: 100%;
   padding-bottom: 128px;
   overflow-y: scroll;
-  -ms-overflow-style: none; /* IE and Edge */
-  scrollbar-width: none; /* Firefox */
-
-  ::-webkit-scrollbar {
-    display: none; /* Safari and Chrome */
-  }
 `;
 
 const CommentInputWrapper = styled.div`
