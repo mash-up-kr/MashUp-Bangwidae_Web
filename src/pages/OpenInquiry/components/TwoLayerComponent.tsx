@@ -13,8 +13,8 @@ interface Props {
 function TwoLayerContainer({ top, bottom, onClick, withBackground = false, style }: Props) {
   return (
     <Container onClick={onClick} withBackground={withBackground} style={style}>
-      <div>{top}</div>
-      <div>{bottom}</div>
+      {top}
+      {bottom}
     </Container>
   );
 }
@@ -27,8 +27,7 @@ export const Container = styled.div<{ withBackground: boolean }>`
   flex-shrink: 0;
   justify-content: center;
   min-width: 228px;
-  height: 90px;
-  padding: 18px 16px;
+  padding: 16px;
   background: ${({ withBackground, theme }) =>
     withBackground ? theme.color.gray.Gray900 : 'transparent'};
   border-radius: 8px;

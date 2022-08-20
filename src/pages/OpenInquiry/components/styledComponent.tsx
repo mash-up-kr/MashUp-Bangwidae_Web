@@ -26,10 +26,8 @@ export const Footer = styled.div`
   left: 0;
   display: flex;
 
-  width: 100vw;
-
-  margin-bottom: 3vh;
-  padding-left: 24px;
+  margin-bottom: 16px;
+  margin-left: 24px;
 
   overflow: hidden;
 `;
