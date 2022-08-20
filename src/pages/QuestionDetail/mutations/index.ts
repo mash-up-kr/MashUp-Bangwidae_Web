@@ -52,14 +52,16 @@ export const useCommentUpdater = () => {
 
   return useMutation(
     ['COMMENT_UPDATE'],
-    (data: { commentId: string; content: string; latitude: number; longitude: number }) =>
+    (data: {
+      commentId: string;
+      content: string;
+      latitude: number;
+      longitude: number;
+      anonymous?: boolean;
+    }) =>
       api.patch({
         url: `/api/comments/${data.commentId}`,
-        data: {
-          content: data.content,
-          latitude: data.latitude,
-          longitude: data.longitude,
-        },
+        data,
       }),
     {
       onSuccess: () => queryClient.invalidateQueries(COMMENTS),

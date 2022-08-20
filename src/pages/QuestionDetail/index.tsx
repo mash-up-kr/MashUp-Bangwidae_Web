@@ -5,6 +5,7 @@ import type { Comment } from 'pages/QuestionDetail/components/CommentItem';
 import { POST, COMMENTS } from 'src/consts/query';
 import { dateTime } from 'src/utils/DateTime';
 import { useTranslateAnimation } from 'src/hooks';
+import { v4 } from 'uuid';
 import { LargeLineButton, IconTextButton } from '@/src/components';
 import { typography } from '@/styles';
 import { CommentItem, PopupMenu } from './components';
@@ -100,6 +101,26 @@ function QuestionDetail() {
     mutateCommentDelete({ commentId: selectedCommentId });
   };
 
+  const handleCommentAnonymousButtonClick = () => {
+    togglePopupMenu();
+
+    const { latitude, longitude } = post;
+    const selectedComment = comments.values.find(
+      ({ id }: { id: string }) => id === selectedCommentId,
+    );
+
+    const commentDataToUpdate = {
+      commentId: selectedCommentId,
+      content: selectedComment?.content ?? '',
+      latitude,
+      longitude,
+      anonymous: true,
+    };
+
+    mutateCommentUpdate(commentDataToUpdate);
+    setSelectedCommentId('');
+  };
+
   if (isPostLoading || isCommentLoading) return <div>Loading</div>;
   if (isPostError || isCommentError) return <div>Error</div>;
 
@@ -118,7 +139,7 @@ function QuestionDetail() {
               </FlexRow>
               <FlexRow gap={6}>
                 {post.user.tags.map((tag: string) => (
-                  <InterestTag key={tag}>{tag}</InterestTag>
+                  <InterestTag key={v4()}>{tag}</InterestTag>
                 ))}
               </FlexRow>
             </FlexColumn>
@@ -187,7 +208,7 @@ function QuestionDetail() {
         <PopupMenu onClose={togglePopupMenu} isBeforeClose={isBeforeTargetClose}>
           <span onClick={handleCommentEditButtonClick}>수정하기</span>
           <span onClick={handleCommentDeleteButtonClick}>삭제하기</span>
-          <span onClick={() => {}}>익명으로 변경</span>
+          <span onClick={handleCommentAnonymousButtonClick}>익명으로 변경</span>
         </PopupMenu>
       )}
     </Layout>
