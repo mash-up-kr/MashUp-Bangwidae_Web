@@ -4,6 +4,8 @@ import { useQuery } from 'react-query';
 import type { Comment } from 'pages/QuestionDetail/components/CommentItem';
 import { POST, COMMENTS } from 'src/consts/query';
 import { dateTime } from 'src/utils/DateTime';
+import { useTranslateAnimation } from 'src/hooks';
+import { v4 } from 'uuid';
 import { LargeLineButton, IconTextButton } from '@/src/components';
 import { typography } from '@/styles';
 import { CommentItem, PopupMenu } from './components';
@@ -19,10 +21,9 @@ import {
 function QuestionDetail() {
   const theme = useTheme();
   const [commentInput, setCommentInput] = useState('');
-  const [isPopupOpen, setIsPopupOpen] = useState(false);
   const [selectedCommentId, setSelectedCommentId] = useState('');
-  const [commentReplyTargetUserName, setCommentReplyTargetUserName] = useState('');
   const commentInputElement = useRef<HTMLInputElement>(null);
+  const { isTargetOpen, changeTargetOpenState, isBeforeTargetClose } = useTranslateAnimation(0.2);
 
   const {
     data: post,
@@ -74,12 +75,14 @@ function QuestionDetail() {
   };
 
   const handleCommentKebabMenuClick = (event: MouseEvent, commentId: string) => {
+    setCommentInput('');
     togglePopupMenu();
     setSelectedCommentId(commentId);
   };
 
   const togglePopupMenu = () => {
-    setIsPopupOpen((value) => !value);
+    if (isTargetOpen) changeTargetOpenState(false);
+    else changeTargetOpenState(true);
   };
 
   const handleCommentEditButtonClick = () => {
@@ -89,13 +92,34 @@ function QuestionDetail() {
     const selectedComment = comments.values.find(
       ({ id }: { id: string }) => id === selectedCommentId,
     );
-    setCommentReplyTargetUserName(selectedComment.user.nickname);
     setCommentInput(selectedComment.content);
+    setSelectedCommentId('');
   };
 
   const handleCommentDeleteButtonClick = () => {
     togglePopupMenu();
     mutateCommentDelete({ commentId: selectedCommentId });
+    setSelectedCommentId('');
+  };
+
+  const handleCommentAnonymousButtonClick = () => {
+    togglePopupMenu();
+
+    const { latitude, longitude } = post;
+    const selectedComment = comments.values.find(
+      ({ id }: { id: string }) => id === selectedCommentId,
+    );
+
+    const commentDataToUpdate = {
+      commentId: selectedCommentId,
+      content: selectedComment?.content ?? '',
+      latitude,
+      longitude,
+      anonymous: true,
+    };
+
+    mutateCommentUpdate(commentDataToUpdate);
+    setSelectedCommentId('');
   };
 
   if (isPostLoading || isCommentLoading) return <div>Loading</div>;
@@ -116,7 +140,7 @@ function QuestionDetail() {
               </FlexRow>
               <FlexRow gap={6}>
                 {post.user.tags.map((tag: string) => (
-                  <InterestTag key={tag}>{tag}</InterestTag>
+                  <InterestTag key={v4()}>{tag}</InterestTag>
                 ))}
               </FlexRow>
             </FlexColumn>
@@ -154,17 +178,16 @@ function QuestionDetail() {
       </TopSection>
       {/* Bottom Section */}
       <BottomSection>
-        {comments?.values.map((commentItem: Comment) => (
-          <CommentItem
-            key={commentItem.id}
-            comment={commentItem}
-            onMenuClick={handleCommentKebabMenuClick}
-          />
-        ))}
+        <CommentList>
+          {comments?.values.map((commentItem: Comment) => (
+            <CommentItem
+              key={commentItem.id}
+              comment={commentItem}
+              onMenuClick={handleCommentKebabMenuClick}
+            />
+          ))}
+        </CommentList>
         <CommentInputWrapper>
-          {commentReplyTargetUserName && (
-            <CommentInputInfo> {`> ${commentReplyTargetUserName}에 답글 달기`}</CommentInputInfo>
-          )}
           <FlexRow gap={0}>
             <CommentInput
               type="text"
@@ -181,11 +204,11 @@ function QuestionDetail() {
           </FlexRow>
         </CommentInputWrapper>
       </BottomSection>
-      {isPopupOpen && (
-        <PopupMenu onClose={togglePopupMenu}>
-          <span onClick={handleCommentEditButtonClick}>수정하기</span>
-          <span onClick={handleCommentDeleteButtonClick}>삭제하기</span>
-          <span onClick={() => {}}>익명으로 변경</span>
+      {isTargetOpen && (
+        <PopupMenu onClose={togglePopupMenu} isBeforeClose={isBeforeTargetClose}>
+          <div onClick={handleCommentEditButtonClick}>수정하기</div>
+          <div onClick={handleCommentDeleteButtonClick}>삭제하기</div>
+          <div onClick={handleCommentAnonymousButtonClick}>익명으로 변경</div>
         </PopupMenu>
       )}
     </Layout>
@@ -351,20 +374,18 @@ const BottomSection = styled.div`
   border-top: 1px solid ${({ theme }) => theme.color.gray.Gray800};
 `;
 
+const CommentList = styled.div`
+  height: 100%;
+  padding-bottom: 128px;
+  overflow-y: scroll;
+`;
+
 const CommentInputWrapper = styled.div`
   position: absolute;
   bottom: 0;
   left: 0;
   width: 100%;
-  padding-top: 12px;
   background-color: ${({ theme }) => theme.color.basic.DarkGray};
-`;
-
-const CommentInputInfo = styled.div`
-  margin-left: 30px;
-  height: 12px;
-  color: ${({ theme }) => theme.color.secondary01.Blue300};
-  ${typography.Body_Regular_14}
 `;
 
 const CommentInput = styled.input`

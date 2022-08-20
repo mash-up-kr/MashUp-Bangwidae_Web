@@ -5,6 +5,8 @@ import { typography } from '@/styles';
 import { IconTextButton } from '@/src/components';
 import { dateTime } from '@/src/utils/DateTime';
 
+const DEFAULT_IMAGE_URL = process.env.NEXT_PUBLIC_DEFAULT_IMAGE;
+
 interface CommentItemProps {
   comment: Comment;
   onMenuClick: (event: MouseEvent, selectedId: string) => void;
@@ -41,7 +43,7 @@ function CommentItem({ comment, onMenuClick }: CommentItemProps) {
   return (
     <Layout>
       <FlexRow gap={8}>
-        <ProfileImage src="https://picsum.photos/200" />
+        <ProfileImage src={comment.user.profileImageUrl ?? DEFAULT_IMAGE_URL} />
         <FlexBetween>
           <FlexColumn gap={6}>
             <FlexRow gap={8}>
