@@ -35,13 +35,8 @@ function WardSection({ isOpen = false, setIsOpen, targetId, setWardType, wardTyp
       return (
         <NewWardInputModal
           onConfirm={async (wardName) => {
-            try {
-              await mutatePlantWard(wardName);
-
-              setIsOpen(false);
-            } catch (e) {
-              console.log(e);
-            }
+            await mutatePlantWard(wardName);
+            setIsOpen(false);
           }}
           onCancel={() => setIsOpen(false)}
         />
@@ -50,13 +45,8 @@ function WardSection({ isOpen = false, setIsOpen, targetId, setWardType, wardTyp
       return (
         <WardExpandModal
           onConfirm={async () => {
-            try {
-              await mutateExpandWardPeriod();
-
-              setIsOpen(false);
-            } catch (e) {
-              alert('에러가 발생했습니다. 다시 시도해주세요.');
-            }
+            await mutateExpandWardPeriod();
+            setIsOpen(false);
           }}
           onCancel={() => setIsOpen(false)}
         />
@@ -65,13 +55,8 @@ function WardSection({ isOpen = false, setIsOpen, targetId, setWardType, wardTyp
       return (
         <WardDeleteConfirmModal
           onConfirm={async () => {
-            try {
-              await mutateDeleteWard();
-
-              setIsOpen(false);
-            } catch (e) {
-              alert('에러가 발생했습니다. 다시 시도해주세요.');
-            }
+            await mutateDeleteWard();
+            setIsOpen(false);
           }}
           onCancel={() => setIsOpen(false)}
         />
