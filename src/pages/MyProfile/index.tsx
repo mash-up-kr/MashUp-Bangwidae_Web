@@ -69,7 +69,7 @@ function MyProfile() {
 
   useEffect(() => {
     setProfileInfoValue({
-      description: profileInfo?.profileDescription || '',
+      description: profileInfo?.profileDescription ?? '',
       interests: '',
       representativeWardId: profileInfo?.representativeWard?.id ?? NOT_APPLICABLE,
     });
@@ -277,7 +277,7 @@ const ImgWrapper = styled.div`
 const ImgCancelSvg = styled.i`
   position: absolute;
   top: 6px;
-  right: 0px;
+  right: 0;
 `;
 
 const StyledButton = styled.button`
@@ -286,6 +286,7 @@ const StyledButton = styled.button`
   background-color: ${({ theme }) => theme.color.primary.Lime300};
   border: none;
   border-radius: 10px;
+
   ${typography.Title2_Bold_16}
   &:disabled {
     color: ${({ theme }) => theme.color.gray.Gray300};

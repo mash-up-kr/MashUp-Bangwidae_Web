@@ -11,7 +11,7 @@ const createApiMethod =
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   (config: AxiosRequestConfig): Promise<any> => {
     _axiosInstance.interceptors.response.use((response) => {
-      if (!response.data) {
+      if (!response?.data) {
         return response;
       }
       return response.data.data;

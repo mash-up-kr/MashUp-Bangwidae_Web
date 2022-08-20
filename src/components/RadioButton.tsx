@@ -15,7 +15,7 @@ interface RadioButtonProps {
   onChange?: (value: string) => void;
 }
 
-function RadioButton({ options, value, name, onChange }: RadioButtonProps) {
+function RadioButton({ options, value, name = v4(), onChange }: RadioButtonProps) {
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     onChange?.(e.target.value);
   };
@@ -27,7 +27,7 @@ function RadioButton({ options, value, name, onChange }: RadioButtonProps) {
           <Input
             id={option.key}
             type="radio"
-            name={name ?? v4()}
+            name={name}
             value={option.value}
             checked={value === option.value}
             onChange={handleChange}

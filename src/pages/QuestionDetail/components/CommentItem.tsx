@@ -1,54 +1,100 @@
-import styled from 'styled-components';
-import { IconTextButton } from '@/src/components';
+import React, { MouseEvent } from 'react';
+import styled, { useTheme } from 'styled-components';
+import { useCommentLikeCreator, useCommentUnlikeCreator } from 'pages/QuestionDetail/mutations';
 import { typography } from '@/styles';
+import { IconTextButton } from '@/src/components';
+import { dateTime } from '@/src/utils/DateTime';
 
-function QuestionDetail() {
+const DEFAULT_IMAGE_URL = process.env.NEXT_PUBLIC_DEFAULT_IMAGE;
+
+interface CommentItemProps {
+  comment: Comment;
+  onMenuClick: (event: MouseEvent, selectedId: string) => void;
+}
+
+export interface Comment {
+  id: string;
+  user: {
+    id: string;
+    tags: string[];
+    nickname: string;
+    profileImageUrl: string;
+  };
+  content: string;
+  likeCount: number;
+  commentCount: number;
+  userLiked: boolean;
+  representativeAddress: string;
+  anonymous: boolean;
+  createdAt: string;
+  updatedAt: string;
+}
+
+function CommentItem({ comment, onMenuClick }: CommentItemProps) {
+  const theme = useTheme();
+  const { mutate: mutateLikeCount } = useCommentLikeCreator(comment.id);
+  const { mutate: mutateUnlikeCount } = useCommentUnlikeCreator(comment.id);
+
+  const handleLikeButtonClick = () => {
+    // eslint-disable-next-line @typescript-eslint/no-unused-expressions
+    comment.userLiked ? mutateUnlikeCount() : mutateLikeCount();
+  };
+
   return (
     <Layout>
       <FlexRow gap={8}>
-        <ProfileImage src="https://picsum.photos/200" />
+        <ProfileImage src={comment.user.profileImageUrl ?? DEFAULT_IMAGE_URL} />
         <FlexBetween>
           <FlexColumn gap={6}>
             <FlexRow gap={8}>
-              <Nickname>도리를 찾아서</Nickname>
+              <Nickname>{comment.user.nickname}</Nickname>
               <LevelTag>Lv.1</LevelTag>
             </FlexRow>
           </FlexColumn>
         </FlexBetween>
         <FlexRow gap={8}>
-          <LocatedAt>강남구</LocatedAt>
-          <CreatedAt>1분 전</CreatedAt>
+          <LocatedAt>{comment.representativeAddress}</LocatedAt>
+          <CreatedAt>{dateTime.fromNow(comment.createdAt)}</CreatedAt>
           <IconPosition>
-            <IconTextButton name="more" color="#767676" size={24} onClick={() => {}} />
+            <IconTextButton
+              name="more"
+              color="#767676"
+              size={24}
+              onClick={(event) => onMenuClick(event, comment.id)}
+            />
           </IconPosition>
         </FlexRow>
       </FlexRow>
-      <CommentContent>니모의 절친 도리를 모른다고??</CommentContent>
+      <CommentContent>{comment.content}</CommentContent>
       <FlexBetween>
         <FlexRow gap={8}>
-          <IconTextButton color="#767676" size={24} onClick={() => {}}>
+          <IconTextButton color={theme.color.gray.Gray500} size={24} onClick={() => {}}>
             답글 달기
           </IconTextButton>
           <VerticalDivider />
-          <IconTextButton color="#DBF87A" size={24} onClick={() => {}}>
+          <IconTextButton
+            color={comment.userLiked ? theme.color.primary.Lime300 : theme.color.gray.Gray500}
+            size={24}
+            onClick={handleLikeButtonClick}
+          >
             좋아요
           </IconTextButton>
         </FlexRow>
         <IconTextButton
           name="heart"
-          color="#DBF87A"
+          color={theme.color.primary.Lime300}
           size={24}
           iconPosition="right"
           onClick={() => {}}
         >
-          <IconText>1</IconText>
+          <IconText>{comment.likeCount}</IconText>
         </IconTextButton>
       </FlexBetween>
     </Layout>
   );
 }
 
-export default QuestionDetail;
+export default CommentItem;
 
 const Layout = styled.div`
   padding: 17px 0;
@@ -104,8 +150,8 @@ const LevelTag = styled.div`
 const LocatedAt = styled.div`
   color: ${({ theme }) => theme.color.gray.Gray600};
   font-weight: 400;
-  ${typography.Caption2_Regular_12}
 
+  ${typography.Caption2_Regular_12}
   ::after {
     height: 10px;
     margin-left: 10px;
@@ -133,6 +179,7 @@ const CommentContent = styled.div`
   padding: 10px 0;
   color: white;
   font-size: 14px;
+  word-break: break-word;
 `;
 
 const VerticalDivider = styled.div`
