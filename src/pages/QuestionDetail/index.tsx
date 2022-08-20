@@ -75,6 +75,7 @@ function QuestionDetail() {
   };
 
   const handleCommentKebabMenuClick = (event: MouseEvent, commentId: string) => {
+    setCommentInput('');
     togglePopupMenu();
     setSelectedCommentId(commentId);
   };
