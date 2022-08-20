@@ -53,6 +53,7 @@ function WardInfoContainer({ type, location, remainDays }: Props) {
     </Wrapper>
   );
 }
+
 export default WardInfoContainer;
 
 const Wrapper = styled.div`
@@ -68,10 +69,10 @@ const Wrapper = styled.div`
 const Button = styled.button<{ withBackground: boolean }>`
   width: 100%;
   height: 48px;
-  margin-top: 8;
+  margin-top: 8px;
   color: ${({ withBackground }) => (withBackground ? 'black' : 'white')};
   font-weight: 700;
-  font-size: 14;
+  font-size: 14px;
   background-color: ${({ withBackground, theme }) =>
     withBackground ? theme.color.primary.Lime300 : 'transparent'};
 
