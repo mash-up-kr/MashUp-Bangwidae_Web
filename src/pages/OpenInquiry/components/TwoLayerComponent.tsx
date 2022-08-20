@@ -12,31 +12,27 @@ interface Props {
 
 function TwoLayerContainer({ top, bottom, onClick, withBackground = false, style }: Props) {
   return (
-    <Container onClick={onClick} withBackground={withBackground} style={style}>
-      <div>{top}</div>
-      <div>{bottom}</div>
+    <Container onClick={onClick} withBackground={withBackground} style={{ ...style }}>
+      <div style={{ flexShrink: 0 }}>{top}</div>
+      <div style={{ flexShrink: 0 }}>{bottom}</div>
     </Container>
   );
 }
 
 export default TwoLayerContainer;
 
-export const Container = styled.div<{ withBackground: boolean }>`
+export const Container = styled.div<{ withBackground: boolean; style?: CSSProperties }>`
   display: flex;
   flex-direction: column;
   flex-shrink: 0;
   justify-content: center;
-  min-width: 228px;
-  height: 90px;
-  margin-left: 8px;
-  padding: 18px 16px;
+  min-height: 90px;
   background: ${({ withBackground, theme }) =>
     withBackground ? theme.color.gray.Gray900 : 'transparent'};
   border-radius: 8px;
 `;
 
 export const Title = styled.div`
-  max-width: 196px;
   padding-bottom: 10px;
   overflow: hidden;
   color: ${({ theme }) => theme.color.gray.Gray500};

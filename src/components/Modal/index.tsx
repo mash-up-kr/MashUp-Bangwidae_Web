@@ -42,6 +42,7 @@ const ModalWrapper = styled.div`
   display: flex;
   width: 100vw;
   height: 100vh;
+  background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5));
 `;
 
 const ModalContent = styled.div`
@@ -51,11 +52,9 @@ const ModalContent = styled.div`
   display: flex;
   flex-direction: column;
   width: 75%;
-  padding: 30px 16px;
+  padding: 24px 16px;
   text-align: center;
   background-color: ${({ theme }) => theme.color.gray.Gray800};
   border-radius: 16px;
   transform: translate3d(-50%, -50%, 0);
-  filter: drop-shadow(0 3px 13px rgba(0, 0, 0, 0.039))
-    drop-shadow(0 10.5px 36px rgba(0, 0, 0, 0.19));
 `;

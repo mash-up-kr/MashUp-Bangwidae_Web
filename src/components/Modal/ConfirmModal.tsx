@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions */
-import { ReactNode, useState } from 'react';
+import { ReactNode } from 'react';
 import styled from 'styled-components';
 import TwoLayerContainer from '@/src/pages/OpenInquiry/components/TwoLayerComponent';
 import Modal from '.';
@@ -24,38 +24,33 @@ function ConfirmModal({
   onCancel,
   cancelButtonTxt = '취소',
 }: Props) {
-  const [isOpen, setIsOpen] = useState(true);
-
-  if (!isOpen) {
-    return null;
-  }
-
   return (
     <Modal>
-      <Flex direction="column">
-        <TwoLayerContainer top={title} bottom={subTitle} style={{ marginBottom: 20 }} />
-        {addOn}
-      </Flex>
-      <Flex justify="space-between" style={{ width: '100%', marginTop: 8 }}>
-        <Button
-          withBackground={false}
-          style={{ marginRight: 8 }}
-          onClick={() => {
-            onCancel && onCancel();
-            setIsOpen(false);
-          }}
-        >
-          {cancelButtonTxt}
-        </Button>
-        <Button
-          withBackground
-          onClick={() => {
-            onConfirm && onConfirm();
-            setIsOpen(false);
-          }}
-        >
-          {confirmButtonTxt}
-        </Button>
+      <Flex direction="column" justify="center" align="center">
+        <Flex direction="column" justify="center" align="center">
+          <TwoLayerContainer top={title} bottom={subTitle} />
+          {addOn && <Flex>{addOn}</Flex>}
+        </Flex>
+
+        <Flex justify="space-between" style={{ width: '100%', marginTop: 8 }}>
+          <Button
+            withBackground={false}
+            style={{ marginRight: 8 }}
+            onClick={() => {
+              onCancel && onCancel();
+            }}
+          >
+            {cancelButtonTxt}
+          </Button>
+          <Button
+            withBackground
+            onClick={() => {
+              onConfirm && onConfirm();
+            }}
+          >
+            {confirmButtonTxt}
+          </Button>
+        </Flex>
       </Flex>
     </Modal>
   );
