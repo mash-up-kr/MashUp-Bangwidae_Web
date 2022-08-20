@@ -4,6 +4,7 @@ import { useQuery } from 'react-query';
 import type { Comment } from 'pages/QuestionDetail/components/CommentItem';
 import { POST, COMMENTS } from 'src/consts/query';
 import { dateTime } from 'src/utils/DateTime';
+import { useTranslateAnimation } from 'src/hooks';
 import { LargeLineButton, IconTextButton } from '@/src/components';
 import { typography } from '@/styles';
 import { CommentItem, PopupMenu } from './components';
@@ -19,10 +20,10 @@ import {
 function QuestionDetail() {
   const theme = useTheme();
   const [commentInput, setCommentInput] = useState('');
-  const [isPopupOpen, setIsPopupOpen] = useState(false);
   const [selectedCommentId, setSelectedCommentId] = useState('');
   const [commentReplyTargetUserName, setCommentReplyTargetUserName] = useState('');
   const commentInputElement = useRef<HTMLInputElement>(null);
+  const { isTargetOpen, changeTargetOpenState, isBeforeTargetClose } = useTranslateAnimation(0.2);
 
   const {
     data: post,
@@ -79,7 +80,8 @@ function QuestionDetail() {
   };
 
   const togglePopupMenu = () => {
-    setIsPopupOpen((value) => !value);
+    if (isTargetOpen) changeTargetOpenState(false);
+    else changeTargetOpenState(true);
   };
 
   const handleCommentEditButtonClick = () => {
@@ -181,8 +183,8 @@ function QuestionDetail() {
           </FlexRow>
         </CommentInputWrapper>
       </BottomSection>
-      {isPopupOpen && (
-        <PopupMenu onClose={togglePopupMenu}>
+      {isTargetOpen && (
+        <PopupMenu onClose={togglePopupMenu} isBeforeClose={isBeforeTargetClose}>
           <span onClick={handleCommentEditButtonClick}>수정하기</span>
           <span onClick={handleCommentDeleteButtonClick}>삭제하기</span>
           <span onClick={() => {}}>익명으로 변경</span>
