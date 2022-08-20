@@ -37,18 +37,22 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@splinetool/runtime", "npm:0.9.95"],\
             ["@stylelint/postcss-css-in-js", "virtual:1fbd4f2c9aa3a03ac18099f09c5d6be2da6c1cb1010c20668cc6aa6083bebfa409fa9e1becb8a79d1553bc0825388e53284c58854de362db68d1ea8fa75d9d8c#npm:0.37.3"],\
             ["@svgr/webpack", "npm:6.3.1"],\
+            ["@types/d3-geo", "npm:3.0.2"],\
             ["@types/form-data", "npm:2.5.0"],\
+            ["@types/geojson", "npm:7946.0.10"],\
             ["@types/nanoid", "npm:3.0.0"],\
             ["@types/node", "npm:18.0.0"],\
             ["@types/react", "npm:18.0.14"],\
             ["@types/react-dom", "npm:18.0.5"],\
             ["@types/react-slick", "npm:0.23.10"],\
             ["@types/styled-components", "npm:5.1.25"],\
+            ["@types/topojson-client", "npm:3.1.1"],\
             ["@types/uuid", "npm:8.3.4"],\
             ["@typescript-eslint/eslint-plugin", "virtual:1fbd4f2c9aa3a03ac18099f09c5d6be2da6c1cb1010c20668cc6aa6083bebfa409fa9e1becb8a79d1553bc0825388e53284c58854de362db68d1ea8fa75d9d8c#npm:5.29.0"],\
             ["@typescript-eslint/parser", "virtual:1fbd4f2c9aa3a03ac18099f09c5d6be2da6c1cb1010c20668cc6aa6083bebfa409fa9e1becb8a79d1553bc0825388e53284c58854de362db68d1ea8fa75d9d8c#npm:5.29.0"],\
             ["@yarnpkg/sdks", "npm:3.0.0-rc.11"],\
             ["axios", "npm:0.27.2"],\
+            ["d3-geo", "npm:3.0.1"],\
             ["dayjs", "npm:1.11.4"],\
             ["eslint", "npm:8.18.0"],\
             ["eslint-config-airbnb", "virtual:1fbd4f2c9aa3a03ac18099f09c5d6be2da6c1cb1010c20668cc6aa6083bebfa409fa9e1becb8a79d1553bc0825388e53284c58854de362db68d1ea8fa75d9d8c#npm:19.0.4"],\
@@ -59,6 +63,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["eslint-plugin-jsx-a11y", "virtual:1fbd4f2c9aa3a03ac18099f09c5d6be2da6c1cb1010c20668cc6aa6083bebfa409fa9e1becb8a79d1553bc0825388e53284c58854de362db68d1ea8fa75d9d8c#npm:6.6.0"],\
             ["eslint-plugin-react", "virtual:1fbd4f2c9aa3a03ac18099f09c5d6be2da6c1cb1010c20668cc6aa6083bebfa409fa9e1becb8a79d1553bc0825388e53284c58854de362db68d1ea8fa75d9d8c#npm:7.30.1"],\
             ["form-data", "npm:4.0.0"],\
+            ["geojson", "npm:0.5.0"],\
             ["husky", "npm:8.0.1"],\
             ["lint-staged", "npm:13.0.3"],\
             ["nanoid", "npm:4.0.0"],\
@@ -80,6 +85,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["stylelint-config-standard", "virtual:1fbd4f2c9aa3a03ac18099f09c5d6be2da6c1cb1010c20668cc6aa6083bebfa409fa9e1becb8a79d1553bc0825388e53284c58854de362db68d1ea8fa75d9d8c#npm:24.0.0"],\
             ["stylelint-config-styled-components", "npm:0.1.1"],\
             ["stylelint-processor-styled-components", "npm:1.10.0"],\
+            ["topojson-client", "npm:3.1.0"],\
             ["typescript", "patch:typescript@npm%3A4.7.4#~builtin<compat/typescript>::version=4.7.4&hash=7ad353"],\
             ["uuid", "npm:8.3.2"]\
           ],\
@@ -3475,6 +3481,16 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "linkType": "HARD"\
         }]\
       ]],\
+      ["@types/d3-geo", [\
+        ["npm:3.0.2", {\
+          "packageLocation": "./.yarn/cache/@types-d3-geo-npm-3.0.2-08a756e2a7-23ecb29d81.zip/node_modules/@types/d3-geo/",\
+          "packageDependencies": [\
+            ["@types/d3-geo", "npm:3.0.2"],\
+            ["@types/geojson", "npm:7946.0.10"]\
+          ],\
+          "linkType": "HARD"\
+        }]\
+      ]],\
       ["@types/emscripten", [\
         ["npm:1.39.6", {\
           "packageLocation": "./.yarn/cache/@types-emscripten-npm-1.39.6-c9c4021365-437f2f9cdf.zip/node_modules/@types/emscripten/",\
@@ -3490,6 +3506,15 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageDependencies": [\
             ["@types/form-data", "npm:2.5.0"],\
             ["form-data", "npm:4.0.0"]\
+          ],\
+          "linkType": "HARD"\
+        }]\
+      ]],\
+      ["@types/geojson", [\
+        ["npm:7946.0.10", {\
+          "packageLocation": "./.yarn/cache/@types-geojson-npm-7946.0.10-deca8d1263-12c407c2dc.zip/node_modules/@types/geojson/",\
+          "packageDependencies": [\
+            ["@types/geojson", "npm:7946.0.10"]\
           ],\
           "linkType": "HARD"\
         }]\
@@ -3694,6 +3719,27 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@types/hoist-non-react-statics", "npm:3.3.1"],\
             ["@types/react", "npm:18.0.14"],\
             ["csstype", "npm:3.1.0"]\
+          ],\
+          "linkType": "HARD"\
+        }]\
+      ]],\
+      ["@types/topojson-client", [\
+        ["npm:3.1.1", {\
+          "packageLocation": "./.yarn/cache/@types-topojson-client-npm-3.1.1-2f3523e689-09f101803b.zip/node_modules/@types/topojson-client/",\
+          "packageDependencies": [\
+            ["@types/topojson-client", "npm:3.1.1"],\
+            ["@types/geojson", "npm:7946.0.10"],\
+            ["@types/topojson-specification", "npm:1.0.2"]\
+          ],\
+          "linkType": "HARD"\
+        }]\
+      ]],\
+      ["@types/topojson-specification", [\
+        ["npm:1.0.2", {\
+          "packageLocation": "./.yarn/cache/@types-topojson-specification-npm-1.0.2-f80945612e-ad1a759cc9.zip/node_modules/@types/topojson-specification/",\
+          "packageDependencies": [\
+            ["@types/topojson-specification", "npm:1.0.2"],\
+            ["@types/geojson", "npm:7946.0.10"]\
           ],\
           "linkType": "HARD"\
         }]\
@@ -5136,6 +5182,13 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
         }]\
       ]],\
       ["commander", [\
+        ["npm:2.20.3", {\
+          "packageLocation": "./.yarn/cache/commander-npm-2.20.3-d8dcbaa39b-ab8c07884e.zip/node_modules/commander/",\
+          "packageDependencies": [\
+            ["commander", "npm:2.20.3"]\
+          ],\
+          "linkType": "HARD"\
+        }],\
         ["npm:7.2.0", {\
           "packageLocation": "./.yarn/cache/commander-npm-7.2.0-19178180f8-53501cbeee.zip/node_modules/commander/",\
           "packageDependencies": [\
@@ -5385,6 +5438,26 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageDependencies": [\
             ["currently-unhandled", "npm:0.4.1"],\
             ["array-find-index", "npm:1.0.2"]\
+          ],\
+          "linkType": "HARD"\
+        }]\
+      ]],\
+      ["d3-array", [\
+        ["npm:3.2.0", {\
+          "packageLocation": "./.yarn/cache/d3-array-npm-3.2.0-c3a38fe288-e236f6670b.zip/node_modules/d3-array/",\
+          "packageDependencies": [\
+            ["d3-array", "npm:3.2.0"],\
+            ["internmap", "npm:2.0.3"]\
+          ],\
+          "linkType": "HARD"\
+        }]\
+      ]],\
+      ["d3-geo", [\
+        ["npm:3.0.1", {\
+          "packageLocation": "./.yarn/cache/d3-geo-npm-3.0.1-2aabdbb750-e0f7e6a2f0.zip/node_modules/d3-geo/",\
+          "packageDependencies": [\
+            ["d3-geo", "npm:3.0.1"],\
+            ["d3-array", "npm:3.2.0"]\
           ],\
           "linkType": "HARD"\
         }]\
@@ -6836,6 +6909,15 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "linkType": "HARD"\
         }]\
       ]],\
+      ["geojson", [\
+        ["npm:0.5.0", {\
+          "packageLocation": "./.yarn/cache/geojson-npm-0.5.0-c4ee7ae15e-44fbf916dc.zip/node_modules/geojson/",\
+          "packageDependencies": [\
+            ["geojson", "npm:0.5.0"]\
+          ],\
+          "linkType": "HARD"\
+        }]\
+      ]],\
       ["get-intrinsic", [\
         ["npm:1.1.2", {\
           "packageLocation": "./.yarn/cache/get-intrinsic-npm-1.1.2-89f421122b-252f45491f.zip/node_modules/get-intrinsic/",\
@@ -7432,6 +7514,15 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["get-intrinsic", "npm:1.1.2"],\
             ["has", "npm:1.0.3"],\
             ["side-channel", "npm:1.0.4"]\
+          ],\
+          "linkType": "HARD"\
+        }]\
+      ]],\
+      ["internmap", [\
+        ["npm:2.0.3", {\
+          "packageLocation": "./.yarn/cache/internmap-npm-2.0.3-d74f5c9998-7ca41ec6ab.zip/node_modules/internmap/",\
+          "packageDependencies": [\
+            ["internmap", "npm:2.0.3"]\
           ],\
           "linkType": "HARD"\
         }]\
@@ -8736,18 +8827,22 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@splinetool/runtime", "npm:0.9.95"],\
             ["@stylelint/postcss-css-in-js", "virtual:1fbd4f2c9aa3a03ac18099f09c5d6be2da6c1cb1010c20668cc6aa6083bebfa409fa9e1becb8a79d1553bc0825388e53284c58854de362db68d1ea8fa75d9d8c#npm:0.37.3"],\
             ["@svgr/webpack", "npm:6.3.1"],\
+            ["@types/d3-geo", "npm:3.0.2"],\
             ["@types/form-data", "npm:2.5.0"],\
+            ["@types/geojson", "npm:7946.0.10"],\
             ["@types/nanoid", "npm:3.0.0"],\
             ["@types/node", "npm:18.0.0"],\
             ["@types/react", "npm:18.0.14"],\
             ["@types/react-dom", "npm:18.0.5"],\
             ["@types/react-slick", "npm:0.23.10"],\
             ["@types/styled-components", "npm:5.1.25"],\
+            ["@types/topojson-client", "npm:3.1.1"],\
             ["@types/uuid", "npm:8.3.4"],\
             ["@typescript-eslint/eslint-plugin", "virtual:1fbd4f2c9aa3a03ac18099f09c5d6be2da6c1cb1010c20668cc6aa6083bebfa409fa9e1becb8a79d1553bc0825388e53284c58854de362db68d1ea8fa75d9d8c#npm:5.29.0"],\
             ["@typescript-eslint/parser", "virtual:1fbd4f2c9aa3a03ac18099f09c5d6be2da6c1cb1010c20668cc6aa6083bebfa409fa9e1becb8a79d1553bc0825388e53284c58854de362db68d1ea8fa75d9d8c#npm:5.29.0"],\
             ["@yarnpkg/sdks", "npm:3.0.0-rc.11"],\
             ["axios", "npm:0.27.2"],\
+            ["d3-geo", "npm:3.0.1"],\
             ["dayjs", "npm:1.11.4"],\
             ["eslint", "npm:8.18.0"],\
             ["eslint-config-airbnb", "virtual:1fbd4f2c9aa3a03ac18099f09c5d6be2da6c1cb1010c20668cc6aa6083bebfa409fa9e1becb8a79d1553bc0825388e53284c58854de362db68d1ea8fa75d9d8c#npm:19.0.4"],\
@@ -8758,6 +8853,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["eslint-plugin-jsx-a11y", "virtual:1fbd4f2c9aa3a03ac18099f09c5d6be2da6c1cb1010c20668cc6aa6083bebfa409fa9e1becb8a79d1553bc0825388e53284c58854de362db68d1ea8fa75d9d8c#npm:6.6.0"],\
             ["eslint-plugin-react", "virtual:1fbd4f2c9aa3a03ac18099f09c5d6be2da6c1cb1010c20668cc6aa6083bebfa409fa9e1becb8a79d1553bc0825388e53284c58854de362db68d1ea8fa75d9d8c#npm:7.30.1"],\
             ["form-data", "npm:4.0.0"],\
+            ["geojson", "npm:0.5.0"],\
             ["husky", "npm:8.0.1"],\
             ["lint-staged", "npm:13.0.3"],\
             ["nanoid", "npm:4.0.0"],\
@@ -8779,6 +8875,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["stylelint-config-standard", "virtual:1fbd4f2c9aa3a03ac18099f09c5d6be2da6c1cb1010c20668cc6aa6083bebfa409fa9e1becb8a79d1553bc0825388e53284c58854de362db68d1ea8fa75d9d8c#npm:24.0.0"],\
             ["stylelint-config-styled-components", "npm:0.1.1"],\
             ["stylelint-processor-styled-components", "npm:1.10.0"],\
+            ["topojson-client", "npm:3.1.0"],\
             ["typescript", "patch:typescript@npm%3A4.7.4#~builtin<compat/typescript>::version=4.7.4&hash=7ad353"],\
             ["uuid", "npm:8.3.2"]\
           ],\
@@ -11495,6 +11592,16 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageDependencies": [\
             ["to-regex-range", "npm:5.0.1"],\
             ["is-number", "npm:7.0.0"]\
+          ],\
+          "linkType": "HARD"\
+        }]\
+      ]],\
+      ["topojson-client", [\
+        ["npm:3.1.0", {\
+          "packageLocation": "./.yarn/cache/topojson-client-npm-3.1.0-70e59c7f28-8c029a4f18.zip/node_modules/topojson-client/",\
+          "packageDependencies": [\
+            ["topojson-client", "npm:3.1.0"],\
+            ["commander", "npm:2.20.3"]\
           ],\
           "linkType": "HARD"\
         }]\

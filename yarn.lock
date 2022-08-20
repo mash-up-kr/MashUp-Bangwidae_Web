@@ -2142,6 +2142,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@types/d3-geo@npm:^3.0.2":
+  version: 3.0.2
+  resolution: "@types/d3-geo@npm:3.0.2"
+  dependencies:
+    "@types/geojson": "*"
+  checksum: 23ecb29d818ef62e8a7a8fd97bcea8b9e36ce52035fe8e102fb567f223b7b530716a4dd6d4e66bb353720b027aba76fea60279ffdeb2d6a7ab89e6e3571bca32
+  languageName: node
+  linkType: hard
+
 "@types/emscripten@npm:^1.39.6":
   version: 1.39.6
   resolution: "@types/emscripten@npm:1.39.6"
@@ -2155,6 +2164,13 @@ __metadata:
   dependencies:
     form-data: "*"
   checksum: c3f6c8932726970d49d67a23410d5eef0e1ad0be418163ccc3d73a4cbaa0dcd71e0e29acbe2779aab85ed8f47cb0e8f6b67028480da3b0f7d074c5a3416b2400
+  languageName: node
+  linkType: hard
+
+"@types/geojson@npm:*, @types/geojson@npm:^7946.0.10":
+  version: 7946.0.10
+  resolution: "@types/geojson@npm:7946.0.10"
+  checksum: 12c407c2dc93ecb26c08af533ee732f1506a9b29456616ba7ba1d525df96206c28ddf44a528f6a5415d7d22893e9d967420940a9c095ee5e539c1eba5fefc1f4
   languageName: node
   linkType: hard
 
@@ -2326,6 +2342,25 @@ __metadata:
     "@types/react": "*"
     csstype: ^3.0.2
   checksum: 60ce64f13283b01da54fd3a4c5703769d8575c979d5ec6b67ad124c2d4df980c9b96bb91af87e03f6447a816a5d2b0270c63eefad60cfa885091b594984525f5
+  languageName: node
+  linkType: hard
+
+"@types/topojson-client@npm:^3.1.1":
+  version: 3.1.1
+  resolution: "@types/topojson-client@npm:3.1.1"
+  dependencies:
+    "@types/geojson": "*"
+    "@types/topojson-specification": "*"
+  checksum: 09f101803b2ba86a10929eb7467e56f7185a5b3f2964e48a81905c8b19de922b75ffcf37ea1b362b5f5971b1659b5da6d6a0f10caa8419c642807ca7612cab6b
+  languageName: node
+  linkType: hard
+
+"@types/topojson-specification@npm:*":
+  version: 1.0.2
+  resolution: "@types/topojson-specification@npm:1.0.2"
+  dependencies:
+    "@types/geojson": "*"
+  checksum: ad1a759cc9cb76d388140eaac160794d0ea33f8b4ba5b75bad4a48b6b0a28c72e031fca78d564871759eb6a8b4173a5e19baedb79f2c5b5eaa18c9b808248a89
   languageName: node
   linkType: hard
 
@@ -3503,6 +3538,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"commander@npm:2":
+  version: 2.20.3
+  resolution: "commander@npm:2.20.3"
+  checksum: ab8c07884e42c3a8dbc5dd9592c606176c7eb5c1ca5ff274bcf907039b2c41de3626f684ea75ccf4d361ba004bbaff1f577d5384c155f3871e456bdf27becf9e
+  languageName: node
+  linkType: hard
+
 "commander@npm:^7.2.0":
   version: 7.2.0
   resolution: "commander@npm:7.2.0"
@@ -3722,6 +3764,24 @@ __metadata:
   dependencies:
     array-find-index: ^1.0.1
   checksum: 1f59fe10b5339b54b1a1eee110022f663f3495cf7cf2f480686e89edc7fa8bfe42dbab4b54f85034bc8b092a76cc7becbc2dad4f9adad332ab5831bec39ad540
+  languageName: node
+  linkType: hard
+
+"d3-array@npm:2.5.0 - 3":
+  version: 3.2.0
+  resolution: "d3-array@npm:3.2.0"
+  dependencies:
+    internmap: 1 - 2
+  checksum: e236f6670b60b64abb6c435da25b5cbbdc2c7c0decdbf9355bc4cf6803d6da4fa820b7b78b9cbd127edb493555934a9788d45084c2f39d7c2e1a2b7aa48264a4
+  languageName: node
+  linkType: hard
+
+"d3-geo@npm:^3.0.1":
+  version: 3.0.1
+  resolution: "d3-geo@npm:3.0.1"
+  dependencies:
+    d3-array: 2.5.0 - 3
+  checksum: e0f7e6a2f0d4c26efe08a7aa2c40b9a1a5a037220c6aaa51fb527035597e6e8841222b433e5681f9b5588b5b6f9a1c2d7f032a76ccbac3a17b0c1cbfffd05c1b
   languageName: node
   linkType: hard
 
@@ -4849,6 +4909,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"geojson@npm:^0.5.0":
+  version: 0.5.0
+  resolution: "geojson@npm:0.5.0"
+  checksum: 44fbf916dc66d17f1561fb56fd2741f21e26da5dd7daf842a794119c841c7f6d611ccc21d9797c9c62a78c41a0f841c0648042989a5a5a05045835c6ada8612f
+  languageName: node
+  linkType: hard
+
 "get-intrinsic@npm:^1.0.2, get-intrinsic@npm:^1.1.0, get-intrinsic@npm:^1.1.1":
   version: 1.1.2
   resolution: "get-intrinsic@npm:1.1.2"
@@ -5389,6 +5456,13 @@ __metadata:
     has: ^1.0.3
     side-channel: ^1.0.4
   checksum: 1944f92e981e47aebc98a88ff0db579fd90543d937806104d0b96557b10c1f170c51fb777b97740a8b6ddeec585fca8c39ae99fd08a8e058dfc8ab70937238bf
+  languageName: node
+  linkType: hard
+
+"internmap@npm:1 - 2":
+  version: 2.0.3
+  resolution: "internmap@npm:2.0.3"
+  checksum: 7ca41ec6aba8f0072fc32fa8a023450a9f44503e2d8e403583c55714b25efd6390c38a87161ec456bf42d7bc83aab62eb28f5aef34876b1ac4e60693d5e1d241
   languageName: node
   linkType: hard
 
@@ -6555,18 +6629,22 @@ __metadata:
     "@splinetool/runtime": ^0.9.95
     "@stylelint/postcss-css-in-js": ^0.37.2
     "@svgr/webpack": ^6.3.1
+    "@types/d3-geo": ^3.0.2
     "@types/form-data": ^2.5.0
+    "@types/geojson": ^7946.0.10
     "@types/nanoid": ^3.0.0
     "@types/node": 18.0.0
     "@types/react": 18.0.14
     "@types/react-dom": 18.0.5
     "@types/react-slick": ^0.23.10
     "@types/styled-components": ^5.1.25
+    "@types/topojson-client": ^3.1.1
     "@types/uuid": ^8.3.4
     "@typescript-eslint/eslint-plugin": latest
     "@typescript-eslint/parser": latest
     "@yarnpkg/sdks": ^3.0.0-rc.11
     axios: ^0.27.2
+    d3-geo: ^3.0.1
     dayjs: ^1.11.4
     eslint: 8.18.0
     eslint-config-airbnb: ^19.0.4
@@ -6577,6 +6655,7 @@ __metadata:
     eslint-plugin-jsx-a11y: latest
     eslint-plugin-react: latest
     form-data: ^4.0.0
+    geojson: ^0.5.0
     husky: ^8.0.0
     lint-staged: ^13.0.3
     nanoid: ^4.0.0
@@ -6598,6 +6677,7 @@ __metadata:
     stylelint-config-standard: ^24.0.0
     stylelint-config-styled-components: ^0.1.1
     stylelint-processor-styled-components: ^1.10.0
+    topojson-client: ^3.1.0
     typescript: 4.7.4
     uuid: ^8.3.2
   languageName: unknown
@@ -8902,6 +8982,19 @@ __metadata:
     regex-not: ^1.0.2
     safe-regex: ^1.1.0
   checksum: 4ed4a619059b64e204aad84e4e5f3ea82d97410988bcece7cf6cbfdbf193d11bff48cf53842d88b8bb00b1bfc0d048f61f20f0709e6f393fd8fe0122662d9db4
+  languageName: node
+  linkType: hard
+
+"topojson-client@npm:^3.1.0":
+  version: 3.1.0
+  resolution: "topojson-client@npm:3.1.0"
+  dependencies:
+    commander: 2
+  bin:
+    topo2geo: bin/topo2geo
+    topomerge: bin/topomerge
+    topoquantize: bin/topoquantize
+  checksum: 8c029a4f18324ace0b8b55dd90edbd40c9e3c6de18bafbb5da37ca20ebf20e26fbd4420891acb3c2c264e214185f7557871f5651a9eee517028663be98d836de
   languageName: node
   linkType: hard
 
