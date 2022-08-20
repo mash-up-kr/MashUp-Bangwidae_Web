@@ -27,7 +27,7 @@ export const Footer = styled.div`
   display: flex;
 
   margin-bottom: 16px;
-  margin-left: 24px;
+  margin-left: 8px;
 
   overflow: hidden;
 `;

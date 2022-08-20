@@ -14,7 +14,7 @@ function WardConfirmModal({ location, onConfirm, onCancel }: Props) {
   return (
     <ConfirmModal
       title={
-        <TitleWrapper style={{ marginTop: 24, marginBottom: 8, textAlign: 'center' }}>
+        <TitleWrapper style={{ marginTop: 14, marginBottom: 8, textAlign: 'center' }}>
           <p style={{ marginBottom: 6 }}>
             <span>지금 </span>
             <span style={{ color: theme.color.primary.Lime300 }}>{location}</span>에
@@ -22,8 +22,8 @@ function WardConfirmModal({ location, onConfirm, onCancel }: Props) {
           <p>지금 와드를 심으시겠어요?</p>
         </TitleWrapper>
       }
-      subTitle={<SubTitle>최소 20일간 소통할 수 있어요!</SubTitle>}
-      addOn={<Image src={addWard} width={150} height={123} />}
+      subTitle={<SubTitle style={{ fontSize: 14 }}>최소 20일간 소통할 수 있어요!</SubTitle>}
+      addOn={<Image src={addWard} width={123} height={100} />}
       onConfirm={onConfirm}
       onCancel={onCancel}
     />

@@ -11,9 +11,11 @@ interface Props {
   remainDays: string;
   location: string; // 별명 또는 현재 위치를 해당 인자로 넘깁니다.
   onAdd?: () => void;
+  onExpand?: () => void;
+  onDelete?: () => void;
 }
 
-function WardInfoContainer({ type, location, remainDays, onAdd }: Props) {
+function WardInfoContainer({ type, location, remainDays, onAdd, onExpand, onDelete }: Props) {
   const titlePrefix = type === 'new' ? '지금 여기는' : '와드를 심어놓은';
   const locationName = type === 'new' ? `${location}!` : location;
 
@@ -45,10 +47,12 @@ function WardInfoContainer({ type, location, remainDays, onAdd }: Props) {
         </Button>
       ) : (
         <Flex justify="space-between" style={{ width: '100%', marginTop: 8 }}>
-          <Button withBackground={false} style={{ marginRight: 8 }}>
+          <Button withBackground={false} onClick={onDelete} style={{ marginRight: 8 }}>
             삭제
           </Button>
-          <Button withBackground>기간 연장</Button>
+          <Button withBackground onClick={onExpand}>
+            기간 연장
+          </Button>
         </Flex>
       )}
     </Wrapper>

@@ -1,1 +1,1 @@
-export type WardType = 'new' | 'newInput' | 'expand';
+export type WardType = 'new' | 'newInput' | 'expand' | 'delete';

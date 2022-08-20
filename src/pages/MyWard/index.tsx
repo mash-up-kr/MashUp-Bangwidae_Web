@@ -24,6 +24,7 @@ interface Ward {
 function MyWard() {
   const [isOpen, setIsOpen] = useState(false);
   const [wardType, setWardType] = useState<WardType>('new');
+  const [currentIdx, setCurrentIdx] = useState<number>();
   const { data: wardList } = useQuery(['myWard/getMyWard'], getMyWard);
 
   return (
@@ -40,14 +41,30 @@ function MyWard() {
             }}
           />
           {wardList &&
-            wardList.map(({ id, name, remainDays }: Ward) => (
-              <WardInfoContainer key={id} type="existing" location={name} remainDays={remainDays} />
+            wardList.map(({ id, name, remainDays }: Ward, idx: string) => (
+              <WardInfoContainer
+                key={id}
+                type="existing"
+                location={name}
+                remainDays={remainDays}
+                onExpand={() => {
+                  setCurrentIdx(Number(idx));
+                  setWardType('expand');
+                  setIsOpen(true);
+                }}
+                onDelete={() => {
+                  setCurrentIdx(Number(idx));
+                  setWardType('delete');
+                  setIsOpen(true);
+                }}
+              />
             ))}
         </StyledCarousel>
       </Footer>
       <WardSection
         isOpen={isOpen}
         wardType={wardType}
+        targetId={currentIdx ? wardList[currentIdx] && wardList[currentIdx].id : null}
         setIsOpen={(status: boolean) => setIsOpen(status)}
         setWardType={(nextWardType: WardType) => setWardType(nextWardType)}
       />

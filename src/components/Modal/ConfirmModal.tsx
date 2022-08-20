@@ -28,7 +28,7 @@ function ConfirmModal({
     <Modal>
       <Flex direction="column" justify="center" align="center">
         <Flex direction="column" justify="center" align="center">
-          <TwoLayerContainer top={title} bottom={subTitle} style={{ width: '100%' }} />
+          <TwoLayerContainer top={title} bottom={subTitle} />
           {addOn && <Flex>{addOn}</Flex>}
         </Flex>
 
