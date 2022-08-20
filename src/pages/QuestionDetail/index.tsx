@@ -98,6 +98,7 @@ function QuestionDetail() {
   const handleCommentDeleteButtonClick = () => {
     togglePopupMenu();
     mutateCommentDelete({ commentId: selectedCommentId });
+    setSelectedCommentId('');
   };
 
   const handleCommentAnonymousButtonClick = () => {
