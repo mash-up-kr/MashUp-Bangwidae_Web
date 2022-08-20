@@ -39,6 +39,8 @@
     "styled-components": "^5.3.5"
   },
   "devDependencies": {
+    "@splinetool/react-spline": "^2.2.1",
+    "@splinetool/runtime": "^0.9.95",
     "@stylelint/postcss-css-in-js": "^0.37.2",
     "@svgr/webpack": "^6.3.1",
     "@types/node": "18.0.0",
