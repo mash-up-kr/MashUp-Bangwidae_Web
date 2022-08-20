@@ -75,7 +75,7 @@ export const useDeleteWard = (targetId?: string) => {
     [QUERY_KEYS.DELETE_WARD],
     () =>
       api.delete({
-        url: `/api/ward1/${targetId}`,
+        url: `/api/ward/${targetId}`,
       }),
     {
       onSuccess: () => {
