@@ -22,7 +22,6 @@ function QuestionDetail() {
   const theme = useTheme();
   const [commentInput, setCommentInput] = useState('');
   const [selectedCommentId, setSelectedCommentId] = useState('');
-  const [commentReplyTargetUserName, setCommentReplyTargetUserName] = useState('');
   const commentInputElement = useRef<HTMLInputElement>(null);
   const { isTargetOpen, changeTargetOpenState, isBeforeTargetClose } = useTranslateAnimation(0.2);
 
@@ -76,6 +75,7 @@ function QuestionDetail() {
   };
 
   const handleCommentKebabMenuClick = (event: MouseEvent, commentId: string) => {
+    setCommentInput('');
     togglePopupMenu();
     setSelectedCommentId(commentId);
   };
@@ -92,13 +92,14 @@ function QuestionDetail() {
     const selectedComment = comments.values.find(
       ({ id }: { id: string }) => id === selectedCommentId,
     );
-    setCommentReplyTargetUserName(selectedComment.user.nickname);
     setCommentInput(selectedComment.content);
+    setSelectedCommentId('');
   };
 
   const handleCommentDeleteButtonClick = () => {
     togglePopupMenu();
     mutateCommentDelete({ commentId: selectedCommentId });
+    setSelectedCommentId('');
   };
 
   const handleCommentAnonymousButtonClick = () => {
@@ -177,17 +178,16 @@ function QuestionDetail() {
       </TopSection>
       {/* Bottom Section */}
       <BottomSection>
-        {comments?.values.map((commentItem: Comment) => (
-          <CommentItem
-            key={commentItem.id}
-            comment={commentItem}
-            onMenuClick={handleCommentKebabMenuClick}
-          />
-        ))}
+        <CommentList>
+          {comments?.values.map((commentItem: Comment) => (
+            <CommentItem
+              key={commentItem.id}
+              comment={commentItem}
+              onMenuClick={handleCommentKebabMenuClick}
+            />
+          ))}
+        </CommentList>
         <CommentInputWrapper>
-          {commentReplyTargetUserName && (
-            <CommentInputInfo> {`> ${commentReplyTargetUserName}에 답글 달기`}</CommentInputInfo>
-          )}
           <FlexRow gap={0}>
             <CommentInput
               type="text"
@@ -206,9 +206,9 @@ function QuestionDetail() {
       </BottomSection>
       {isTargetOpen && (
         <PopupMenu onClose={togglePopupMenu} isBeforeClose={isBeforeTargetClose}>
-          <span onClick={handleCommentEditButtonClick}>수정하기</span>
-          <span onClick={handleCommentDeleteButtonClick}>삭제하기</span>
-          <span onClick={handleCommentAnonymousButtonClick}>익명으로 변경</span>
+          <div onClick={handleCommentEditButtonClick}>수정하기</div>
+          <div onClick={handleCommentDeleteButtonClick}>삭제하기</div>
+          <div onClick={handleCommentAnonymousButtonClick}>익명으로 변경</div>
         </PopupMenu>
       )}
     </Layout>
@@ -374,20 +374,18 @@ const BottomSection = styled.div`
   border-top: 1px solid ${({ theme }) => theme.color.gray.Gray800};
 `;
 
+const CommentList = styled.div`
+  height: 100%;
+  padding-bottom: 128px;
+  overflow-y: scroll;
+`;
+
 const CommentInputWrapper = styled.div`
   position: absolute;
   bottom: 0;
   left: 0;
   width: 100%;
-  padding-top: 12px;
   background-color: ${({ theme }) => theme.color.basic.DarkGray};
-`;
-
-const CommentInputInfo = styled.div`
-  margin-left: 30px;
-  height: 12px;
-  color: ${({ theme }) => theme.color.secondary01.Blue300};
-  ${typography.Body_Regular_14}
 `;
 
 const CommentInput = styled.input`
