@@ -205,9 +205,9 @@ function QuestionDetail() {
       </BottomSection>
       {isTargetOpen && (
         <PopupMenu onClose={togglePopupMenu} isBeforeClose={isBeforeTargetClose}>
-          <span onClick={handleCommentEditButtonClick}>수정하기</span>
-          <span onClick={handleCommentDeleteButtonClick}>삭제하기</span>
-          <span onClick={handleCommentAnonymousButtonClick}>익명으로 변경</span>
+          <div onClick={handleCommentEditButtonClick}>수정하기</div>
+          <div onClick={handleCommentDeleteButtonClick}>삭제하기</div>
+          <div onClick={handleCommentAnonymousButtonClick}>익명으로 변경</div>
         </PopupMenu>
       )}
     </Layout>
