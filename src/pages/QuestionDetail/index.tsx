@@ -175,13 +175,15 @@ function QuestionDetail() {
       </TopSection>
       {/* Bottom Section */}
       <BottomSection>
-        {comments?.values.map((commentItem: Comment) => (
-          <CommentItem
-            key={commentItem.id}
-            comment={commentItem}
-            onMenuClick={handleCommentKebabMenuClick}
-          />
-        ))}
+        <CommentList>
+          {comments?.values.map((commentItem: Comment) => (
+            <CommentItem
+              key={commentItem.id}
+              comment={commentItem}
+              onMenuClick={handleCommentKebabMenuClick}
+            />
+          ))}
+        </CommentList>
         <CommentInputWrapper>
           <FlexRow gap={0}>
             <CommentInput
@@ -367,6 +369,18 @@ const BottomSection = styled.div`
   padding: 0 30px;
   background-color: black;
   border-top: 1px solid ${({ theme }) => theme.color.gray.Gray800};
+`;
+
+const CommentList = styled.div`
+  height: 100%;
+  padding-bottom: 128px;
+  overflow-y: scroll;
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
+
+  ::-webkit-scrollbar {
+    display: none; /* Safari and Chrome */
+  }
 `;
 
 const CommentInputWrapper = styled.div`
