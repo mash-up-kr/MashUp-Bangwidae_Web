@@ -41,7 +41,6 @@ function MyWard() {
           <WardInfoContainer
             type="new"
             location="강남구"
-            remainDays="D-10"
             onAdd={() => {
               setIsOpen(true);
               setWardType('new');

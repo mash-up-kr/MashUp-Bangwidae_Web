@@ -5,11 +5,12 @@ import ClipLoader from 'react-spinners/ClipLoader';
 import Flex from '@/src/components/Flex';
 import Tag from '@/src/components/Tag';
 import thumbNail from '@/src/asset/image/thumbNail.png';
+import existingWard from '@/src/asset/image/existingWard.png';
 import colorTheme from '@/styles/theme';
 
 interface Props {
   type: 'new' | 'existing';
-  remainDays: string;
+  remainDays?: string;
   location: string; // 별명 또는 현재 위치를 해당 인자로 넘깁니다.
   isLoading?: boolean;
   onAdd?: () => void;
@@ -28,16 +29,23 @@ function WardInfoContainer({
 }: Props) {
   const titlePrefix = type === 'new' ? '지금 여기는' : '와드를 심어놓은';
   const locationName = type === 'new' ? `${location}!` : location;
+  const isExist = remainDays != null;
 
   return (
     <Wrapper>
       <Flex>
         <Flex direction="column">
           <Flex style={{ marginBottom: 16, flexShrink: 0 }}>
-            <Tag type="outline" color={colorTheme.color.primary.Lime300}>
-              {remainDays}
-            </Tag>
-            <Tag type="outline" color="white" style={{ marginLeft: 8 }}>
+            {remainDays && (
+              <Tag type="outline" color={colorTheme.color.primary.Lime300}>
+                {remainDays}
+              </Tag>
+            )}
+            <Tag
+              type="outline"
+              color={isExist ? 'white' : colorTheme.color.primary.Lime300}
+              style={{ marginLeft: isExist ? 8 : 0 }}
+            >
               현위치
             </Tag>
           </Flex>
@@ -47,7 +55,7 @@ function WardInfoContainer({
           </Flex>
         </Flex>
         <Flex align="center" style={{ height: '100%', flexShrink: 0 }}>
-          <Image src={thumbNail} width={94} height={94} />
+          <Image src={isExist ? existingWard : thumbNail} width={94} height={94} />
         </Flex>
       </Flex>
 
