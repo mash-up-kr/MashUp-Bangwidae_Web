@@ -10,6 +10,7 @@ import { getMyWard } from '@/pages/my-ward';
 import { Footer, StyledCarousel } from '../OpenInquiry/components/styledComponent';
 import WardSection from './components/WardSection';
 import { WardType } from './types';
+import { useDeleteWard, useExpandWardPeriod, usePlantWard } from './remote';
 
 interface Ward {
   id: string;
@@ -26,6 +27,12 @@ function MyWard() {
   const [wardType, setWardType] = useState<WardType>('new');
   const [currentIdx, setCurrentIdx] = useState<number>();
   const { data: wardList } = useQuery(['myWard/getMyWard'], getMyWard);
+  const targetId = currentIdx ? wardList[currentIdx] && wardList[currentIdx].id : null;
+
+  const { mutate: mutatePlantWard, isLoading } = usePlantWard();
+  const { mutate: mutateExpandWardPeriod, isLoading: isExpandWardLoading } =
+    useExpandWardPeriod(targetId);
+  const { mutate: mutateDeleteWard } = useDeleteWard(targetId);
 
   return (
     <Container>
@@ -39,6 +46,7 @@ function MyWard() {
               setIsOpen(true);
               setWardType('new');
             }}
+            isLoading={isLoading}
           />
           {wardList &&
             wardList.map(({ id, name, remainDays }: Ward, idx: string) => (
@@ -57,6 +65,7 @@ function MyWard() {
                   setWardType('delete');
                   setIsOpen(true);
                 }}
+                isLoading={isExpandWardLoading}
               />
             ))}
         </StyledCarousel>
@@ -64,9 +73,11 @@ function MyWard() {
       <WardSection
         isOpen={isOpen}
         wardType={wardType}
-        targetId={currentIdx ? wardList[currentIdx] && wardList[currentIdx].id : null}
         setIsOpen={(status: boolean) => setIsOpen(status)}
         setWardType={(nextWardType: WardType) => setWardType(nextWardType)}
+        handleWardAdd={mutatePlantWard}
+        handleWardDelete={mutateDeleteWard}
+        handleWardExpand={mutateExpandWardPeriod}
       />
     </Container>
   );

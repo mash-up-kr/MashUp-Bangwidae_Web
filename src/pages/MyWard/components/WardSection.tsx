@@ -2,22 +2,27 @@ import { WardType } from '../types';
 import NewWardInputModal from './Modal/NewWardInputModal';
 import WardConfirmModal from './Modal/WardConfirmModal';
 import WardExpandModal from './Modal/WardExpandConfirmModal';
-import { useDeleteWard, useExpandWardPeriod, usePlantWard } from '../remote';
 import WardDeleteConfirmModal from './Modal/WardDeleteConfirmModal';
 
 interface Props {
   isOpen: boolean;
   wardType: WardType;
-  targetId?: string;
   setIsOpen: (status: boolean) => void;
   setWardType: (wardType: WardType) => void;
+  handleWardAdd: (wardName: string) => void;
+  handleWardDelete: () => void;
+  handleWardExpand: () => void;
 }
 
-function WardSection({ isOpen = false, setIsOpen, targetId, setWardType, wardType }: Props) {
-  const { mutate: mutatePlantWard } = usePlantWard();
-  const { mutate: mutateExpandWardPeriod } = useExpandWardPeriod(targetId);
-  const { mutate: mutateDeleteWard } = useDeleteWard(targetId);
-
+function WardSection({
+  isOpen = false,
+  setIsOpen,
+  setWardType,
+  wardType,
+  handleWardAdd,
+  handleWardDelete,
+  handleWardExpand,
+}: Props) {
   if (!isOpen) return null;
 
   switch (wardType) {
@@ -35,7 +40,7 @@ function WardSection({ isOpen = false, setIsOpen, targetId, setWardType, wardTyp
       return (
         <NewWardInputModal
           onConfirm={async (wardName) => {
-            await mutatePlantWard(wardName);
+            await handleWardAdd(wardName);
             setIsOpen(false);
           }}
           onCancel={() => setIsOpen(false)}
@@ -45,7 +50,7 @@ function WardSection({ isOpen = false, setIsOpen, targetId, setWardType, wardTyp
       return (
         <WardExpandModal
           onConfirm={async () => {
-            await mutateExpandWardPeriod();
+            await handleWardExpand();
             setIsOpen(false);
           }}
           onCancel={() => setIsOpen(false)}
@@ -55,7 +60,7 @@ function WardSection({ isOpen = false, setIsOpen, targetId, setWardType, wardTyp
       return (
         <WardDeleteConfirmModal
           onConfirm={async () => {
-            await mutateDeleteWard();
+            await handleWardDelete();
             setIsOpen(false);
           }}
           onCancel={() => setIsOpen(false)}
