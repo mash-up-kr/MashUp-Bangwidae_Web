@@ -6,6 +6,7 @@ import WardDeleteConfirmModal from './Modal/WardDeleteConfirmModal';
 
 interface Props {
   isOpen: boolean;
+  location?: string;
   wardType: WardType;
   setIsOpen: (status: boolean) => void;
   setWardType: (wardType: WardType) => void;
@@ -16,6 +17,7 @@ interface Props {
 
 function WardSection({
   isOpen = false,
+  location,
   setIsOpen,
   setWardType,
   wardType,
@@ -29,7 +31,7 @@ function WardSection({
     case 'new':
       return (
         <WardConfirmModal
-          location="강남구"
+          location={location ?? '강남구'}
           onConfirm={() => {
             setWardType('newInput');
           }}

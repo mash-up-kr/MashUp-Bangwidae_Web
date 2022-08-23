@@ -11,7 +11,7 @@ import colorTheme from '@/styles/theme';
 interface Props {
   type: 'new' | 'existing';
   remainDays?: string;
-  location: string; // 별명 또는 현재 위치를 해당 인자로 넘깁니다.
+  location: string;
   isLoading?: boolean;
   onAdd?: () => void;
   onExpand?: () => void;
