@@ -26,10 +26,14 @@
   },
   "dependencies": {
     "@types/form-data": "^2.5.0",
+    "@types/geojson": "^7946.0.10",
     "@types/nanoid": "^3.0.0",
+    "@types/topojson-client": "^3.1.1",
     "axios": "^0.27.2",
+    "d3-geo": "^3.0.1",
     "dayjs": "^1.11.4",
     "form-data": "^4.0.0",
+    "geojson": "^0.5.0",
     "nanoid": "^4.0.0",
     "next": "12.1.6",
     "react": "18.2.0",
@@ -37,13 +41,15 @@
     "react-is": "^18.2.0",
     "react-query": "^3.39.1",
     "react-spinners": "^0.13.4",
-    "styled-components": "^5.3.5"
+    "styled-components": "^5.3.5",
+    "topojson-client": "^3.1.0"
   },
   "devDependencies": {
     "@splinetool/react-spline": "^2.2.1",
     "@splinetool/runtime": "^0.9.95",
     "@stylelint/postcss-css-in-js": "^0.37.2",
     "@svgr/webpack": "^6.3.1",
+    "@types/d3-geo": "^3.0.2",
     "@types/node": "18.0.0",
     "@types/react": "18.0.14",
     "@types/react-dom": "18.0.5",

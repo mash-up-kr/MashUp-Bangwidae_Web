@@ -9,6 +9,7 @@ import WardInfoContainer from './components/WardInfoContainer';
 import { getMyWard } from '@/pages/my-ward';
 import { Footer, StyledCarousel } from '../OpenInquiry/components/styledComponent';
 import WardSection from './components/WardSection';
+import DomesticMap from '@/src/components/DomesticMap';
 import { WardType } from './types';
 import { getRealAddress, useDeleteWard, useExpandWardPeriod, usePlantWard } from './remote';
 
@@ -68,6 +69,7 @@ function MyWard() {
 
   return (
     <Container>
+      <DomesticMap />
       <Footer>
         <StyledCarousel>
           <WardInfoContainer
@@ -121,5 +123,6 @@ export const Container = styled(Flex)`
   position: 'relative';
   width: '100vw';
   height: '100vh';
-  padding: 16;
+  margin: 0 auto;
+  padding: 16px;
 `;
