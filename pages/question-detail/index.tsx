@@ -2,7 +2,6 @@ import api from 'src/api/core';
 import { dehydrate, QueryClient } from 'react-query';
 import { POST, COMMENTS } from 'src/consts/query';
 
-const { NEXT_PUBLIC_ORIGIN } = process.env;
 const FETCHING_COMMENT_SIZE = 10;
 
 export async function getServerSideProps() {
@@ -19,13 +18,13 @@ export async function getServerSideProps() {
 
 export function getPostDetail() {
   return api.get({
-    url: `${NEXT_PUBLIC_ORIGIN}/api/posts/${TEST_ID}`,
+    url: `/api/posts/${TEST_ID}`,
   });
 }
 
 export function getCommentList() {
   return api.get({
-    url: `${NEXT_PUBLIC_ORIGIN}/api/posts/${TEST_ID}/comment?size=${FETCHING_COMMENT_SIZE}`,
+    url: `/api/posts/${TEST_ID}/comment?size=${FETCHING_COMMENT_SIZE}`,
   });
 }
 

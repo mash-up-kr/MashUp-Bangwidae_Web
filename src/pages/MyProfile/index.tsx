@@ -40,7 +40,7 @@ function MyProfile() {
       // FIXME: react-qeury로 변경 필요
       const formData = new FormData();
       formData.append('image', profileImage.file);
-      await axios.post(`${process.env.NEXT_PUBLIC_ORIGIN}/api/user/profile/image`, formData, {
+      await axios.post(`/api/user/profile/image`, formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
           'Cache-Control': 'no-cache',
