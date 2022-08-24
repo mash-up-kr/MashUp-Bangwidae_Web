@@ -6,8 +6,8 @@
   TOML_ENV_VAR = "From netlify.toml"
   NEXT_PUBLIC_TOML_ENV_VAR = "From netlify.toml (NEXT_PUBLIC_)"
 
-[redirects]
+[[redirects]]
   from = “/api/*”
   to = "https://doridori.ga/api/v1/:splat"
-  status = "200"
-  force = "true"
+  status = 200
+  force = true
