@@ -47,6 +47,7 @@ function MyProfile() {
           Authorization: `Bearer ${process.env.NEXT_PUBLIC_MOCK_TOKEN}`,
         },
       });
+      handleComplete();
       return;
     }
     if (profileImage.url === undefined) {
@@ -74,7 +75,7 @@ function MyProfile() {
       representativeWardId: profileInfo?.representativeWard?.id ?? NOT_APPLICABLE,
     });
     setInterestList(profileInfo?.tags || []);
-    setProfileImage({ url: profileInfo?.profileImageUrl });
+    setProfileImage({ url: profileInfo?.profileImageUrl, file: undefined });
   }, [profileInfo, wardList, setProfileInfoValue, setInterestList, setProfileImage]);
 
   const handleChange = useCallback(
@@ -154,7 +155,7 @@ function MyProfile() {
             </ImgWrapper>
           ) : (
             <StyledImg
-              src="https://dori-dori-bucket.kr.object.ncloudstorage.com/PROFILE/DEFAULT_IMAGE.png"
+              src={process.env.NEXT_PUBLIC_DEFAULT_PROFILE}
               alt="기본 프로필"
               width={100}
               height={100}
@@ -233,14 +234,15 @@ function MyProfile() {
           </>
         )}
       </div>
-      {/* TODO: disabled 조건 확인 필요 */}
-      <StyledButton
-        type="button"
-        disabled={interestList.length === 0 || profileInfoValue.description.length > 10}
-        onClick={handleSubmit}
-      >
-        프로필 변경하기
-      </StyledButton>
+      <StickyButton>
+        <StyledButton
+          type="button"
+          disabled={interestList.length === 0 || profileInfoValue.description.length > 10}
+          onClick={handleSubmit}
+        >
+          프로필 변경하기
+        </StyledButton>
+      </StickyButton>
       {snackBarText && <SnackBar onClose={() => setSnackBarText(undefined)} text={snackBarText} />}
     </Wrapper>
   );
@@ -253,7 +255,7 @@ const Wrapper = styled.div`
   flex-direction: column;
   justify-content: space-between;
   height: 100vh;
-  padding: 28px 30px 20px;
+  padding: 28px 30px 0px;
 `;
 
 const SubTitle = styled.div<{ marginBottom?: number }>`
@@ -329,4 +331,11 @@ const InterestsWrapper = styled.div`
 const ConfirmButton = styled(LargeLineButton)`
   margin-bottom: 25px;
   margin-left: 20px;
+`;
+
+const StickyButton = styled.div`
+  position: sticky;
+  bottom: 0px;
+  padding: 10px 0 20px;
+  background-color: ${({ theme }) => theme.color.basic.Black};
 `;
