@@ -11,8 +11,3 @@
   to = "https://doridori.ga/api/v1/:splat"
   status = 200
   force = true
-
-[[redirects]]
-  from = "/*"
-  to = "/index.html"
-  status = 200
