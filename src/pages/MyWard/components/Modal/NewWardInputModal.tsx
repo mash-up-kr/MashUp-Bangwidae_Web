@@ -7,6 +7,9 @@ interface Props {
   onCancel?: () => void;
 }
 
+const MIN_LENGTH = 2;
+const MAX_LENGTH = 5;
+
 function NewWardInputModal({ onConfirm, onCancel }: Props) {
   const colorTheme = useTheme();
   const [wardName, setWardName] = useState('');
@@ -27,11 +30,12 @@ function NewWardInputModal({ onConfirm, onCancel }: Props) {
           <SubTitle style={{ marginTop: 4, fontSize: 14 }}>
             2~5자의 글자로 이름지어 주세요.
           </SubTitle>
-          <Input onChange={(e) => setWardName(e.target.value)} />
+          <Input onChange={(e) => setWardName(e.target.value)} maxLength={MAX_LENGTH} />
         </>
       }
       onConfirm={() => onConfirm(wardName)}
       onCancel={onCancel}
+      isDisabled={wardName.length < MIN_LENGTH}
     />
   );
 }

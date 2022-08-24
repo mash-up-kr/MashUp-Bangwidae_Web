@@ -6668,6 +6668,7 @@ __metadata:
     react-is: ^18.2.0
     react-query: ^3.39.1
     react-slick: ^0.29.0
+    react-spinners: ^0.13.4
     slick-carousel: ^1.8.1
     styled-components: ^5.3.5
     stylelint: ^14.2.0
@@ -7616,6 +7617,16 @@ __metadata:
     react: ^0.14.0 || ^15.0.1 || ^16.0.0 || ^17.0.0 || ^18.0.0
     react-dom: ^0.14.0 || ^15.0.1 || ^16.0.0 || ^17.0.0 || ^18.0.0
   checksum: 67ce4981914da8a76c6efb4bc8ee7ab69e04c33bd4b3517419ab2165679a3c701dae781556149713fe2c542f84188b7ca101ea58883537be5c05756408f48c8b
+  languageName: node
+  linkType: hard
+
+"react-spinners@npm:^0.13.4":
+  version: 0.13.4
+  resolution: "react-spinners@npm:0.13.4"
+  peerDependencies:
+    react: ^16.0.0 || ^17.0.0 || ^18.0.0
+    react-dom: ^16.0.0 || ^17.0.0 || ^18.0.0
+  checksum: ae9430bc8a2fede2ffdcac57c3586c56c5b459e1ba3ee60058c4eaf9b7cbdd87cf07c15927cfe0a171fc7460553385b69d961dc8448356bc558fd44db02eee63
   languageName: node
   linkType: hard
 
