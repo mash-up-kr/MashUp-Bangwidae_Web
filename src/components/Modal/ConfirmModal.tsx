@@ -13,6 +13,7 @@ interface Props {
   confirmButtonTxt?: string;
   onCancel?: () => void | Promise<unknown>;
   cancelButtonTxt?: string;
+  isDisabled?: boolean;
 }
 
 function ConfirmModal({
@@ -23,6 +24,7 @@ function ConfirmModal({
   confirmButtonTxt = '확인',
   onCancel,
   cancelButtonTxt = '취소',
+  isDisabled,
 }: Props) {
   return (
     <Modal>
@@ -47,6 +49,7 @@ function ConfirmModal({
             onClick={() => {
               onConfirm && onConfirm();
             }}
+            disabled={isDisabled}
           >
             {confirmButtonTxt}
           </Button>
@@ -70,4 +73,9 @@ const Button = styled.button<{ withBackground: boolean }>`
   border: ${({ withBackground, theme }) =>
     withBackground ? 'none' : `1px solid ${theme.color.gray.Gray500}`};
   border-radius: 8px;
+
+  :disabled {
+    color: white;
+    background-color: ${({ theme }) => theme.color.gray.Gray400};
+  }
 `;

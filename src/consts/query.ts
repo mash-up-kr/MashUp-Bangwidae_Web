@@ -5,6 +5,17 @@ const QUERY_KEYS = {
   UNLIKE: 'questionDetail/unlike',
   COMMENT_LIKE: 'commentItem/like',
   COMMENT_UNLIKE: 'commentItem/unlike',
+  MY_LEVEL: 'myLevel',
+  LEVEL_POLICY: 'level/policy',
 };
 
-export const { POST, COMMENTS, LIKE, UNLIKE, COMMENT_LIKE, COMMENT_UNLIKE } = QUERY_KEYS;
+export const {
+  POST,
+  COMMENTS,
+  LIKE,
+  UNLIKE,
+  COMMENT_LIKE,
+  COMMENT_UNLIKE,
+  MY_LEVEL,
+  LEVEL_POLICY,
+} = QUERY_KEYS;

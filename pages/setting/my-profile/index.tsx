@@ -1,5 +1,5 @@
 import api from 'src/api/core';
-import { dehydrate, QueryClient } from 'react-query';
+// import { dehydrate, QueryClient } from 'react-query';
 
 // TODO: 공용 const 폴더로 이동
 export const QUERY_KEYS = {
@@ -11,17 +11,17 @@ export const QUERY_KEYS = {
   RESET_PROFILE_IMAGE: 'myProfile/image/reset',
 };
 
-export async function getServerSideProps() {
-  const queryClient = new QueryClient();
-  await queryClient.prefetchQuery([QUERY_KEYS.MY_PROFILE], getProfileInfo);
-  await queryClient.prefetchQuery([QUERY_KEYS.WARD_LIST], getMyWardList);
+// export async function getServerSideProps() {
+//   const queryClient = new QueryClient();
+//   await queryClient.prefetchQuery([QUERY_KEYS.MY_PROFILE], getProfileInfo);
+//   await queryClient.prefetchQuery([QUERY_KEYS.WARD_LIST], getMyWardList);
 
-  return {
-    props: {
-      dehydratedState: dehydrate(queryClient),
-    },
-  };
-}
+//   return {
+//     props: {
+//       dehydratedState: dehydrate(queryClient),
+//     },
+//   };
+// }
 
 export function getProfileInfo() {
   return api.get({

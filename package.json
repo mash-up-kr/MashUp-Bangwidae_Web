@@ -40,6 +40,7 @@
     "react-dom": "18.2.0",
     "react-is": "^18.2.0",
     "react-query": "^3.39.1",
+    "react-spinners": "^0.13.4",
     "styled-components": "^5.3.5",
     "topojson-client": "^3.1.0"
   },

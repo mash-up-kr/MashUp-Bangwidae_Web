@@ -76,6 +76,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["react-is", "npm:18.2.0"],\
             ["react-query", "virtual:1fbd4f2c9aa3a03ac18099f09c5d6be2da6c1cb1010c20668cc6aa6083bebfa409fa9e1becb8a79d1553bc0825388e53284c58854de362db68d1ea8fa75d9d8c#npm:3.39.1"],\
             ["react-slick", "virtual:1fbd4f2c9aa3a03ac18099f09c5d6be2da6c1cb1010c20668cc6aa6083bebfa409fa9e1becb8a79d1553bc0825388e53284c58854de362db68d1ea8fa75d9d8c#npm:0.29.0"],\
+            ["react-spinners", "virtual:1fbd4f2c9aa3a03ac18099f09c5d6be2da6c1cb1010c20668cc6aa6083bebfa409fa9e1becb8a79d1553bc0825388e53284c58854de362db68d1ea8fa75d9d8c#npm:0.13.4"],\
             ["slick-carousel", "virtual:1fbd4f2c9aa3a03ac18099f09c5d6be2da6c1cb1010c20668cc6aa6083bebfa409fa9e1becb8a79d1553bc0825388e53284c58854de362db68d1ea8fa75d9d8c#npm:1.8.1"],\
             ["styled-components", "virtual:1fbd4f2c9aa3a03ac18099f09c5d6be2da6c1cb1010c20668cc6aa6083bebfa409fa9e1becb8a79d1553bc0825388e53284c58854de362db68d1ea8fa75d9d8c#npm:5.3.5"],\
             ["stylelint", "npm:14.9.1"],\
@@ -8866,6 +8867,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["react-is", "npm:18.2.0"],\
             ["react-query", "virtual:1fbd4f2c9aa3a03ac18099f09c5d6be2da6c1cb1010c20668cc6aa6083bebfa409fa9e1becb8a79d1553bc0825388e53284c58854de362db68d1ea8fa75d9d8c#npm:3.39.1"],\
             ["react-slick", "virtual:1fbd4f2c9aa3a03ac18099f09c5d6be2da6c1cb1010c20668cc6aa6083bebfa409fa9e1becb8a79d1553bc0825388e53284c58854de362db68d1ea8fa75d9d8c#npm:0.29.0"],\
+            ["react-spinners", "virtual:1fbd4f2c9aa3a03ac18099f09c5d6be2da6c1cb1010c20668cc6aa6083bebfa409fa9e1becb8a79d1553bc0825388e53284c58854de362db68d1ea8fa75d9d8c#npm:0.13.4"],\
             ["slick-carousel", "virtual:1fbd4f2c9aa3a03ac18099f09c5d6be2da6c1cb1010c20668cc6aa6083bebfa409fa9e1becb8a79d1553bc0825388e53284c58854de362db68d1ea8fa75d9d8c#npm:1.8.1"],\
             ["styled-components", "virtual:1fbd4f2c9aa3a03ac18099f09c5d6be2da6c1cb1010c20668cc6aa6083bebfa409fa9e1becb8a79d1553bc0825388e53284c58854de362db68d1ea8fa75d9d8c#npm:5.3.5"],\
             ["stylelint", "npm:14.9.1"],\
@@ -10061,6 +10063,32 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["react", "npm:18.2.0"],\
             ["react-dom", "virtual:1fbd4f2c9aa3a03ac18099f09c5d6be2da6c1cb1010c20668cc6aa6083bebfa409fa9e1becb8a79d1553bc0825388e53284c58854de362db68d1ea8fa75d9d8c#npm:18.2.0"],\
             ["resize-observer-polyfill", "npm:1.5.1"]\
+          ],\
+          "packagePeers": [\
+            "@types/react-dom",\
+            "@types/react",\
+            "react-dom",\
+            "react"\
+          ],\
+          "linkType": "HARD"\
+        }]\
+      ]],\
+      ["react-spinners", [\
+        ["npm:0.13.4", {\
+          "packageLocation": "./.yarn/cache/react-spinners-npm-0.13.4-b8116576f3-ae9430bc8a.zip/node_modules/react-spinners/",\
+          "packageDependencies": [\
+            ["react-spinners", "npm:0.13.4"]\
+          ],\
+          "linkType": "SOFT"\
+        }],\
+        ["virtual:1fbd4f2c9aa3a03ac18099f09c5d6be2da6c1cb1010c20668cc6aa6083bebfa409fa9e1becb8a79d1553bc0825388e53284c58854de362db68d1ea8fa75d9d8c#npm:0.13.4", {\
+          "packageLocation": "./.yarn/__virtual__/react-spinners-virtual-89b041ac21/0/cache/react-spinners-npm-0.13.4-b8116576f3-ae9430bc8a.zip/node_modules/react-spinners/",\
+          "packageDependencies": [\
+            ["react-spinners", "virtual:1fbd4f2c9aa3a03ac18099f09c5d6be2da6c1cb1010c20668cc6aa6083bebfa409fa9e1becb8a79d1553bc0825388e53284c58854de362db68d1ea8fa75d9d8c#npm:0.13.4"],\
+            ["@types/react", "npm:18.0.14"],\
+            ["@types/react-dom", "npm:18.0.5"],\
+            ["react", "npm:18.2.0"],\
+            ["react-dom", "virtual:1fbd4f2c9aa3a03ac18099f09c5d6be2da6c1cb1010c20668cc6aa6083bebfa409fa9e1becb8a79d1553bc0825388e53284c58854de362db68d1ea8fa75d9d8c#npm:18.2.0"]\
           ],\
           "packagePeers": [\
             "@types/react-dom",\

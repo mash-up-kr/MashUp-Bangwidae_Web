@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import styled from 'styled-components';
+import axios from 'axios';
 import { Toggle } from '@/src/components';
 import { typography } from '@/styles';
 
@@ -7,12 +8,24 @@ function Alarm() {
   const [alarm1, setAlarm1] = useState(true);
   const [alarm2, setAlarm2] = useState(false);
   const [alarm3, setAlarm3] = useState(true);
+
+  const handleChange = async (v: boolean) => {
+    setAlarm1(v);
+    const data = await axios.get(`/api/user/me`, {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+        'Cache-Control': 'no-cache',
+        Authorization: `Bearer ${process.env.NEXT_PUBLIC_MOCK_TOKEN}`,
+      },
+    });
+    console.log(data);
+  };
   return (
     <Wrapper>
       <Title>알림</Title>
       <ToggleWrapper style={{ marginBottom: '34px' }}>
         <div>알림</div>
-        <Toggle checked={alarm1} onChange={(v) => setAlarm1(v)} />
+        <Toggle checked={alarm1} onChange={handleChange} />
       </ToggleWrapper>
       <ToggleWrapper>
         <div>심야 알림 허용</div>

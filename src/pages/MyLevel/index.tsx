@@ -1,13 +1,19 @@
 import styled, { css } from 'styled-components';
 // import dynamic from 'next/dynamic';
-import MessageIcon from 'public/icons/message.svg';
 import CheckIcon from 'public/icons/check.svg';
 import LevelIcon from 'public/icons/level.svg';
 import RockIcon from 'public/icons/rock.svg';
-import { useCallback, useState } from 'react';
-import Spline from '@splinetool/react-spline';
-import levelMessage from './message';
+import { useCallback, useEffect, useMemo, useState } from 'react';
+// import Spline from '@splinetool/react-spline';
+import { useQuery } from 'react-query';
 import { typography } from '@/styles';
+import { getLevelPolicy, getMyLevel } from '@/pages/my-level';
+import Mission from './components/Mission';
+import LevelMessage from './components/LevelMessage';
+import { LEVEL_POLICY, MY_LEVEL } from '@/src/consts/query';
+
+const MISSION_TITLE_ARR = ['질문', '답변'];
+const STANDARD_LEVEL = 3;
 
 function MyLevel() {
   // TODO: dynamic을 사용하면 호출이 더 많이 일어남. 확인 필요
@@ -15,15 +21,29 @@ function MyLevel() {
   //   ssr: false,
   // });
 
-  // FIXME: 임시 값
-  const myLevel = 3;
+  // const [showSpline, setShowSpline] = useState(false);
+  const [selectedLevel, setSelectedLevel] = useState(1);
+  const [policyArr, setPlicyArr] = useState<Array<string>>();
 
-  const [showSpline, setShowSpline] = useState(false);
-  const [selectedLevel, setSelectedLevel] = useState(myLevel);
+  // 현재 선택된 값이 이전 레벨인지 앞으로의 레벨인지 판단하는 값 필요 -> 따라서 메세지 표출
+
+  const { data: myLevelInfo } = useQuery(MY_LEVEL, getMyLevel);
+  const { data: levelpolicy } = useQuery(
+    [LEVEL_POLICY, selectedLevel],
+    getLevelPolicy(selectedLevel),
+  );
+
+  const myLevel = useMemo(() => (myLevelInfo?.userLevel ?? 0) + 1, [myLevelInfo]);
+
+  useEffect(() => {
+    setSelectedLevel((myLevelInfo?.userLevel ?? 0) + 1);
+    setPlicyArr(myLevelInfo?.userLevel > STANDARD_LEVEL ? MISSION_TITLE_ARR : undefined);
+  }, [myLevelInfo]);
 
   const handleClick = useCallback(
     (currentLevel: number) => () => {
       setSelectedLevel(currentLevel);
+      setPlicyArr(currentLevel > STANDARD_LEVEL ? MISSION_TITLE_ARR : undefined);
     },
     [setSelectedLevel],
   );
@@ -32,7 +52,7 @@ function MyLevel() {
     if (myLevel === currentLevel) {
       return <LevelIcon />;
     }
-    if (myLevel < currentLevel) {
+    if (myLevelInfo?.userLevel < currentLevel) {
       return <RockIcon />;
     }
     return <CheckIcon />;
@@ -55,36 +75,54 @@ function MyLevel() {
       </LevelBoxWrapper>
       <Wrapper>
         <SplineWrapper>
-          {!showSpline && (
-            <StyledImg
-              alt="level"
-              src="https://kr.object.ncloudstorage.com/dori-dori-bucket/LEVEL/1.png"
-            />
-          )}
-          <Spline
+          <StyledImg
+            alt="level"
+            src={levelpolicy?.imageUrl ?? `${process.env.NEXT_PUBLIC_DEFAULT_PROFILE}`}
+          />
+          {/* {!showSpline && levelpolicy?.imageUrl && (
+            <StyledImg alt="level" src={levelpolicy?.imageUrl} />
+          )} */}
+          {/* <Spline
             onLoad={() => {
               setShowSpline(true);
             }}
             scene="https://prod.spline.design/mHPQGrOzHhcb4YmF/scene.splinecode"
-          />
+          /> */}
         </SplineWrapper>
-        {levelMessage[1]}
-        {['질문', '답변'].map((i) => (
-          <MissionWrapper disabled={myLevel !== selectedLevel}>
-            <IconWrapper hasBorder>
-              <MessageIcon />
-            </IconWrapper>
-            <ProgressBarWrapper>
-              <ProgressBarMessage>
-                {i} 5개 작성하기
-                <span>5/5</span>
-              </ProgressBarMessage>
-              <ProgressBar>
-                <Percent percent={50} />
-              </ProgressBar>
-            </ProgressBarWrapper>
-          </MissionWrapper>
-        ))}
+        <LevelMessage
+          userLevel={myLevelInfo?.userLevel}
+          selectedLevel={selectedLevel}
+          maxWardCount={levelpolicy?.maxWardCount}
+        />
+        <MissionWrapper>
+          {policyArr ? (
+            policyArr.map((policy, index) => {
+              const isAnswer = index === 0;
+              return (
+                <Mission
+                  key={policy}
+                  myLevel={myLevel}
+                  currentLevel={selectedLevel}
+                  policyText={policy}
+                  totalCount={
+                    isAnswer
+                      ? levelpolicy?.answerCountCondition
+                      : levelpolicy?.questionCountCondition
+                  }
+                  currentCount={
+                    isAnswer ? myLevelInfo?.userAnswerCount : myLevelInfo?.userQuestionCount
+                  }
+                />
+              );
+            })
+          ) : (
+            <Mission
+              myLevel={myLevel}
+              currentLevel={selectedLevel}
+              currentCount={myLevelInfo?.userAnswerCount}
+            />
+          )}
+        </MissionWrapper>
       </Wrapper>
     </>
   );
@@ -111,6 +149,9 @@ const LevelBoxWrapper = styled.div`
   ${LevelBox}:last-child {
     margin-right: 30px;
   }
+  ::-webkit-scrollbar {
+    display: none;
+  }
 `;
 
 const Level = styled.div<{ isSelected?: boolean }>`
@@ -129,14 +170,8 @@ const SplineWrapper = styled.div`
   justify-content: center;
 `;
 
-const MissionWrapper = styled.div<{ disabled: boolean }>`
-  display: flex;
-  margin-top: 30px;
-  ${({ disabled }) =>
-    disabled &&
-    css`
-      opacity: 0.5;
-    `}
+const MissionWrapper = styled.div`
+  height: 160px;
 `;
 
 const IconWrapper = styled.div<{ hasBorder?: boolean; isSelected?: boolean }>`
@@ -160,39 +195,7 @@ const IconWrapper = styled.div<{ hasBorder?: boolean; isSelected?: boolean }>`
       border: 1px solid ${({ theme }) => theme.color.primary.Lime300};
     `}
 `;
-const ProgressBarWrapper = styled.div`
-  flex: 1;
-`;
-
-const ProgressBarMessage = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin-bottom: 8px;
-  ${typography.Title2_Bold_16}
-  span {
-    color: ${({ theme }) => theme.color.gray.Gray600};
-    ${typography.Caption1_Regular_13}
-  }
-`;
-
-const ProgressBar = styled.div`
-  position: relative;
-  height: 4px;
-  background-color: ${({ theme }) => theme.color.gray.Gray800};
-  border-radius: 10px;
-`;
-
-const Percent = styled.div<{ percent: number }>`
-  position: absolute;
-  width: ${({ percent }) => percent ?? 0}%;
-  height: 4px;
-  background: ${({ theme }) =>
-    `linear-gradient(90deg, ${theme.color.primary.Lime300}  0%, ${theme.color.secondary01.Blue300} 100%)`};
-  border-radius: 10px;
-`;
 
 const StyledImg = styled.img`
-  width: 185px;
   height: 205px;
 `;

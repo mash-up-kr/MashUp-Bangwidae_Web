@@ -3,7 +3,7 @@
 import { useQuery } from 'react-query';
 
 import styled from 'styled-components';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import Flex from '@/src/components/Flex';
 import WardInfoContainer from './components/WardInfoContainer';
 import { getMyWard } from '@/pages/my-ward';
@@ -11,6 +11,7 @@ import { Footer, StyledCarousel } from '../OpenInquiry/components/styledComponen
 import WardSection from './components/WardSection';
 import DomesticMap from '@/src/components/DomesticMap';
 import { WardType } from './types';
+import { getRealAddress, useDeleteWard, useExpandWardPeriod, usePlantWard } from './remote';
 
 interface Ward {
   id: string;
@@ -22,11 +23,49 @@ interface Ward {
   createdAt: string;
 }
 
+interface CurrnetLocation {
+  name: string;
+  latitude?: number;
+  longitude?: number;
+}
+
 function MyWard() {
   const [isOpen, setIsOpen] = useState(false);
   const [wardType, setWardType] = useState<WardType>('new');
   const [currentIdx, setCurrentIdx] = useState<number>();
+  const [currentLocation, setCurrentLocation] = useState<CurrnetLocation>();
   const { data: wardList } = useQuery(['myWard/getMyWard'], getMyWard);
+  const targetId = currentIdx ? wardList[currentIdx] && wardList[currentIdx].id : null;
+
+  const { mutate: mutatePlantWard, isLoading } = usePlantWard({
+    latitude: currentLocation?.latitude,
+    longitude: currentLocation?.longitude,
+  });
+  const { mutate: mutateExpandWardPeriod, isLoading: isExpandWardLoading } =
+    useExpandWardPeriod(targetId);
+  const { mutate: mutateDeleteWard } = useDeleteWard(targetId);
+
+  useEffect(() => {
+    async function onSuccess(position: GeolocationPosition) {
+      const { latitude, longitude } = position.coords;
+
+      const result = await getRealAddress({
+        latitude,
+        longitude,
+      });
+      setCurrentLocation({
+        name: result?.읍면동 ?? '강남구',
+        latitude,
+        longitude,
+      });
+    }
+
+    async function getCurrentLocation() {
+      await navigator.geolocation.getCurrentPosition(onSuccess);
+    }
+
+    getCurrentLocation();
+  }, []);
 
   return (
     <Container>
@@ -35,12 +74,12 @@ function MyWard() {
         <StyledCarousel>
           <WardInfoContainer
             type="new"
-            location="강남구"
-            remainDays="D-10"
+            location={currentLocation?.name ?? '강남구'}
             onAdd={() => {
               setIsOpen(true);
               setWardType('new');
             }}
+            isLoading={isLoading}
           />
           {wardList &&
             wardList.map(({ id, name, remainDays }: Ward, idx: string) => (
@@ -59,16 +98,20 @@ function MyWard() {
                   setWardType('delete');
                   setIsOpen(true);
                 }}
+                isLoading={isExpandWardLoading}
               />
             ))}
         </StyledCarousel>
       </Footer>
       <WardSection
         isOpen={isOpen}
+        location={currentLocation?.name}
         wardType={wardType}
-        targetId={currentIdx ? wardList[currentIdx] && wardList[currentIdx].id : null}
         setIsOpen={(status: boolean) => setIsOpen(status)}
         setWardType={(nextWardType: WardType) => setWardType(nextWardType)}
+        handleWardAdd={mutatePlantWard}
+        handleWardDelete={mutateDeleteWard}
+        handleWardExpand={mutateExpandWardPeriod}
       />
     </Container>
   );

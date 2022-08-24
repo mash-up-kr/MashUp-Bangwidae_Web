@@ -20,13 +20,20 @@ const QUERY_KEYS = {
 const COMMON_ERROR_MESSAGE = '에러가 발생했습니다. 다시 시도해주세요.';
 
 export function getRealAddress({ latitude, longitude }: { latitude: number; longitude: number }) {
+  if (latitude == null || longitude == null) return null;
+
   return api.get({
-    url: '/api/place/reverse/geocode',
-    data: { latitude, longitude },
+    url: `/api/place/reverse/geocode?latitude=${latitude}&longitude=${longitude}`,
   }) as Promise<AddressResponse>;
 }
 
-export const usePlantWard = () => {
+export const usePlantWard = ({
+  latitude,
+  longitude,
+}: {
+  latitude?: number;
+  longitude?: number;
+}) => {
   const queryClient = useQueryClient();
 
   return useMutation(
@@ -34,7 +41,7 @@ export const usePlantWard = () => {
     (wardName?: string) =>
       api.post({
         url: '/api/ward',
-        data: { name: wardName },
+        data: { name: wardName, latitude, longitude },
       }),
     {
       onSuccess: () => {
