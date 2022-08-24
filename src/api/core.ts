@@ -14,6 +14,11 @@ const createApiMethod =
       if (!response?.data) {
         return response;
       }
+
+      if (response.data.error) {
+        return response.data;
+      }
+
       return response.data.data;
     });
 

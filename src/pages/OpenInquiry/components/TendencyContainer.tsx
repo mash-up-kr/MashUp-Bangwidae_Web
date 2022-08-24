@@ -20,6 +20,7 @@ function TendencyContainer({ title, tags }: Props) {
           <TendencyTag>+{tags.length - 3}</TendencyTag>
         </Flex>
       }
+      style={{ margin: '0 8px', padding: '0 16px' }}
     />
   );
 }

@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions */
-import { ReactNode, useState } from 'react';
+import { ReactNode } from 'react';
 import styled from 'styled-components';
 import TwoLayerContainer from '@/src/pages/OpenInquiry/components/TwoLayerComponent';
 import Modal from '.';
@@ -13,6 +13,7 @@ interface Props {
   confirmButtonTxt?: string;
   onCancel?: () => void | Promise<unknown>;
   cancelButtonTxt?: string;
+  isDisabled?: boolean;
 }
 
 function ConfirmModal({
@@ -23,39 +24,36 @@ function ConfirmModal({
   confirmButtonTxt = '확인',
   onCancel,
   cancelButtonTxt = '취소',
+  isDisabled,
 }: Props) {
-  const [isOpen, setIsOpen] = useState(true);
-
-  if (!isOpen) {
-    return null;
-  }
-
   return (
     <Modal>
-      <Flex direction="column">
-        <TwoLayerContainer top={title} bottom={subTitle} style={{ marginBottom: 20 }} />
-        {addOn}
-      </Flex>
-      <Flex justify="space-between" style={{ width: '100%', marginTop: 8 }}>
-        <Button
-          withBackground={false}
-          style={{ marginRight: 8 }}
-          onClick={() => {
-            onCancel && onCancel();
-            setIsOpen(false);
-          }}
-        >
-          {cancelButtonTxt}
-        </Button>
-        <Button
-          withBackground
-          onClick={() => {
-            onConfirm && onConfirm();
-            setIsOpen(false);
-          }}
-        >
-          {confirmButtonTxt}
-        </Button>
+      <Flex direction="column" justify="center" align="center">
+        <Flex direction="column" justify="center" align="center">
+          <TwoLayerContainer top={title} bottom={subTitle} />
+          {addOn && <Flex>{addOn}</Flex>}
+        </Flex>
+
+        <Flex justify="space-between" style={{ width: '100%', marginTop: 8 }}>
+          <Button
+            withBackground={false}
+            style={{ marginRight: 8 }}
+            onClick={() => {
+              onCancel && onCancel();
+            }}
+          >
+            {cancelButtonTxt}
+          </Button>
+          <Button
+            withBackground
+            onClick={() => {
+              onConfirm && onConfirm();
+            }}
+            disabled={isDisabled}
+          >
+            {confirmButtonTxt}
+          </Button>
+        </Flex>
       </Flex>
     </Modal>
   );
@@ -75,4 +73,9 @@ const Button = styled.button<{ withBackground: boolean }>`
   border: ${({ withBackground, theme }) =>
     withBackground ? 'none' : `1px solid ${theme.color.gray.Gray500}`};
   border-radius: 8px;
+
+  :disabled {
+    color: white;
+    background-color: ${({ theme }) => theme.color.gray.Gray400};
+  }
 `;

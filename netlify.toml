@@ -1,0 +1,13 @@
+[build]
+  command = "yarn build"
+  publish = ".next"
+
+[context.production.environment]
+  TOML_ENV_VAR = "From netlify.toml"
+  NEXT_PUBLIC_TOML_ENV_VAR = "From netlify.toml (NEXT_PUBLIC_)"
+
+[[redirects]]
+  from = "/api/*"
+  to = "https://doridori.ga/api/v1/:splat"
+  status = 200
+  force = true
