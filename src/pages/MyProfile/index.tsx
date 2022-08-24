@@ -17,10 +17,14 @@ type MyProfileInputType = 'description' | 'interests' | 'representativeWardId';
 const NOT_APPLICABLE = 'notApplicable';
 
 function MyProfile() {
-  const { data: profileInfo, isLoading } = useQuery(QUERY_KEYS.MY_PROFILE, getProfileInfo);
-  const { data: wardList } = useQuery(QUERY_KEYS.WARD_LIST, getMyWardList);
-
-  console.log('profileInfo', profileInfo);
+  const { data: profileInfo, isLoading: isLoadingProfileInfo } = useQuery(
+    QUERY_KEYS.MY_PROFILE,
+    getProfileInfo,
+  );
+  const { data: wardList, isLoading: isLoadingWardList } = useQuery(
+    QUERY_KEYS.WARD_LIST,
+    getMyWardList,
+  );
 
   const [profileInfoValue, setProfileInfoValue] = useState<Record<MyProfileInputType, string>>({
     description: '',
@@ -142,8 +146,8 @@ function MyProfile() {
     submitProfileInfo();
   };
 
-  if (isLoading) {
-    <div>Loading...</div>;
+  if (isLoadingProfileInfo || isLoadingWardList) {
+    return <div>Loading...</div>;
   }
 
   return (
@@ -292,6 +296,7 @@ const ImgCancelSvg = styled.i`
 const StyledButton = styled.button`
   width: 100%;
   min-height: 54px;
+  color: ${({ theme }) => theme.color.basic.DarkGray};
   background-color: ${({ theme }) => theme.color.primary.Lime300};
   border: none;
   border-radius: 10px;
@@ -344,5 +349,5 @@ const StickyButton = styled.div`
   position: sticky;
   bottom: 0px;
   padding: 10px 0 20px;
-  background-color: ${({ theme }) => theme.color.basic.Black};
+  background-color: ${({ theme }) => theme.color.basic.DarkGray};
 `;
