@@ -18,7 +18,7 @@ function QuestionContainer({ id, title, content }: Props) {
       top={<ContainerTitle>Q. {title}</ContainerTitle>}
       bottom={content}
       onClick={() => router.push(`/question-detail?id=${id}`)}
-      style={{ marginRight: 8 }}
+      style={{ marginRight: 8, padding: '0 16px' }}
     />
   );
 }
