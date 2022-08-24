@@ -1,42 +1,80 @@
-import { useState } from 'react';
-import styled from 'styled-components';
-import axios from 'axios';
+import { useEffect, useState } from 'react';
+import styled, { css } from 'styled-components';
+import { useQuery } from 'react-query';
 import { Toggle } from '@/src/components';
 import { typography } from '@/styles';
+import { GET_NOTIFICATION_INFO } from '@/src/consts/query';
+import { getMyNotificationSetting } from '@/pages/setting/alarm';
+import { useNotificationUpdater } from './mutations';
+import ConfirmModal from '@/src/components/Modal/ConfirmModal';
 
 function Alarm() {
-  const [alarm1, setAlarm1] = useState(true);
-  const [alarm2, setAlarm2] = useState(false);
-  const [alarm3, setAlarm3] = useState(true);
+  const { data } = useQuery(GET_NOTIFICATION_INFO, getMyNotificationSetting);
 
-  const handleChange = async (v: boolean) => {
-    setAlarm1(v);
-    const data = await axios.get(`/api/user/me`, {
-      headers: {
-        'Content-Type': 'multipart/form-data',
-        'Cache-Control': 'no-cache',
-        Authorization: `Bearer ${process.env.NEXT_PUBLIC_MOCK_TOKEN}`,
-      },
-    });
-    console.log(data);
+  const [notification, setNotification] = useState(false);
+  const [nightNotification, setNightNotification] = useState(false);
+  const [locationInfo, setLocationInfo] = useState(false);
+  const [showModal, setShowModal] = useState(false);
+
+  useEffect(() => {
+    if (!data) {
+      return;
+    }
+    setNotification(data.notification);
+    setNightNotification(data.nightNotification);
+    setLocationInfo(data.locationInfo);
+  }, [data]);
+
+  const { mutate: updateNotificationInfo } = useNotificationUpdater({
+    notification,
+    nightNotification,
+    locationInfo,
+  });
+
+  useEffect(() => {
+    updateNotificationInfo();
+  }, [notification, nightNotification, locationInfo]);
+
+  const handleLocationInfoChange = (v: boolean) => {
+    if (!v) {
+      setShowModal(true);
+      return;
+    }
+    setLocationInfo(v);
   };
   return (
     <Wrapper>
       <Title>알림</Title>
-      <ToggleWrapper style={{ marginBottom: '34px' }}>
+      <ToggleWrapper hasBorder>
         <div>알림</div>
-        <Toggle checked={alarm1} onChange={handleChange} />
+        <Toggle checked={notification} onChange={(v) => setNotification(v)} />
       </ToggleWrapper>
       <ToggleWrapper>
         <div>심야 알림 허용</div>
-        <Toggle checked={alarm2} onChange={(v) => setAlarm2(v)} />
+        <Toggle checked={nightNotification} onChange={(v) => setNightNotification(v)} />
       </ToggleWrapper>
       <Description>20:00 ~ 07:00 사이에도 알림을 보내드릴께요!</Description>
-      <Title style={{ marginTop: '77px' }}>위치정보</Title>
-      <ToggleWrapper>
+      <Title>위치정보</Title>
+      <ToggleWrapper hasBorder>
         <div>위치정보 사용 허가하기</div>
-        <Toggle checked={alarm3} onChange={(v) => setAlarm3(v)} />
+        <Toggle checked={locationInfo} onChange={handleLocationInfoChange} />
       </ToggleWrapper>
+      {showModal && (
+        <ConfirmModal
+          title="위치정보 사용 관리"
+          subTitle="위치정보를 차단하면 앱 사용에 제한이 있어요. 위치정보를 허용해주세요!"
+          confirmButtonTxt="허용하기"
+          cancelButtonTxt="차단하기"
+          onConfirm={() => {
+            setLocationInfo(true);
+            setShowModal(false);
+          }}
+          onCancel={() => {
+            setLocationInfo(false);
+            setShowModal(false);
+          }}
+        />
+      )}
     </Wrapper>
   );
 }
@@ -47,11 +85,17 @@ const Wrapper = styled.div`
   padding: 28px 30px 20px;
 `;
 
-const ToggleWrapper = styled.div`
+const ToggleWrapper = styled.div<{ hasBorder?: boolean }>`
   display: flex;
   align-items: center;
   justify-content: space-between;
-  /* margin-bottom: 34px; */
+  ${({ hasBorder }) =>
+    hasBorder &&
+    css`
+      margin-bottom: 12px;
+      padding-bottom: 13px;
+      border-bottom: 1px solid #252525;
+    `}
 `;
 
 const Title = styled.div`
@@ -61,6 +105,9 @@ const Title = styled.div`
 `;
 
 const Description = styled.div`
+  margin-bottom: 40px;
+  padding-bottom: 12px;
   color: ${({ theme }) => theme.color.gray.Gray500};
+  border-bottom: 1px solid #252525;
   ${typography.Caption1_Regular_13}
 `;
