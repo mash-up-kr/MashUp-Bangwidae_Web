@@ -17,7 +17,7 @@ type MyProfileInputType = 'description' | 'interests' | 'representativeWardId';
 const NOT_APPLICABLE = 'notApplicable';
 
 function MyProfile() {
-  const { data: profileInfo } = useQuery(QUERY_KEYS.MY_PROFILE, getProfileInfo);
+  const { data: profileInfo, isLoading } = useQuery(QUERY_KEYS.MY_PROFILE, getProfileInfo);
   const { data: wardList } = useQuery(QUERY_KEYS.WARD_LIST, getMyWardList);
 
   const [profileInfoValue, setProfileInfoValue] = useState<Record<MyProfileInputType, string>>({
@@ -121,6 +121,7 @@ function MyProfile() {
       }
       const reader = new FileReader();
       reader.onloadend = () => {
+        alert(`url: ${reader.result}`);
         setProfileImage({
           file,
           url: reader.result as string,
@@ -138,6 +139,10 @@ function MyProfile() {
   const handleSubmit = () => {
     submitProfileInfo();
   };
+
+  if (isLoading) {
+    <div>Loading...</div>;
+  }
 
   return (
     <Wrapper>
