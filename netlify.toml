@@ -9,5 +9,5 @@
 [redirects]
   from = “/api/*”
   to = "https://doridori.ga/api/v1/:splat"
-  status = 200
-  force = true
+  status = "200"
+  force = "true"
