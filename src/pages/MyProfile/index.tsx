@@ -20,6 +20,8 @@ function MyProfile() {
   const { data: profileInfo } = useQuery(QUERY_KEYS.MY_PROFILE, getProfileInfo);
   const { data: wardList } = useQuery(QUERY_KEYS.WARD_LIST, getMyWardList);
 
+  console.log('profileInfo', profileInfo);
+
   const [profileInfoValue, setProfileInfoValue] = useState<Record<MyProfileInputType, string>>({
     description: '',
     interests: '',

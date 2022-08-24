@@ -35,5 +35,7 @@ export function getMyWardList() {
   });
 }
 
+console.log('page/setting/my-profile');
+
 // eslint-disable-next-line no-restricted-exports
 export { default } from 'pages/MyProfile';
