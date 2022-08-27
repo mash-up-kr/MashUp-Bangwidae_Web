@@ -9,6 +9,8 @@ const QUERY_KEYS = {
   LEVEL_POLICY: 'level/policy',
   NOTICE_LIST: 'setting/notice',
   TERMS: 'setting/terms',
+  GET_NOTIFICATION_INFO: 'get/setting/alarm',
+  SET_NOTIFICATION_INFO: 'set/setting/alarm',
 };
 
 export const {
@@ -22,4 +24,6 @@ export const {
   LEVEL_POLICY,
   NOTICE_LIST,
   TERMS,
+  GET_NOTIFICATION_INFO,
+  SET_NOTIFICATION_INFO,
 } = QUERY_KEYS;
