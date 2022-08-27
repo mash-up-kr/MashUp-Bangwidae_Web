@@ -1,5 +1,13 @@
+import { useEffect, useState } from 'react';
+
 function Home() {
-  return <div>Home</div>;
+  const [cookie, setCookie] = useState('');
+
+  useEffect(() => {
+    setCookie(document.cookie);
+  }, []);
+
+  return <div>Cookie is {cookie || 'empty.'}</div>;
 }
 
 export default Home;
