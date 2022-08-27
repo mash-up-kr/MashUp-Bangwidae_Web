@@ -20,7 +20,7 @@ export async function sendPostMessage(
 
     const customWindow: CustomWindowType = window;
     try {
-      customWindow.webkit?.messageHandlers.Common.postMessage(message);
+      customWindow.webkit?.messageHandlers.DoriDori.postMessage(message);
     } catch (e) {
       reject(e);
     }
