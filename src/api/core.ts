@@ -1,10 +1,13 @@
 import axios, { AxiosInstance, AxiosRequestConfig, Method } from 'axios';
+import Cookies from 'js-cookie';
 import { HTTP_METHODS } from '@/src/consts';
 
 const axiosInstance: AxiosInstance = axios.create({
   timeout: 10000,
   headers: { 'Content-Type': 'application/json', 'Cache-Control': 'no-cache' },
 });
+
+const accessToken = Cookies.get('accessToken') ?? '';
 
 const createApiMethod =
   (_axiosInstance: AxiosInstance, methodType: Method) =>
@@ -26,7 +29,7 @@ const createApiMethod =
       ...config,
       method: methodType,
       headers: {
-        Authorization: `Bearer ${process.env.NEXT_PUBLIC_MOCK_TOKEN}`,
+        Authorization: accessToken,
       },
     });
   };
