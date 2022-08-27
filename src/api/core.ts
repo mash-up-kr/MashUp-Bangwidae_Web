@@ -7,7 +7,7 @@ const axiosInstance: AxiosInstance = axios.create({
   headers: { 'Content-Type': 'application/json', 'Cache-Control': 'no-cache' },
 });
 
-const accessToken = Cookies.get('accessToken') ?? '';
+const accessToken = Cookies.get('accessToken') || '';
 const accessTokenForTest = `Bearer ${process.env.NEXT_PUBLIC_MOCK_TOKEN}`;
 
 const createApiMethod =
