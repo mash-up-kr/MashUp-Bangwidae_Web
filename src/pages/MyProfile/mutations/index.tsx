@@ -4,7 +4,7 @@ import { QUERY_KEYS } from '@/pages/setting/my-profile';
 
 export const useProfileInfoUpdater = (
   data: { description: string; tags: string[]; representativeWardId: string | null },
-  onComplete: () => void,
+  onComplete?: () => void,
 ) =>
   useMutation(
     [QUERY_KEYS.UPDATE_PROFILE],
@@ -15,7 +15,7 @@ export const useProfileInfoUpdater = (
       }),
     {
       onSuccess: () => {
-        onComplete();
+        onComplete?.();
       },
     },
   );
