@@ -40,6 +40,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@types/d3-geo", "npm:3.0.2"],\
             ["@types/form-data", "npm:2.5.0"],\
             ["@types/geojson", "npm:7946.0.10"],\
+            ["@types/js-cookie", "npm:3.0.2"],\
             ["@types/nanoid", "npm:3.0.0"],\
             ["@types/node", "npm:18.0.0"],\
             ["@types/react", "npm:18.0.14"],\
@@ -65,6 +66,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["form-data", "npm:4.0.0"],\
             ["geojson", "npm:0.5.0"],\
             ["husky", "npm:8.0.1"],\
+            ["js-cookie", "npm:3.0.1"],\
             ["lint-staged", "npm:13.0.3"],\
             ["nanoid", "npm:4.0.0"],\
             ["next", "virtual:1fbd4f2c9aa3a03ac18099f09c5d6be2da6c1cb1010c20668cc6aa6083bebfa409fa9e1becb8a79d1553bc0825388e53284c58854de362db68d1ea8fa75d9d8c#npm:12.1.6"],\
@@ -3547,6 +3549,15 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageLocation": "./.yarn/cache/@types-http-cache-semantics-npm-4.0.1-90863c7a3e-1048aacf62.zip/node_modules/@types/http-cache-semantics/",\
           "packageDependencies": [\
             ["@types/http-cache-semantics", "npm:4.0.1"]\
+          ],\
+          "linkType": "HARD"\
+        }]\
+      ]],\
+      ["@types/js-cookie", [\
+        ["npm:3.0.2", {\
+          "packageLocation": "./.yarn/cache/@types-js-cookie-npm-3.0.2-0fde2a4d71-7ab964288d.zip/node_modules/@types/js-cookie/",\
+          "packageDependencies": [\
+            ["@types/js-cookie", "npm:3.0.2"]\
           ],\
           "linkType": "HARD"\
         }]\
@@ -8002,6 +8013,15 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "linkType": "HARD"\
         }]\
       ]],\
+      ["js-cookie", [\
+        ["npm:3.0.1", {\
+          "packageLocation": "./.yarn/cache/js-cookie-npm-3.0.1-04c7177de1-bb48de67e2.zip/node_modules/js-cookie/",\
+          "packageDependencies": [\
+            ["js-cookie", "npm:3.0.1"]\
+          ],\
+          "linkType": "HARD"\
+        }]\
+      ]],\
       ["js-sha3", [\
         ["npm:0.8.0", {\
           "packageLocation": "./.yarn/cache/js-sha3-npm-0.8.0-decf3ddcfa-75df77c1fc.zip/node_modules/js-sha3/",\
@@ -8831,6 +8851,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@types/d3-geo", "npm:3.0.2"],\
             ["@types/form-data", "npm:2.5.0"],\
             ["@types/geojson", "npm:7946.0.10"],\
+            ["@types/js-cookie", "npm:3.0.2"],\
             ["@types/nanoid", "npm:3.0.0"],\
             ["@types/node", "npm:18.0.0"],\
             ["@types/react", "npm:18.0.14"],\
@@ -8856,6 +8877,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["form-data", "npm:4.0.0"],\
             ["geojson", "npm:0.5.0"],\
             ["husky", "npm:8.0.1"],\
+            ["js-cookie", "npm:3.0.1"],\
             ["lint-staged", "npm:13.0.3"],\
             ["nanoid", "npm:4.0.0"],\
             ["next", "virtual:1fbd4f2c9aa3a03ac18099f09c5d6be2da6c1cb1010c20668cc6aa6083bebfa409fa9e1becb8a79d1553bc0825388e53284c58854de362db68d1ea8fa75d9d8c#npm:12.1.6"],\
