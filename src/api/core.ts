@@ -8,6 +8,7 @@ const axiosInstance: AxiosInstance = axios.create({
 });
 
 const accessToken = Cookies.get('accessToken') ?? '';
+const accessTokenForTest = `Bearer ${process.env.NEXT_PUBLIC_MOCK_TOKEN}`;
 
 const createApiMethod =
   (_axiosInstance: AxiosInstance, methodType: Method) =>
@@ -29,7 +30,7 @@ const createApiMethod =
       ...config,
       method: methodType,
       headers: {
-        Authorization: accessToken,
+        Authorization: accessToken || accessTokenForTest,
       },
     });
   };
