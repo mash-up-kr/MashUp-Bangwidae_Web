@@ -9,7 +9,7 @@ import { useNotificationUpdater } from './mutations';
 import ConfirmModal from '@/src/components/Modal/ConfirmModal';
 
 function Alarm() {
-  const { data } = useQuery(GET_NOTIFICATION_INFO, getMyNotificationSetting);
+  const { data, isLoading } = useQuery(GET_NOTIFICATION_INFO, getMyNotificationSetting);
 
   const [notification, setNotification] = useState(false);
   const [nightNotification, setNightNotification] = useState(false);
@@ -32,6 +32,9 @@ function Alarm() {
   });
 
   useEffect(() => {
+    if (isLoading) {
+      return;
+    }
     updateNotificationInfo();
   }, [notification, nightNotification, locationInfo]);
 
@@ -42,6 +45,7 @@ function Alarm() {
     }
     setLocationInfo(v);
   };
+
   return (
     <Wrapper>
       <Title>알림</Title>
