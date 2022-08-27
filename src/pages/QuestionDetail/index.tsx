@@ -17,11 +17,7 @@ import {
   useCommentUpdater,
   useCommentDeleter,
 } from './mutations';
-
-interface CustomWindowType extends Window {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  webkit?: any;
-}
+import { sendPostMessage } from '@/src/utils/sendPostMessage';
 
 function QuestionDetail() {
   const theme = useTheme();
@@ -130,26 +126,11 @@ function QuestionDetail() {
   if (isPostLoading || isCommentLoading) return <div>Loading</div>;
   if (isPostError || isCommentError) return <div>Error</div>;
 
-  const handleDeepLinkClick = (page: 'mypage_other' | 'question') => async () =>
-    new Promise((_, reject) => {
-      const params = {
-        value: `doridori://main/${page}?userId=${post.user?.id}`,
-      };
-
-      const message = {
-        cmd: 'link',
-        parameters: params,
-      };
-
-      const customWindow: CustomWindowType = window;
-      try {
-        alert('딥링크 호출');
-        customWindow.webkit?.messageHandlers.Common.postMessage(message);
-      } catch (e) {
-        reject(e);
-        alert(`error: ${e}`);
-      }
+  const handleDeepLinkClick = (page: 'mypage_other' | 'question') => () => {
+    sendPostMessage({
+      value: `doridori://main/${page}?userId=${post.user?.id}`,
     });
+  };
 
   return (
     <Layout>
