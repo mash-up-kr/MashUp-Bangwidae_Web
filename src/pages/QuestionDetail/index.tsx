@@ -18,6 +18,11 @@ import {
   useCommentDeleter,
 } from './mutations';
 
+interface CustomWindowType extends Window {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  webkit?: any;
+}
+
 function QuestionDetail() {
   const theme = useTheme();
   const [commentInput, setCommentInput] = useState('');
@@ -125,26 +130,49 @@ function QuestionDetail() {
   if (isPostLoading || isCommentLoading) return <div>Loading</div>;
   if (isPostError || isCommentError) return <div>Error</div>;
 
+  const handleDeepLinkClick = (page: 'mypage_other' | 'question') => async () =>
+    new Promise((_, reject) => {
+      const params = {
+        value: `doridori://main/${page}?userId=${post.user?.id}`,
+      };
+
+      const message = {
+        cmd: 'link',
+        parameters: params,
+      };
+
+      const customWindow: CustomWindowType = window;
+      try {
+        alert('딥링크 호출');
+        customWindow.webkit?.messageHandlers.Common.postMessage(message);
+      } catch (e) {
+        reject(e);
+        alert(`error: ${e}`);
+      }
+    });
+
   return (
     <Layout>
       {/* Top Section */}
       <TopSection>
         {/* Header */}
         <FlexRow gap={8}>
-          <ProfileImage src={post.user.profileImageUrl} />
+          <ProfileImage src={post.user?.profileImageUrl} />
           <FlexBetween>
             <FlexColumn gap={6}>
               <FlexRow gap={8}>
-                <Nickname>{post.user.nickname}</Nickname>
+                <Nickname onClick={handleDeepLinkClick('mypage_other')}>
+                  {post.user?.nickname}
+                </Nickname>
                 <LevelTag>Lv.1</LevelTag>
               </FlexRow>
               <FlexRow gap={6}>
-                {post.user.tags.map((tag: string) => (
+                {post.user?.tags.map((tag: string) => (
                   <InterestTag key={v4()}>{tag}</InterestTag>
                 ))}
               </FlexRow>
             </FlexColumn>
-            <LargeLineButton buttonType="default" onClick={() => {}}>
+            <LargeLineButton buttonType="default" onClick={handleDeepLinkClick('question')}>
               질문하기
             </LargeLineButton>
           </FlexBetween>
