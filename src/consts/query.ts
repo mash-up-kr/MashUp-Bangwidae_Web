@@ -7,6 +7,8 @@ const QUERY_KEYS = {
   COMMENT_UNLIKE: 'commentItem/unlike',
   MY_LEVEL: 'myLevel',
   LEVEL_POLICY: 'level/policy',
+  GET_NOTIFICATION_INFO: 'get/setting/alarm',
+  SET_NOTIFICATION_INFO: 'set/setting/alarm',
 };
 
 export const {
@@ -18,4 +20,6 @@ export const {
   COMMENT_UNLIKE,
   MY_LEVEL,
   LEVEL_POLICY,
+  GET_NOTIFICATION_INFO,
+  SET_NOTIFICATION_INFO,
 } = QUERY_KEYS;
