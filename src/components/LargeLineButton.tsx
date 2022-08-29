@@ -40,6 +40,7 @@ const Button = styled.button<{
   border: ${({ theme }) => `1px solid ${theme.color.gray.Gray700}`};
   border-radius: 40px;
   cursor: pointer;
+  white-space: nowrap;
   ${({ buttonType }) =>
     buttonType === 'primary' &&
     css`

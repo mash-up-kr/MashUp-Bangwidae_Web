@@ -7,6 +7,7 @@ import { dateTime } from 'src/utils/DateTime';
 import { useTranslateAnimation } from 'src/hooks';
 import { v4 } from 'uuid';
 import { LargeLineButton, IconTextButton } from '@/src/components';
+import Flex from '@/src/components/Flex';
 import { typography } from '@/styles';
 import { CommentItem, PopupMenu } from './components';
 import { getPostDetail, getCommentList } from '@/pages/question-detail';
@@ -137,34 +138,34 @@ function QuestionDetail() {
       {/* Top Section */}
       <TopSection>
         {/* Header */}
-        <FlexRow gap={8}>
+        <Flex direction="row" align="center">
           <ProfileImage src={post.user?.profileImageUrl} />
-          <FlexBetween>
-            <FlexColumn gap={6}>
-              <FlexRow gap={8}>
+          <Flex direction="row" justify="space-between" style={{ flexGrow: 1 }}>
+            <Flex direction="column">
+              <Flex direction="row" style={{ marginBottom: '6px' }}>
                 <Nickname onClick={handleDeepLinkClick('mypage_other')}>
                   {post.user?.nickname}
                 </Nickname>
                 <LevelTag>Lv.1</LevelTag>
-              </FlexRow>
-              <FlexRow gap={6}>
+              </Flex>
+              <Flex direction="row" style={{ minWidth: '130px' }}>
                 {post.user?.tags.map((tag: string) => (
                   <InterestTag key={v4()}>{tag}</InterestTag>
                 ))}
-              </FlexRow>
-            </FlexColumn>
+              </Flex>
+            </Flex>
             <LargeLineButton buttonType="default" onClick={handleDeepLinkClick('question')}>
               질문하기
             </LargeLineButton>
-          </FlexBetween>
-        </FlexRow>
+          </Flex>
+        </Flex>
         <Divider />
         {/* Content */}
         <Content>{post.content}</Content>
-        <FlexRow gap={8}>
+        <Flex direction="row">
           <LocatedAt>{post.representativeAddress}</LocatedAt>
           <CreatedAt>{dateTime.fromNow(post.createdAt)}</CreatedAt>
-        </FlexRow>
+        </Flex>
         {/* Menu Group */}
         <MenuGroupPosition>
           <MenuGroup>
@@ -197,7 +198,7 @@ function QuestionDetail() {
           ))}
         </CommentList>
         <CommentInputWrapper>
-          <FlexRow gap={0}>
+          <Flex direction="row" align="center">
             <CommentInput
               type="text"
               placeholder="댓글을 남겨주세요."
@@ -210,7 +211,7 @@ function QuestionDetail() {
                 등록
               </LargeLineButton>
             </CommentSubmitButton>
-          </FlexRow>
+          </Flex>
         </CommentInputWrapper>
       </BottomSection>
       {isTargetOpen && (
@@ -239,37 +240,17 @@ const TopSection = styled.div`
   padding: 0 30px;
 `;
 
-const FlexRow = styled.div<{
-  gap: number;
-}>`
-  display: flex;
-  align-items: center;
-  column-gap: ${({ gap }) => `${gap}px`};
-`;
-
 const ProfileImage = styled.img`
   width: 52px;
   height: 52px;
+  margin-right: 8px;
   border: 1px solid #3a3a3a;
   border-radius: 50%;
 `;
 
-const FlexBetween = styled.div`
-  display: flex;
-  flex-grow: 1;
-  justify-content: space-between;
-`;
-
-const FlexColumn = styled.div<{
-  gap: number;
-}>`
-  display: flex;
-  flex-direction: column;
-  row-gap: ${({ gap }) => `${gap}px`};
-`;
-
 const Nickname = styled.div`
   ${typography.Body_Medium_14}
+  margin-right: 8px;
 `;
 
 const LevelTag = styled.div`
@@ -290,9 +271,10 @@ const InterestTag = styled.div`
   align-items: center;
   justify-content: center;
   height: 20px;
+  margin-right: 6px;
   padding: 1px 6px;
   color: ${({ theme }) => theme.color.gray.Gray400};
-  font-weight: 700;
+  font-weight: 400;
   font-size: 12px;
   text-align: center;
   background-color: ${({ theme }) => theme.color.gray.Gray800};
@@ -319,7 +301,7 @@ const LocatedAt = styled.div`
   ${typography.Caption2_Regular_12}
   ::after {
     height: 10px;
-    margin-left: 10px;
+    margin: 0 10px;
     border-right: 1px solid ${({ theme }) => theme.color.gray.Gray700};
     content: '';
   }
