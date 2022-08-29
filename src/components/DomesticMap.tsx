@@ -4,35 +4,28 @@ import React, { useEffect } from 'react';
 import { select, geoMercator, easeElastic } from 'd3';
 import { geoPath } from 'd3-geo';
 import { feature } from 'topojson-client';
+import type { Ward } from 'pages/MyWard';
+import koreaMap from 'public/mapData/provinces-geo.json';
 import Flex from '@/src/components/Flex';
-import koreaMap from '../../public/mapData/provinces-geo.json';
-
-const mapInfo = [
-  {
-    name: '서울',
-    latitude: '37.532600',
-    longitude: '127.024612',
-  },
-  {
-    name: '대전',
-    latitude: '36.3730178',
-    longitude: '127.2483736',
-  },
-];
 
 const MARKER = {
   TRANSITION: {
     OFFSET: 30,
     DURATION: 2000,
-    DELAY: 100,
   },
   IMG_PATH: 'images/marker.svg',
 };
 
-function DomesticMap() {
+interface DomesticMapProps {
+  wardList: Ward[];
+}
+
+function DomesticMap({ wardList }: DomesticMapProps) {
   useEffect(() => {
-    createSvgMap();
-  }, []);
+    if (wardList) {
+      createSvgMap(wardList);
+    }
+  }, [wardList]);
 
   return (
     <Flex justify="center" align="center" style={{ width: '100%', height: 'calc(100vh - 360px)' }}>
@@ -41,7 +34,7 @@ function DomesticMap() {
   );
 }
 
-function createSvgMap() {
+function createSvgMap(wardList) {
   const MAP_WIDTH = document.documentElement.clientWidth;
   const MAP_HEIGHT = document.documentElement.clientHeight;
   const topology = koreaMap;
@@ -90,7 +83,7 @@ function createSvgMap() {
   svg
     .append('g')
     .selectAll('svg')
-    .data(mapInfo)
+    .data(wardList)
     .enter()
     .append('svg:image')
     .attr('width', 20)
@@ -101,7 +94,6 @@ function createSvgMap() {
     .transition()
     .ease(easeElastic)
     .duration(MARKER.TRANSITION.DURATION)
-    .delay((d, i) => i * MARKER.TRANSITION.DELAY)
     .attr('y', (d) => projection([d.longitude, d.latitude])[1]);
 }
 

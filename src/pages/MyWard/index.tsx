@@ -13,7 +13,7 @@ import DomesticMap from '@/src/components/DomesticMap';
 import { WardType } from './types';
 import { getRealAddress, useDeleteWard, useExpandWardPeriod, usePlantWard } from './remote';
 
-interface Ward {
+export interface Ward {
   id: string;
   isRepresentative: boolean;
   latitude: number;
@@ -69,7 +69,7 @@ function MyWard() {
 
   return (
     <Container>
-      <DomesticMap />
+      <DomesticMap wardList={wardList} />
       <Footer>
         <StyledCarousel>
           <WardInfoContainer
