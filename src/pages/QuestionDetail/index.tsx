@@ -2,7 +2,7 @@ import { useState, ChangeEvent, MouseEvent, useRef } from 'react';
 import styled, { useTheme } from 'styled-components';
 import { useQuery } from 'react-query';
 import type { Comment } from 'pages/QuestionDetail/components/CommentItem';
-import { POST, COMMENTS } from 'src/consts/query';
+import { POST, COMMENTS, USER_INFO } from 'src/consts/query';
 import { dateTime } from 'src/utils/DateTime';
 import { useTranslateAnimation } from 'src/hooks';
 import { v4 } from 'uuid';
@@ -10,7 +10,7 @@ import { LargeLineButton, IconTextButton } from '@/src/components';
 import Flex from '@/src/components/Flex';
 import { typography } from '@/styles';
 import { CommentItem, PopupMenu } from './components';
-import { getPostDetail, getCommentList } from '@/pages/question-detail';
+import { getPostDetail, getCommentList, getUserInfo } from '@/pages/question-detail';
 import {
   usePostLikeCreator,
   usePostUnlikeCreator,
@@ -26,6 +26,7 @@ function QuestionDetail() {
   const [selectedCommentId, setSelectedCommentId] = useState('');
   const commentInputElement = useRef<HTMLInputElement>(null);
   const { isTargetOpen, changeTargetOpenState, isBeforeTargetClose } = useTranslateAnimation(0.2);
+  const [isMyComment, setIsMyComment] = useState(false);
 
   const {
     data: post,
@@ -38,6 +39,8 @@ function QuestionDetail() {
     isError: isCommentError,
     isLoading: isCommentLoading,
   } = useQuery([COMMENTS], getCommentList);
+
+  const { data: userInfo } = useQuery([USER_INFO], getUserInfo);
 
   const { mutate: mutateUnlikeCount } = usePostUnlikeCreator();
   const { mutate: mutateLikeCount } = usePostLikeCreator();
@@ -80,6 +83,8 @@ function QuestionDetail() {
     setCommentInput('');
     togglePopupMenu();
     setSelectedCommentId(commentId);
+    const selectedComment = comments.values.find(({ id }: { id: string }) => id === commentId);
+    setIsMyComment(userInfo?.userId === selectedComment?.user?.id);
   };
 
   const togglePopupMenu = () => {
@@ -216,9 +221,26 @@ function QuestionDetail() {
       </BottomSection>
       {isTargetOpen && (
         <PopupMenu onClose={togglePopupMenu} isBeforeClose={isBeforeTargetClose}>
-          <div onClick={handleCommentEditButtonClick}>수정하기</div>
-          <div onClick={handleCommentDeleteButtonClick}>삭제하기</div>
-          <div onClick={handleCommentAnonymousButtonClick}>익명으로 변경</div>
+          {isMyComment
+            ? [
+                <div key={v4()} onClick={handleCommentEditButtonClick}>
+                  수정하기
+                </div>,
+                <div key={v4()} onClick={handleCommentDeleteButtonClick}>
+                  삭제하기
+                </div>,
+                <div key={v4()} onClick={handleCommentAnonymousButtonClick}>
+                  익명으로 변경
+                </div>,
+              ]
+            : [
+                <div key={v4()} onClick={() => {}}>
+                  신고하기
+                </div>,
+                <div key={v4()} onClick={() => {}}>
+                  대댓글 쓰기
+                </div>,
+              ]}
         </PopupMenu>
       )}
     </Layout>
