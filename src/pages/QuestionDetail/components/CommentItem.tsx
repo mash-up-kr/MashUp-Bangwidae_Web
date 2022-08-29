@@ -4,6 +4,7 @@ import { useCommentLikeCreator, useCommentUnlikeCreator } from 'pages/QuestionDe
 import { typography } from '@/styles';
 import { IconTextButton } from '@/src/components';
 import { dateTime } from '@/src/utils/DateTime';
+import Flex from '@/src/components/Flex';
 
 const DEFAULT_IMAGE_URL = process.env.NEXT_PUBLIC_DEFAULT_IMAGE;
 
@@ -42,18 +43,19 @@ function CommentItem({ comment, onMenuClick }: CommentItemProps) {
 
   return (
     <Layout>
-      <FlexRow gap={8}>
+      <Flex direction="row" align="center">
         <ProfileImage src={comment.user.profileImageUrl ?? DEFAULT_IMAGE_URL} />
-        <FlexBetween>
-          <FlexColumn gap={6}>
-            <FlexRow gap={8}>
+        <Flex direction="row" justify="space-between">
+          <Flex direction="column">
+            <Flex direction="row">
               <Nickname>{comment.user.nickname}</Nickname>
               <LevelTag>Lv.1</LevelTag>
-            </FlexRow>
-          </FlexColumn>
-        </FlexBetween>
-        <FlexRow gap={8}>
+            </Flex>
+          </Flex>
+        </Flex>
+        <Flex direction="row" justify="flex-end" align="center" style={{ flexGrow: 1 }}>
           <LocatedAt>{comment.representativeAddress}</LocatedAt>
+          <VerticalDivider />
           <CreatedAt>{dateTime.fromNow(comment.createdAt)}</CreatedAt>
           <IconPosition>
             <IconTextButton
@@ -63,15 +65,15 @@ function CommentItem({ comment, onMenuClick }: CommentItemProps) {
               onClick={(event) => onMenuClick(event, comment.id)}
             />
           </IconPosition>
-        </FlexRow>
-      </FlexRow>
+        </Flex>
+      </Flex>
       <CommentContent>{comment.content}</CommentContent>
-      <FlexBetween>
-        <FlexRow gap={8}>
+      <Flex direction="row" justify="space-between">
+        <Flex direction="row" align="center">
           <IconTextButton color={theme.color.gray.Gray500} size={24} onClick={() => {}}>
             답글 달기
           </IconTextButton>
-          <VerticalDivider />
+          <VerticalDivider style={{ marginBottom: '4px' }} />
           <IconTextButton
             color={comment.userLiked ? theme.color.primary.Lime300 : theme.color.gray.Gray500}
             size={24}
@@ -79,7 +81,7 @@ function CommentItem({ comment, onMenuClick }: CommentItemProps) {
           >
             좋아요
           </IconTextButton>
-        </FlexRow>
+        </Flex>
         <IconTextButton
           name="heart"
           color={theme.color.primary.Lime300}
@@ -89,7 +91,7 @@ function CommentItem({ comment, onMenuClick }: CommentItemProps) {
         >
           <IconText>{comment.likeCount}</IconText>
         </IconTextButton>
-      </FlexBetween>
+      </Flex>
     </Layout>
   );
 }
@@ -101,14 +103,6 @@ const Layout = styled.div`
   border-bottom: 1px solid ${({ theme }) => theme.color.gray.Gray800};
 `;
 
-const FlexRow = styled.div<{
-  gap: number;
-}>`
-  display: flex;
-  align-items: center;
-  column-gap: ${({ gap }) => `${gap}px`};
-`;
-
 const ProfileImage = styled.img`
   width: 32px;
   height: 32px;
@@ -116,22 +110,9 @@ const ProfileImage = styled.img`
   border-radius: 50%;
 `;
 
-const FlexBetween = styled.div`
-  display: flex;
-  flex-grow: 1;
-  justify-content: space-between;
-`;
-
-const FlexColumn = styled.div<{
-  gap: number;
-}>`
-  display: flex;
-  flex-direction: column;
-  row-gap: ${({ gap }) => `${gap}px`};
-`;
-
 const Nickname = styled.div`
   ${typography.Body_Medium_14}
+  margin: 0 8px;
 `;
 
 const LevelTag = styled.div`
@@ -152,12 +133,6 @@ const LocatedAt = styled.div`
   font-weight: 400;
 
   ${typography.Caption2_Regular_12}
-  ::after {
-    height: 10px;
-    margin-left: 10px;
-    border-right: 1px solid ${({ theme }) => theme.color.gray.Gray800};
-    content: '';
-  }
 `;
 
 const CreatedAt = styled.div`
@@ -184,5 +159,6 @@ const CommentContent = styled.div`
 
 const VerticalDivider = styled.div`
   height: 10px;
+  margin: 0 10px 0 10px;
   border-right: 1px solid ${({ theme }) => theme.color.gray.Gray800};
 `;
