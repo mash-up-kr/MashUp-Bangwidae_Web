@@ -420,6 +420,7 @@ const LeftIcon = styled(IconTextButton)`
   display: flex;
   flex-grow: 1;
   justify-content: center;
+  max-width: 32%;
   height: 24px;
 `;
 
@@ -427,6 +428,7 @@ const CenterIcon = styled(IconTextButton)`
   display: flex;
   flex-grow: 1;
   justify-content: center;
+  max-width: 32%;
   height: 24px;
   border-right: ${({ theme }) => `1px solid ${theme.color.gray.Gray800}`};
   border-left: ${({ theme }) => `1px solid ${theme.color.gray.Gray800}`};
@@ -436,6 +438,7 @@ const RightIcon = styled(IconTextButton)`
   display: flex;
   flex-grow: 1;
   justify-content: center;
+  max-width: 32%;
   height: 24px;
 `;
 
