@@ -152,8 +152,8 @@ function QuestionDetail() {
     setShowPreparationModal(true);
   };
 
-  if (isPostLoading || isCommentLoading) return <div>Loading</div>;
-  if (isPostError || isCommentError) return <div>Error</div>;
+  if (isPostLoading || isCommentLoading) return <div />;
+  if (isPostError || isCommentError) return <div />;
 
   return (
     <Layout>
