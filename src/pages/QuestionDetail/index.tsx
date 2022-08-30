@@ -140,12 +140,12 @@ function QuestionDetail() {
     });
   };
 
-  const handleCommentReportButtonClick = async () => {
+  const handleCommentReportButtonClick = () => {
     togglePopupMenu();
     setShowReportModal(true);
   };
 
-  const handleCommentReplyButtonClick = async () => {
+  const handleCommentReplyButtonClick = () => {
     setShowPreparationModal(true);
   };
 
@@ -238,7 +238,7 @@ function QuestionDetail() {
       </BottomSection>
       {isTargetOpen && (
         <PopupMenu onClose={togglePopupMenu} isBeforeClose={isBeforeTargetClose}>
-          {!isMyComment
+          {isMyComment
             ? [
                 <div key={v4()} onClick={handleCommentEditButtonClick}>
                   수정하기
