@@ -1,4 +1,5 @@
 import { useState, ChangeEvent, MouseEvent, useRef } from 'react';
+import { useRouter } from 'next/router';
 import styled, { useTheme } from 'styled-components';
 import { useQuery } from 'react-query';
 import type { Comment } from 'pages/QuestionDetail/components/CommentItem';
@@ -32,18 +33,20 @@ function QuestionDetail() {
   const [isMyComment, setIsMyComment] = useState(false);
   const [showReportModal, setShowReportModal] = useState(false);
   const [showPreparationModal, setShowPreparationModal] = useState(false);
+  const router = useRouter();
+  const questionId = router.query?.questionId;
 
   const {
     data: post,
     isError: isPostError,
     isLoading: isPostLoading,
-  } = useQuery([POST], getPostDetail);
+  } = useQuery([POST, questionId], getPostDetail);
 
   const {
     data: comments,
     isError: isCommentError,
     isLoading: isCommentLoading,
-  } = useQuery([COMMENTS], getCommentList);
+  } = useQuery([COMMENTS, questionId], getCommentList);
 
   const { data: userInfo } = useQuery([USER_INFO], getUserInfo);
 
@@ -152,7 +155,7 @@ function QuestionDetail() {
     setShowPreparationModal(true);
   };
 
-  if (isPostLoading || isCommentLoading) return <div />;
+  if (!post || isPostLoading || isCommentLoading) return <div />;
   if (isPostError || isCommentError) return <div />;
 
   return (

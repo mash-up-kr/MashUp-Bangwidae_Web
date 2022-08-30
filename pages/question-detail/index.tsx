@@ -1,6 +1,7 @@
 import api from 'src/api/core';
 // import { dehydrate, QueryClient } from 'react-query';
 // import { POST, COMMENTS } from 'src/consts/query';
+import { QueryKey } from 'react-query';
 
 const FETCHING_COMMENT_SIZE = 10;
 
@@ -16,16 +17,28 @@ const FETCHING_COMMENT_SIZE = 10;
 //   };
 // }
 
-export function getPostDetail() {
-  return api.get({
-    url: `/api/posts/${TEST_ID}`,
-  });
+export function getPostDetail({ queryKey }: { queryKey: QueryKey }) {
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+  // @ts-ignore
+  const [, postId] = queryKey;
+  if (postId) {
+    return api.get({
+      url: `/api/posts/${postId}`,
+    });
+  }
+  return {};
 }
 
-export function getCommentList() {
-  return api.get({
-    url: `/api/posts/${TEST_ID}/comment?size=${FETCHING_COMMENT_SIZE}`,
-  });
+export function getCommentList({ queryKey }: { queryKey: QueryKey }) {
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+  // @ts-ignore
+  const [, postId] = queryKey;
+  if (postId) {
+    return api.get({
+      url: `/api/posts/${postId}/comment?size=${FETCHING_COMMENT_SIZE}`,
+    });
+  }
+  return { values: [] };
 }
 
 export function getUserInfo() {
