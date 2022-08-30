@@ -105,7 +105,6 @@ function QuestionDetail() {
       ({ id }: { id: string }) => id === selectedCommentId,
     );
     setCommentInput(selectedComment.content);
-    setSelectedCommentId('');
   };
 
   const handleCommentDeleteButtonClick = () => {
