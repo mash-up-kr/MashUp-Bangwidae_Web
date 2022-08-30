@@ -28,6 +28,12 @@ export function getCommentList() {
   });
 }
 
+export function getUserInfo() {
+  return api.get({
+    url: `/api/user/me`,
+  });
+}
+
 // eslint-disable-next-line no-restricted-exports
 export { default } from 'pages/QuestionDetail';
 export const TEST_ID = '62e5417127d0d407aaeedb39';

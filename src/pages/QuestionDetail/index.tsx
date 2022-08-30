@@ -2,15 +2,18 @@ import { useState, ChangeEvent, MouseEvent, useRef } from 'react';
 import styled, { useTheme } from 'styled-components';
 import { useQuery } from 'react-query';
 import type { Comment } from 'pages/QuestionDetail/components/CommentItem';
-import { POST, COMMENTS } from 'src/consts/query';
+import { POST, COMMENTS, USER_INFO } from 'src/consts/query';
 import { dateTime } from 'src/utils/DateTime';
 import { useTranslateAnimation } from 'src/hooks';
+import api from 'src/api/core';
 import { v4 } from 'uuid';
+import ConfirmModal from 'components/Modal/ConfirmModal';
+import InPreparationModal from 'components/Modal/InPreparationModal';
 import { LargeLineButton, IconTextButton } from '@/src/components';
 import Flex from '@/src/components/Flex';
 import { typography } from '@/styles';
 import { CommentItem, PopupMenu } from './components';
-import { getPostDetail, getCommentList } from '@/pages/question-detail';
+import { getPostDetail, getCommentList, getUserInfo } from '@/pages/question-detail';
 import {
   usePostLikeCreator,
   usePostUnlikeCreator,
@@ -26,6 +29,9 @@ function QuestionDetail() {
   const [selectedCommentId, setSelectedCommentId] = useState('');
   const commentInputElement = useRef<HTMLInputElement>(null);
   const { isTargetOpen, changeTargetOpenState, isBeforeTargetClose } = useTranslateAnimation(0.2);
+  const [isMyComment, setIsMyComment] = useState(false);
+  const [showReportModal, setShowReportModal] = useState(false);
+  const [showPreparationModal, setShowPreparationModal] = useState(false);
 
   const {
     data: post,
@@ -38,6 +44,8 @@ function QuestionDetail() {
     isError: isCommentError,
     isLoading: isCommentLoading,
   } = useQuery([COMMENTS], getCommentList);
+
+  const { data: userInfo } = useQuery([USER_INFO], getUserInfo);
 
   const { mutate: mutateUnlikeCount } = usePostUnlikeCreator();
   const { mutate: mutateLikeCount } = usePostLikeCreator();
@@ -80,6 +88,8 @@ function QuestionDetail() {
     setCommentInput('');
     togglePopupMenu();
     setSelectedCommentId(commentId);
+    const selectedComment = comments.values.find(({ id }: { id: string }) => id === commentId);
+    setIsMyComment(userInfo?.userId === selectedComment?.user?.id);
   };
 
   const togglePopupMenu = () => {
@@ -95,7 +105,6 @@ function QuestionDetail() {
       ({ id }: { id: string }) => id === selectedCommentId,
     );
     setCommentInput(selectedComment.content);
-    setSelectedCommentId('');
   };
 
   const handleCommentDeleteButtonClick = () => {
@@ -124,14 +133,27 @@ function QuestionDetail() {
     setSelectedCommentId('');
   };
 
-  if (isPostLoading || isCommentLoading) return <div>Loading</div>;
-  if (isPostError || isCommentError) return <div>Error</div>;
-
   const handleDeepLinkClick = (page: 'mypage_other' | 'question') => () => {
     sendPostMessage({
       value: `doridori://main/${page}?userId=${post.user?.id}`,
     });
   };
+
+  const handleCommentReportButtonClick = () => {
+    togglePopupMenu();
+    setShowReportModal(true);
+  };
+
+  const handleCommentReplyButtonClick = () => {
+    setShowPreparationModal(true);
+  };
+
+  const handleShareButtonClick = () => {
+    setShowPreparationModal(true);
+  };
+
+  if (isPostLoading || isCommentLoading) return <div />;
+  if (isPostError || isCommentError) return <div />;
 
   return (
     <Layout>
@@ -180,7 +202,12 @@ function QuestionDetail() {
             <CenterIcon name="chat" color={theme.color.gray.Gray500} size={20} onClick={() => {}}>
               {post.commentCount || '댓글'}
             </CenterIcon>
-            <RightIcon name="share" color={theme.color.gray.Gray500} size={20} onClick={() => {}}>
+            <RightIcon
+              name="share"
+              color={theme.color.gray.Gray500}
+              size={20}
+              onClick={handleShareButtonClick}
+            >
               공유
             </RightIcon>
           </MenuGroup>
@@ -194,6 +221,9 @@ function QuestionDetail() {
               key={commentItem.id}
               comment={commentItem}
               onMenuClick={handleCommentKebabMenuClick}
+              onReplyClick={() => {
+                handleCommentReplyButtonClick();
+              }}
             />
           ))}
         </CommentList>
@@ -216,10 +246,73 @@ function QuestionDetail() {
       </BottomSection>
       {isTargetOpen && (
         <PopupMenu onClose={togglePopupMenu} isBeforeClose={isBeforeTargetClose}>
-          <div onClick={handleCommentEditButtonClick}>수정하기</div>
-          <div onClick={handleCommentDeleteButtonClick}>삭제하기</div>
-          <div onClick={handleCommentAnonymousButtonClick}>익명으로 변경</div>
+          {isMyComment
+            ? [
+                <div key={v4()} onClick={handleCommentEditButtonClick}>
+                  수정하기
+                </div>,
+                <div key={v4()} onClick={handleCommentDeleteButtonClick}>
+                  삭제하기
+                </div>,
+                <div key={v4()} onClick={handleCommentAnonymousButtonClick}>
+                  익명으로 변경
+                </div>,
+              ]
+            : [
+                <div key={v4()} onClick={handleCommentReportButtonClick}>
+                  신고하기
+                </div>,
+                <div key={v4()} onClick={handleCommentReplyButtonClick}>
+                  대댓글 쓰기
+                </div>,
+              ]}
         </PopupMenu>
+      )}
+      {showReportModal && (
+        <ConfirmModal
+          title={
+            <TitleWrapper
+              style={{ marginTop: 14, marginBottom: 8, textAlign: 'center', fontSize: 18 }}
+            >
+              <p style={{ marginBottom: 6 }}>
+                <span>댓글을 </span>
+                <span style={{ color: theme.color.primary.Lime300 }}>신고</span>하시겠어요?
+              </p>
+            </TitleWrapper>
+          }
+          subTitle="신고된 댓글은 블라인드 처리됩니다."
+          confirmButtonTxt="신고하기"
+          cancelButtonTxt="취소하기"
+          onConfirm={async () => {
+            setShowReportModal(false);
+
+            await api.post({
+              url: `/api/report/comment/${selectedCommentId}`,
+            });
+
+            setSelectedCommentId('');
+          }}
+          onCancel={() => {
+            setShowReportModal(false);
+          }}
+        />
+      )}
+      {showPreparationModal && (
+        <InPreparationModal
+          title={
+            <TitleWrapper
+              style={{ marginTop: 14, marginBottom: 8, textAlign: 'center', fontSize: 16 }}
+            >
+              <div style={{ marginBottom: 12 }}>아직 준비 중인 기능입니다.</div>
+              <div>새로운 기능을 기대해주세요!</div>
+            </TitleWrapper>
+          }
+          confirmButtonTxt="도리도리 계속 이용하기"
+          onConfirm={async () => {
+            setShowPreparationModal(false);
+            if (isTargetOpen) changeTargetOpenState(false);
+          }}
+        />
       )}
     </Layout>
   );
@@ -336,6 +429,7 @@ const LeftIcon = styled(IconTextButton)`
   display: flex;
   flex-grow: 1;
   justify-content: center;
+  max-width: 32%;
   height: 24px;
 `;
 
@@ -343,15 +437,18 @@ const CenterIcon = styled(IconTextButton)`
   display: flex;
   flex-grow: 1;
   justify-content: center;
+  max-width: 32%;
   height: 24px;
   border-right: ${({ theme }) => `1px solid ${theme.color.gray.Gray800}`};
   border-left: ${({ theme }) => `1px solid ${theme.color.gray.Gray800}`};
+  pointer-events: none;
 `;
 
 const RightIcon = styled(IconTextButton)`
   display: flex;
   flex-grow: 1;
   justify-content: center;
+  max-width: 32%;
   height: 24px;
 `;
 
@@ -400,6 +497,12 @@ const CommentInput = styled.input`
 
 const CommentSubmitButton = styled.div`
   margin-right: 30px;
+`;
+
+const TitleWrapper = styled.div`
+  margin-bottom: 8px;
+  font-weight: 700;
+  font-size: 18px;
 `;
 
 export default QuestionDetail;
