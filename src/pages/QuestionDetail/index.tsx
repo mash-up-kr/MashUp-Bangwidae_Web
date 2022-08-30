@@ -7,6 +7,7 @@ import { dateTime } from 'src/utils/DateTime';
 import { useTranslateAnimation } from 'src/hooks';
 import api from 'src/api/core';
 import { v4 } from 'uuid';
+import ConfirmModal from 'components/Modal/ConfirmModal';
 import { LargeLineButton, IconTextButton } from '@/src/components';
 import Flex from '@/src/components/Flex';
 import { typography } from '@/styles';
@@ -28,6 +29,7 @@ function QuestionDetail() {
   const commentInputElement = useRef<HTMLInputElement>(null);
   const { isTargetOpen, changeTargetOpenState, isBeforeTargetClose } = useTranslateAnimation(0.2);
   const [isMyComment, setIsMyComment] = useState(false);
+  const [showAlertModal, setShowAlertModal] = useState(false);
 
   const {
     data: post,
@@ -137,16 +139,8 @@ function QuestionDetail() {
   };
 
   const handleCommentReportButtonClick = async () => {
-    try {
-      const res = await api.post({
-        url: `/api/report/comment/${selectedCommentId}`,
-      });
-      if (res) alert('신고가 완료되었습니다.');
-      togglePopupMenu();
-      setSelectedCommentId('');
-    } catch (e) {
-      console.log(e);
-    }
+    togglePopupMenu();
+    setShowAlertModal(true);
   };
 
   if (isPostLoading || isCommentLoading) return <div>Loading</div>;
@@ -256,6 +250,35 @@ function QuestionDetail() {
                 </div>,
               ]}
         </PopupMenu>
+      )}
+      {showAlertModal && (
+        <ConfirmModal
+          title={
+            <TitleWrapper
+              style={{ marginTop: 14, marginBottom: 8, textAlign: 'center', fontSize: 18 }}
+            >
+              <p style={{ marginBottom: 6 }}>
+                <span>댓글을 </span>
+                <span style={{ color: theme.color.primary.Lime300 }}>신고</span>하시겠어요?
+              </p>
+            </TitleWrapper>
+          }
+          subTitle="신고된 댓글은 블라인드 처리됩니다."
+          confirmButtonTxt="신고하기"
+          cancelButtonTxt="취소하기"
+          onConfirm={async () => {
+            setShowAlertModal(false);
+
+            await api.post({
+              url: `/api/report/comment/${selectedCommentId}`,
+            });
+
+            setSelectedCommentId('');
+          }}
+          onCancel={() => {
+            setShowAlertModal(false);
+          }}
+        />
       )}
     </Layout>
   );
@@ -436,6 +459,12 @@ const CommentInput = styled.input`
 
 const CommentSubmitButton = styled.div`
   margin-right: 30px;
+`;
+
+const TitleWrapper = styled.div`
+  margin-bottom: 8px;
+  font-weight: 700;
+  font-size: 18px;
 `;
 
 export default QuestionDetail;
