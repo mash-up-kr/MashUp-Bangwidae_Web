@@ -88,7 +88,7 @@ function CommentItem({ comment, onMenuClick, onReplyClick }: CommentItemProps) {
           color={theme.color.primary.Lime300}
           size={24}
           iconPosition="right"
-          onClick={() => {}}
+          onClick={handleLikeButtonClick}
         >
           <IconText>{comment.likeCount}</IconText>
         </IconTextButton>
