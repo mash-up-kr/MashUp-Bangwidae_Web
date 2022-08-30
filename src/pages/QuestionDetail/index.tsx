@@ -5,6 +5,7 @@ import type { Comment } from 'pages/QuestionDetail/components/CommentItem';
 import { POST, COMMENTS, USER_INFO } from 'src/consts/query';
 import { dateTime } from 'src/utils/DateTime';
 import { useTranslateAnimation } from 'src/hooks';
+import api from 'src/api/core';
 import { v4 } from 'uuid';
 import { LargeLineButton, IconTextButton } from '@/src/components';
 import Flex from '@/src/components/Flex';
@@ -129,14 +130,27 @@ function QuestionDetail() {
     setSelectedCommentId('');
   };
 
-  if (isPostLoading || isCommentLoading) return <div>Loading</div>;
-  if (isPostError || isCommentError) return <div>Error</div>;
-
   const handleDeepLinkClick = (page: 'mypage_other' | 'question') => () => {
     sendPostMessage({
       value: `doridori://main/${page}?userId=${post.user?.id}`,
     });
   };
+
+  const handleCommentReportButtonClick = async () => {
+    try {
+      const res = await api.post({
+        url: `/api/report/comment/${selectedCommentId}`,
+      });
+      if (res) alert('신고가 완료되었습니다.');
+      togglePopupMenu();
+      setSelectedCommentId('');
+    } catch (e) {
+      console.log(e);
+    }
+  };
+
+  if (isPostLoading || isCommentLoading) return <div>Loading</div>;
+  if (isPostError || isCommentError) return <div>Error</div>;
 
   return (
     <Layout>
@@ -221,7 +235,7 @@ function QuestionDetail() {
       </BottomSection>
       {isTargetOpen && (
         <PopupMenu onClose={togglePopupMenu} isBeforeClose={isBeforeTargetClose}>
-          {isMyComment
+          {!isMyComment
             ? [
                 <div key={v4()} onClick={handleCommentEditButtonClick}>
                   수정하기
@@ -234,7 +248,7 @@ function QuestionDetail() {
                 </div>,
               ]
             : [
-                <div key={v4()} onClick={() => {}}>
+                <div key={v4()} onClick={handleCommentReportButtonClick}>
                   신고하기
                 </div>,
                 <div key={v4()} onClick={() => {}}>
