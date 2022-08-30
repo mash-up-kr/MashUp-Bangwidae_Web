@@ -11,6 +11,7 @@ const DEFAULT_IMAGE_URL = process.env.NEXT_PUBLIC_DEFAULT_IMAGE;
 interface CommentItemProps {
   comment: Comment;
   onMenuClick: (event: MouseEvent, selectedId: string) => void;
+  onReplyClick: () => void;
 }
 
 export interface Comment {
@@ -31,7 +32,7 @@ export interface Comment {
   updatedAt: string;
 }
 
-function CommentItem({ comment, onMenuClick }: CommentItemProps) {
+function CommentItem({ comment, onMenuClick, onReplyClick }: CommentItemProps) {
   const theme = useTheme();
   const { mutate: mutateLikeCount } = useCommentLikeCreator(comment.id);
   const { mutate: mutateUnlikeCount } = useCommentUnlikeCreator(comment.id);
@@ -70,7 +71,7 @@ function CommentItem({ comment, onMenuClick }: CommentItemProps) {
       <CommentContent>{comment.content}</CommentContent>
       <Flex direction="row" justify="space-between">
         <Flex direction="row" align="center">
-          <IconTextButton color={theme.color.gray.Gray500} size={24} onClick={() => {}}>
+          <IconTextButton color={theme.color.gray.Gray500} size={24} onClick={onReplyClick}>
             답글 달기
           </IconTextButton>
           <VerticalDivider style={{ marginBottom: '4px' }} />

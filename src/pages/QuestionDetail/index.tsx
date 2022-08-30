@@ -8,6 +8,7 @@ import { useTranslateAnimation } from 'src/hooks';
 import api from 'src/api/core';
 import { v4 } from 'uuid';
 import ConfirmModal from 'components/Modal/ConfirmModal';
+import InPreparationModal from 'components/Modal/InPreparationModal';
 import { LargeLineButton, IconTextButton } from '@/src/components';
 import Flex from '@/src/components/Flex';
 import { typography } from '@/styles';
@@ -29,7 +30,8 @@ function QuestionDetail() {
   const commentInputElement = useRef<HTMLInputElement>(null);
   const { isTargetOpen, changeTargetOpenState, isBeforeTargetClose } = useTranslateAnimation(0.2);
   const [isMyComment, setIsMyComment] = useState(false);
-  const [showAlertModal, setShowAlertModal] = useState(false);
+  const [showReportModal, setShowReportModal] = useState(false);
+  const [showPreparationModal, setShowPreparationModal] = useState(false);
 
   const {
     data: post,
@@ -140,7 +142,11 @@ function QuestionDetail() {
 
   const handleCommentReportButtonClick = async () => {
     togglePopupMenu();
-    setShowAlertModal(true);
+    setShowReportModal(true);
+  };
+
+  const handleCommentReplyButtonClick = async () => {
+    setShowPreparationModal(true);
   };
 
   if (isPostLoading || isCommentLoading) return <div>Loading</div>;
@@ -207,6 +213,9 @@ function QuestionDetail() {
               key={commentItem.id}
               comment={commentItem}
               onMenuClick={handleCommentKebabMenuClick}
+              onReplyClick={() => {
+                handleCommentReplyButtonClick();
+              }}
             />
           ))}
         </CommentList>
@@ -245,13 +254,13 @@ function QuestionDetail() {
                 <div key={v4()} onClick={handleCommentReportButtonClick}>
                   신고하기
                 </div>,
-                <div key={v4()} onClick={() => {}}>
+                <div key={v4()} onClick={handleCommentReplyButtonClick}>
                   대댓글 쓰기
                 </div>,
               ]}
         </PopupMenu>
       )}
-      {showAlertModal && (
+      {showReportModal && (
         <ConfirmModal
           title={
             <TitleWrapper
@@ -267,7 +276,7 @@ function QuestionDetail() {
           confirmButtonTxt="신고하기"
           cancelButtonTxt="취소하기"
           onConfirm={async () => {
-            setShowAlertModal(false);
+            setShowReportModal(false);
 
             await api.post({
               url: `/api/report/comment/${selectedCommentId}`,
@@ -276,7 +285,24 @@ function QuestionDetail() {
             setSelectedCommentId('');
           }}
           onCancel={() => {
-            setShowAlertModal(false);
+            setShowReportModal(false);
+          }}
+        />
+      )}
+      {showPreparationModal && (
+        <InPreparationModal
+          title={
+            <TitleWrapper
+              style={{ marginTop: 14, marginBottom: 8, textAlign: 'center', fontSize: 16 }}
+            >
+              <div style={{ marginBottom: 12 }}>아직 준비 중인 기능입니다.</div>
+              <div>새로운 기능을 기대해주세요!</div>
+            </TitleWrapper>
+          }
+          confirmButtonTxt="도리도리 계속 이용하기"
+          onConfirm={async () => {
+            setShowPreparationModal(false);
+            if (isTargetOpen) changeTargetOpenState(false);
           }}
         />
       )}
