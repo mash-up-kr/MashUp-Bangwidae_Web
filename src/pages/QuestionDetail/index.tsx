@@ -148,6 +148,10 @@ function QuestionDetail() {
     setShowPreparationModal(true);
   };
 
+  const handleShareButtonClick = () => {
+    setShowPreparationModal(true);
+  };
+
   if (isPostLoading || isCommentLoading) return <div>Loading</div>;
   if (isPostError || isCommentError) return <div>Error</div>;
 
@@ -198,7 +202,12 @@ function QuestionDetail() {
             <CenterIcon name="chat" color={theme.color.gray.Gray500} size={20} onClick={() => {}}>
               {post.commentCount || '댓글'}
             </CenterIcon>
-            <RightIcon name="share" color={theme.color.gray.Gray500} size={20} onClick={() => {}}>
+            <RightIcon
+              name="share"
+              color={theme.color.gray.Gray500}
+              size={20}
+              onClick={handleShareButtonClick}
+            >
               공유
             </RightIcon>
           </MenuGroup>
@@ -432,6 +441,7 @@ const CenterIcon = styled(IconTextButton)`
   height: 24px;
   border-right: ${({ theme }) => `1px solid ${theme.color.gray.Gray800}`};
   border-left: ${({ theme }) => `1px solid ${theme.color.gray.Gray800}`};
+  pointer-events: none;
 `;
 
 const RightIcon = styled(IconTextButton)`
