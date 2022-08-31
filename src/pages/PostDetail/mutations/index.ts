@@ -1,15 +1,14 @@
 import { COMMENTS, LIKE, POST, UNLIKE, COMMENT_LIKE, COMMENT_UNLIKE } from 'src/consts/query';
 import api from 'src/api/core';
 import { useMutation, useQueryClient } from 'react-query';
-import { TEST_ID } from '@/pages/post-detail';
 
-export const usePostLikeCreator = () => {
+export const usePostLikeCreator = (postId: string) => {
   const queryClient = useQueryClient();
   return useMutation(
     [LIKE],
     () =>
       api.post({
-        url: `/api/posts/${TEST_ID}/like`,
+        url: `/api/posts/${postId}/like`,
       }),
     {
       onSuccess: () => queryClient.invalidateQueries(POST),
@@ -17,13 +16,13 @@ export const usePostLikeCreator = () => {
   );
 };
 
-export const usePostUnlikeCreator = () => {
+export const usePostUnlikeCreator = (postId: string) => {
   const queryClient = useQueryClient();
   return useMutation(
     [UNLIKE],
     () =>
       api.delete({
-        url: `/api/posts/${TEST_ID}/like`,
+        url: `/api/posts/${postId}/like`,
       }),
     {
       onSuccess: () => queryClient.invalidateQueries(POST),
@@ -31,14 +30,14 @@ export const usePostUnlikeCreator = () => {
   );
 };
 
-export const useCommentCreator = () => {
+export const useCommentCreator = (postId: string) => {
   const queryClient = useQueryClient();
 
   return useMutation(
     ['COMMENT_CREATE'],
     (data: { content: string; latitude: number; longitude: number }) =>
       api.post({
-        url: `/api/posts/${TEST_ID}/comment`,
+        url: `/api/posts/${postId}/comment`,
         data,
       }),
     {

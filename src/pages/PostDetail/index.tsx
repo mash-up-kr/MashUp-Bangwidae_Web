@@ -34,7 +34,7 @@ function PostDetail() {
   const [showReportModal, setShowReportModal] = useState(false);
   const [showPreparationModal, setShowPreparationModal] = useState(false);
   const router = useRouter();
-  const postId = router.query?.postId;
+  const postId = router.query?.postId as string;
 
   const {
     data: post,
@@ -50,9 +50,9 @@ function PostDetail() {
 
   const { data: userInfo } = useQuery([USER_INFO], getUserInfo);
 
-  const { mutate: mutateUnlikeCount } = usePostUnlikeCreator();
-  const { mutate: mutateLikeCount } = usePostLikeCreator();
-  const { mutate: mutateCommentCreate } = useCommentCreator();
+  const { mutate: mutateUnlikeCount } = usePostUnlikeCreator(postId);
+  const { mutate: mutateLikeCount } = usePostLikeCreator(postId);
+  const { mutate: mutateCommentCreate } = useCommentCreator(postId);
   const { mutate: mutateCommentUpdate } = useCommentUpdater();
   const { mutate: mutateCommentDelete } = useCommentDeleter();
 
