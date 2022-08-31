@@ -5,6 +5,7 @@ import { typography } from '@/styles';
 import { IconTextButton } from '@/src/components';
 import { dateTime } from '@/src/utils/DateTime';
 import Flex from '@/src/components/Flex';
+import type { Comment } from '@/pages/question-detail';
 
 const DEFAULT_IMAGE_URL = process.env.NEXT_PUBLIC_DEFAULT_IMAGE;
 
@@ -12,24 +13,6 @@ interface CommentItemProps {
   comment: Comment;
   onMenuClick: (event: MouseEvent, selectedId: string) => void;
   onReplyClick: () => void;
-}
-
-export interface Comment {
-  id: string;
-  user: {
-    id: string;
-    tags: string[];
-    nickname: string;
-    profileImageUrl: string;
-  };
-  content: string;
-  likeCount: number;
-  commentCount: number;
-  userLiked: boolean;
-  representativeAddress: string;
-  anonymous: boolean;
-  createdAt: string;
-  updatedAt: string;
 }
 
 function CommentItem({ comment, onMenuClick, onReplyClick }: CommentItemProps) {

@@ -2,7 +2,6 @@ import { useState, ChangeEvent, MouseEvent, useRef } from 'react';
 import { useRouter } from 'next/router';
 import styled, { useTheme } from 'styled-components';
 import { useQuery } from 'react-query';
-import type { Comment } from 'pages/QuestionDetail/components/CommentItem';
 import { POST, COMMENTS, USER_INFO } from 'src/consts/query';
 import { dateTime } from 'src/utils/DateTime';
 import { useTranslateAnimation } from 'src/hooks';
@@ -10,6 +9,7 @@ import api from 'src/api/core';
 import { v4 } from 'uuid';
 import ConfirmModal from 'components/Modal/ConfirmModal';
 import InPreparationModal from 'components/Modal/InPreparationModal';
+import type { Post, Comment } from '@/pages/question-detail';
 import { LargeLineButton, IconTextButton } from '@/src/components';
 import Flex from '@/src/components/Flex';
 import { typography } from '@/styles';
@@ -40,13 +40,13 @@ function QuestionDetail() {
     data: post,
     isError: isPostError,
     isLoading: isPostLoading,
-  } = useQuery([POST, questionId], getPostDetail);
+  } = useQuery<Post>([POST, questionId], getPostDetail);
 
   const {
     data: comments,
     isError: isCommentError,
     isLoading: isCommentLoading,
-  } = useQuery([COMMENTS, questionId], getCommentList);
+  } = useQuery<Comment[]>([COMMENTS, questionId], getCommentList);
 
   const { data: userInfo } = useQuery([USER_INFO], getUserInfo);
 
@@ -56,8 +56,11 @@ function QuestionDetail() {
   const { mutate: mutateCommentUpdate } = useCommentUpdater();
   const { mutate: mutateCommentDelete } = useCommentDeleter();
 
+  if (!post || isPostLoading || isCommentLoading) return <div />;
+  if (isPostError || isCommentError) return <div />;
+
   const handleLikeButtonClick = () => {
-    if (post.userLiked) mutateUnlikeCount();
+    if (post?.userLiked) mutateUnlikeCount();
     else mutateLikeCount();
   };
 
@@ -91,7 +94,7 @@ function QuestionDetail() {
     setCommentInput('');
     togglePopupMenu();
     setSelectedCommentId(commentId);
-    const selectedComment = comments.values.find(({ id }: { id: string }) => id === commentId);
+    const selectedComment = comments?.find(({ id }: { id: string }) => id === commentId);
     setIsMyComment(userInfo?.userId === selectedComment?.user?.id);
   };
 
@@ -104,10 +107,8 @@ function QuestionDetail() {
     togglePopupMenu();
     if (!commentInputElement.current) return;
     commentInputElement.current.focus();
-    const selectedComment = comments.values.find(
-      ({ id }: { id: string }) => id === selectedCommentId,
-    );
-    setCommentInput(selectedComment.content);
+    const selectedComment = comments?.find(({ id }: { id: string }) => id === selectedCommentId);
+    if (selectedComment) setCommentInput(selectedComment.content);
   };
 
   const handleCommentDeleteButtonClick = () => {
@@ -120,9 +121,7 @@ function QuestionDetail() {
     togglePopupMenu();
 
     const { latitude, longitude } = post;
-    const selectedComment = comments.values.find(
-      ({ id }: { id: string }) => id === selectedCommentId,
-    );
+    const selectedComment = comments?.find(({ id }: { id: string }) => id === selectedCommentId);
 
     const commentDataToUpdate = {
       commentId: selectedCommentId,
@@ -154,9 +153,6 @@ function QuestionDetail() {
   const handleShareButtonClick = () => {
     setShowPreparationModal(true);
   };
-
-  if (!post || isPostLoading || isCommentLoading) return <div />;
-  if (isPostError || isCommentError) return <div />;
 
   return (
     <Layout>
@@ -219,7 +215,7 @@ function QuestionDetail() {
       {/* Bottom Section */}
       <BottomSection>
         <CommentList>
-          {comments?.values.map((commentItem: Comment) => (
+          {comments?.map((commentItem: Comment) => (
             <CommentItem
               key={commentItem.id}
               comment={commentItem}
