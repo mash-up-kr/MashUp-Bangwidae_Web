@@ -1,114 +1,20 @@
-import { COMMENTS, LIKE, POST, UNLIKE, COMMENT_LIKE, COMMENT_UNLIKE } from 'src/consts/query';
 import api from 'src/api/core';
 import { useMutation, useQueryClient } from 'react-query';
-import { TEST_ID } from '@/pages/question-detail';
+import { GET_QUESTION, POST_ANSWER } from 'src/consts/query';
 
-export const usePostLikeCreator = () => {
-  const queryClient = useQueryClient();
-  return useMutation(
-    [LIKE],
-    () =>
-      api.post({
-        url: `/api/posts/${TEST_ID}/like`,
-      }),
-    {
-      onSuccess: () => queryClient.invalidateQueries(POST),
-    },
-  );
-};
-
-export const usePostUnlikeCreator = () => {
-  const queryClient = useQueryClient();
-  return useMutation(
-    [UNLIKE],
-    () =>
-      api.delete({
-        url: `/api/posts/${TEST_ID}/like`,
-      }),
-    {
-      onSuccess: () => queryClient.invalidateQueries(POST),
-    },
-  );
-};
-
-export const useCommentCreator = () => {
+// eslint-disable-next-line import/prefer-default-export
+export const useAnswerCreator = (questionId: string) => {
   const queryClient = useQueryClient();
 
   return useMutation(
-    ['COMMENT_CREATE'],
+    [POST_ANSWER],
     (data: { content: string; latitude: number; longitude: number }) =>
       api.post({
-        url: `/api/posts/${TEST_ID}/comment`,
+        url: `/api/questions/${questionId}/answer`,
         data,
       }),
     {
-      onSuccess: () => queryClient.invalidateQueries(COMMENTS),
-    },
-  );
-};
-
-export const useCommentUpdater = () => {
-  const queryClient = useQueryClient();
-
-  return useMutation(
-    ['COMMENT_UPDATE'],
-    (data: {
-      commentId: string;
-      content: string;
-      latitude: number;
-      longitude: number;
-      anonymous?: boolean;
-    }) =>
-      api.patch({
-        url: `/api/comments/${data.commentId}`,
-        data,
-      }),
-    {
-      onSuccess: () => queryClient.invalidateQueries(COMMENTS),
-    },
-  );
-};
-
-export const useCommentDeleter = () => {
-  const queryClient = useQueryClient();
-
-  return useMutation(
-    ['COMMENT_DELETE'],
-    (data: { commentId: string }) =>
-      api.delete({
-        url: `/api/comments/${data.commentId}`,
-        data,
-      }),
-    {
-      onSuccess: () => queryClient.invalidateQueries(COMMENTS),
-    },
-  );
-};
-
-export const useCommentLikeCreator = (commentId: string) => {
-  const queryClient = useQueryClient();
-  return useMutation(
-    [COMMENT_LIKE],
-    () =>
-      api.post({
-        url: `/api/comments/${commentId}/like`,
-      }),
-    {
-      onSuccess: () => queryClient.invalidateQueries(COMMENTS),
-    },
-  );
-};
-
-export const useCommentUnlikeCreator = (commentId: string) => {
-  const queryClient = useQueryClient();
-  return useMutation(
-    [COMMENT_UNLIKE],
-    () =>
-      api.delete({
-        url: `/api/comments/${commentId}/like`,
-      }),
-    {
-      onSuccess: () => queryClient.invalidateQueries(COMMENTS),
+      onSuccess: () => queryClient.invalidateQueries(GET_QUESTION),
     },
   );
 };

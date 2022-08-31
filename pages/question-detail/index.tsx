@@ -1,21 +1,12 @@
 import api from 'src/api/core';
-// import { dehydrate, QueryClient } from 'react-query';
-// import { POST, COMMENTS } from 'src/consts/query';
 import { QueryKey } from 'react-query';
 
-const FETCHING_COMMENT_SIZE = 10;
-
-export interface Post {
-  anonymous: boolean;
-  commentCount: number;
+export interface Answer {
   content: string;
   createdAt: string;
   id: string;
-  latitude: number;
   likeCount: number;
-  longitude: number;
   representativeAddress: string;
-  updatedAt: string;
   user: {
     id: string;
     level: number;
@@ -26,63 +17,40 @@ export interface Post {
   userLiked: boolean;
 }
 
-export interface Comment {
-  id: string;
-  user: {
+export interface Question {
+  anonymous: boolean;
+  answer: Answer;
+  content: string;
+  createdAt: string;
+  fromUser: {
     id: string;
-    tags: string[];
+    level: number;
     nickname: string;
     profileImageUrl: string;
+    tags: string[];
   };
-  content: string;
-  likeCount: number;
-  commentCount: number;
-  userLiked: boolean;
+  id: string;
   representativeAddress: string;
-  anonymous: boolean;
-  createdAt: string;
-  updatedAt: string;
+  toUser: {
+    id: string;
+    level: number;
+    nickname: string;
+    profileImageUrl: string;
+    tags: string[];
+  };
 }
-
-// export async function getServerSideProps() {
-//   const queryClient = new QueryClient();
-//   await queryClient.prefetchQuery([POST], getPostDetail);
-//   await queryClient.prefetchQuery([COMMENTS], getCommentList);
-
-//   return {
-//     props: {
-//       dehydratedState: dehydrate(queryClient),
-//     },
-//   };
-// }
 
 // eslint-disable-next-line consistent-return,@typescript-eslint/ban-ts-comment
 // @ts-ignore
 // eslint-disable-next-line consistent-return
-export function getPostDetail({ queryKey }: { queryKey: QueryKey }): Promise<Post> {
+export function getQuestionDetail({ queryKey }: { queryKey: QueryKey }): Promise<Question> {
   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   // @ts-ignore
-  const [, postId] = queryKey;
-  if (postId) {
+  const [, questionId] = queryKey;
+  if (questionId) {
     return api.get({
-      url: `/api/posts/${postId}`,
+      url: `/api/questions/${questionId}`,
     });
-  }
-}
-
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-ignore
-// eslint-disable-next-line consistent-return
-export async function getCommentList({ queryKey }: { queryKey: QueryKey }): Promise<Comment[]> {
-  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-  // @ts-ignore
-  const [, postId] = queryKey;
-  if (postId) {
-    return (
-      await api.get({
-        url: `/api/posts/${postId}/comment?size=${FETCHING_COMMENT_SIZE}`,
-      })
-    ).values;
   }
 }
 
@@ -94,4 +62,3 @@ export function getUserInfo() {
 
 // eslint-disable-next-line no-restricted-exports
 export { default } from 'pages/QuestionDetail';
-export const TEST_ID = '62e5417127d0d407aaeedb39';

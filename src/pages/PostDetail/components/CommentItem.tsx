@@ -1,12 +1,12 @@
 import React, { MouseEvent } from 'react';
 import styled, { useTheme } from 'styled-components';
-import { useCommentLikeCreator, useCommentUnlikeCreator } from 'pages/QuestionDetail/mutations';
+import { useCommentLikeCreator, useCommentUnlikeCreator } from 'pages/PostDetail/mutations';
 import { sendPostMessage } from 'src/utils/sendPostMessage';
 import { typography } from '@/styles';
 import { IconTextButton } from '@/src/components';
 import { dateTime } from '@/src/utils/DateTime';
 import Flex from '@/src/components/Flex';
-import type { Comment } from '@/pages/question-detail';
+import type { Comment } from '@/pages/post-detail';
 
 const DEFAULT_IMAGE_URL = process.env.NEXT_PUBLIC_DEFAULT_IMAGE;
 
