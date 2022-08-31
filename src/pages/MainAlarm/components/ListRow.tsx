@@ -1,4 +1,3 @@
-import { ReactNode } from 'react';
 import styled from 'styled-components';
 import Image from 'next/image';
 import Flex from '@/src/components/Flex';
@@ -6,13 +5,10 @@ import answered from '@/src/asset/image/answered.png';
 import recevied from '@/src/asset/image/recevied.png';
 import levelup from '@/src/asset/image/levelup.png';
 import expired from '@/src/asset/image/expired.png';
-
-interface Props {
-  title: ReactNode;
-  type: 'QUESTION_RECEIVED' | 'QUESTION_ANSWERED' | 'LEVEL_UP';
-  content: ReactNode;
-  createdAt: string;
-}
+import { sendPostMessage } from '@/src/utils/sendPostMessage';
+import { useUpdateReadState } from '../remote/fetchAlarmList';
+import { Alarm } from '../utils/types';
+import { dateTime } from '@/src/utils/DateTime';
 
 const IMAGE_TYPE = {
   QUESTION_RECEIVED: answered,
@@ -21,11 +17,26 @@ const IMAGE_TYPE = {
   EXPIRED: expired,
 };
 
-function AlarmListRow({ type, title, content, createdAt }: Props) {
-  const [month, day] = createdAt.split('.');
+function AlarmListRow({ id, type, read, title, content, createdAt, urlScheme }: Alarm) {
+  const [month, day] = dateTime.format(createdAt, 'MM.DD').split('.');
+  const { mutate: updateReadState } = useUpdateReadState(id);
+
+  const handleClick = async () => {
+    await updateReadState();
+
+    sendPostMessage({
+      value: urlScheme,
+    });
+  };
+
+  if (read) return null;
 
   return (
-    <Flex direction="row" style={{ width: '100%', padding: '8px 16px', margin: '15px 0' }}>
+    <Flex
+      direction="row"
+      style={{ width: '100%', padding: '8px 30px', margin: '15px 0' }}
+      onClick={handleClick}
+    >
       <ImageWrapper>
         <Image src={IMAGE_TYPE[type]} width={22} height={22} />
       </ImageWrapper>
@@ -36,7 +47,7 @@ function AlarmListRow({ type, title, content, createdAt }: Props) {
             {month}월 {day}일
           </CreatedDaysWrapper>
         </Flex>
-        <div style={{ maxWidth: 200, fontSize: 17 }}>{content}</div>
+        <div style={{ maxWidth: 200, fontSize: 18 }}>{content}</div>
       </Flex>
     </Flex>
   );
