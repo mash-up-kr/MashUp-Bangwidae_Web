@@ -17,7 +17,7 @@ const IMAGE_TYPE = {
   EXPIRED: expired,
 };
 
-function AlarmListRow({ id, type, read, title, content, createdAt, urlScheme }: Alarm) {
+function AlarmListRow({ id, type, title, content, createdAt, urlScheme }: Alarm) {
   const [month, day] = dateTime.format(createdAt, 'MM.DD').split('.');
   const { mutate: updateReadState } = useUpdateReadState(id);
 
@@ -28,8 +28,6 @@ function AlarmListRow({ id, type, read, title, content, createdAt, urlScheme }: 
       value: urlScheme,
     });
   };
-
-  if (read) return null;
 
   return (
     <Flex
