@@ -160,7 +160,10 @@ function QuestionDetail() {
       <TopSection>
         {/* Header */}
         <Flex direction="row" align="center">
-          <ProfileImage src={post.user?.profileImageUrl} />
+          <ProfileImage
+            src={post.user?.profileImageUrl}
+            onClick={handleDeepLinkClick('mypage_other')}
+          />
           <Flex direction="row" justify="space-between" style={{ flexGrow: 1 }}>
             <Flex direction="column">
               <Flex direction="row" style={{ marginBottom: '6px' }}>
