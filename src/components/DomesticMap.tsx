@@ -23,6 +23,7 @@ interface DomesticMapProps {
 function DomesticMap({ wardList }: DomesticMapProps) {
   useEffect(() => {
     if (wardList) {
+      select('.d3').selectAll('*').remove();
       createSvgMap(wardList);
     }
   }, [wardList]);

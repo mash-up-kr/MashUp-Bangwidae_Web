@@ -7,9 +7,17 @@ interface Props {
   align?: CSSProperties['alignItems'];
   style?: CSSProperties;
   children: ReactNode;
+  onClick?: () => void;
 }
 
-function Flex({ direction = 'row', justify = 'start', align = 'start', children, style }: Props) {
+function Flex({
+  direction = 'row',
+  justify = 'start',
+  align = 'start',
+  children,
+  style,
+  onClick,
+}: Props) {
   return (
     <div
       style={{
@@ -19,6 +27,7 @@ function Flex({ direction = 'row', justify = 'start', align = 'start', children,
         alignItems: align,
         ...style,
       }}
+      onClick={onClick}
     >
       {children}
     </div>
