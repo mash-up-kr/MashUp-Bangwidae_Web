@@ -1,7 +1,7 @@
 import { COMMENTS, LIKE, POST, UNLIKE, COMMENT_LIKE, COMMENT_UNLIKE } from 'src/consts/query';
 import api from 'src/api/core';
 import { useMutation, useQueryClient } from 'react-query';
-import { TEST_ID } from '@/pages/question-detail';
+import { TEST_ID } from '@/pages/post-detail';
 
 export const usePostLikeCreator = () => {
   const queryClient = useQueryClient();

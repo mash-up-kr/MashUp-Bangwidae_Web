@@ -93,5 +93,5 @@ export function getUserInfo() {
 }
 
 // eslint-disable-next-line no-restricted-exports
-export { default } from 'pages/QuestionDetail';
+export { default } from 'pages/PostDetail';
 export const TEST_ID = '62e5417127d0d407aaeedb39';

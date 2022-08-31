@@ -9,12 +9,12 @@ import api from 'src/api/core';
 import { v4 } from 'uuid';
 import ConfirmModal from 'components/Modal/ConfirmModal';
 import InPreparationModal from 'components/Modal/InPreparationModal';
-import type { Post, Comment } from '@/pages/question-detail';
+import type { Post, Comment } from '@/pages/post-detail';
 import { LargeLineButton, IconTextButton } from '@/src/components';
 import Flex from '@/src/components/Flex';
 import { typography } from '@/styles';
 import { CommentItem, PopupMenu } from './components';
-import { getPostDetail, getCommentList, getUserInfo } from '@/pages/question-detail';
+import { getPostDetail, getCommentList, getUserInfo } from '@/pages/post-detail';
 import {
   usePostLikeCreator,
   usePostUnlikeCreator,
@@ -24,7 +24,7 @@ import {
 } from './mutations';
 import { sendPostMessage } from '@/src/utils/sendPostMessage';
 
-function QuestionDetail() {
+function PostDetail() {
   const theme = useTheme();
   const [commentInput, setCommentInput] = useState('');
   const [selectedCommentId, setSelectedCommentId] = useState('');
@@ -34,19 +34,19 @@ function QuestionDetail() {
   const [showReportModal, setShowReportModal] = useState(false);
   const [showPreparationModal, setShowPreparationModal] = useState(false);
   const router = useRouter();
-  const questionId = router.query?.questionId;
+  const postId = router.query?.postId;
 
   const {
     data: post,
     isError: isPostError,
     isLoading: isPostLoading,
-  } = useQuery<Post>([POST, questionId], getPostDetail);
+  } = useQuery<Post>([POST, postId], getPostDetail);
 
   const {
     data: comments,
     isError: isCommentError,
     isLoading: isCommentLoading,
-  } = useQuery<Comment[]>([COMMENTS, questionId], getCommentList);
+  } = useQuery<Comment[]>([COMMENTS, postId], getCommentList);
 
   const { data: userInfo } = useQuery([USER_INFO], getUserInfo);
 
@@ -507,4 +507,4 @@ const TitleWrapper = styled.div`
   font-size: 18px;
 `;
 
-export default QuestionDetail;
+export default PostDetail;
