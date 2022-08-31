@@ -1,10 +1,12 @@
 import React, { MouseEvent } from 'react';
 import styled, { useTheme } from 'styled-components';
 import { useCommentLikeCreator, useCommentUnlikeCreator } from 'pages/QuestionDetail/mutations';
+import { sendPostMessage } from 'src/utils/sendPostMessage';
 import { typography } from '@/styles';
 import { IconTextButton } from '@/src/components';
 import { dateTime } from '@/src/utils/DateTime';
 import Flex from '@/src/components/Flex';
+import type { Comment } from '@/pages/question-detail';
 
 const DEFAULT_IMAGE_URL = process.env.NEXT_PUBLIC_DEFAULT_IMAGE;
 
@@ -12,24 +14,6 @@ interface CommentItemProps {
   comment: Comment;
   onMenuClick: (event: MouseEvent, selectedId: string) => void;
   onReplyClick: () => void;
-}
-
-export interface Comment {
-  id: string;
-  user: {
-    id: string;
-    tags: string[];
-    nickname: string;
-    profileImageUrl: string;
-  };
-  content: string;
-  likeCount: number;
-  commentCount: number;
-  userLiked: boolean;
-  representativeAddress: string;
-  anonymous: boolean;
-  createdAt: string;
-  updatedAt: string;
 }
 
 function CommentItem({ comment, onMenuClick, onReplyClick }: CommentItemProps) {
@@ -42,11 +26,22 @@ function CommentItem({ comment, onMenuClick, onReplyClick }: CommentItemProps) {
     comment.userLiked ? mutateUnlikeCount() : mutateLikeCount();
   };
 
+  const handleDeepLinkClick = () => {
+    if (!comment.anonymous) {
+      sendPostMessage({
+        value: `doridori://main/mypage_other?userId=${comment.user?.id}`,
+      });
+    }
+  };
+
   return (
     <Layout>
       <Flex direction="row" align="center">
-        <ProfileImage src={comment.user.profileImageUrl ?? DEFAULT_IMAGE_URL} />
-        <Flex direction="row" justify="space-between">
+        <ProfileImage
+          src={comment.user.profileImageUrl ?? DEFAULT_IMAGE_URL}
+          onClick={handleDeepLinkClick}
+        />
+        <Flex direction="row" justify="space-between" onClick={handleDeepLinkClick}>
           <Flex direction="column">
             <Flex direction="row">
               <Nickname>{comment.user.nickname}</Nickname>
