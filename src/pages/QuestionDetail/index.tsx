@@ -1,153 +1,66 @@
-import { useState, ChangeEvent, MouseEvent, useRef } from 'react';
+import { useState, ChangeEvent, useRef } from 'react';
 import { useRouter } from 'next/router';
 import styled, { useTheme } from 'styled-components';
 import { useQuery } from 'react-query';
-import { POST, COMMENTS, USER_INFO } from 'src/consts/query';
+import { GET_QUESTION, USER_INFO } from 'src/consts/query';
 import { dateTime } from 'src/utils/DateTime';
-import { useTranslateAnimation } from 'src/hooks';
 import api from 'src/api/core';
 import { v4 } from 'uuid';
 import ConfirmModal from 'components/Modal/ConfirmModal';
 import InPreparationModal from 'components/Modal/InPreparationModal';
-import type { Post, Comment } from '@/pages/post-detail';
 import { LargeLineButton, IconTextButton } from '@/src/components';
 import Flex from '@/src/components/Flex';
 import { typography } from '@/styles';
-import { CommentItem, PopupMenu } from './components';
-import { getQuestionDetail, getCommentList, getUserInfo } from '@/pages/post-detail';
-import {
-  usePostLikeCreator,
-  usePostUnlikeCreator,
-  useCommentCreator,
-  useCommentUpdater,
-  useCommentDeleter,
-} from './mutations';
+import { AnswerItem } from './components';
+import { getQuestionDetail, getUserInfo, Question } from '@/pages/question-detail';
+import { useAnswerCreator } from './mutations';
 import { sendPostMessage } from '@/src/utils/sendPostMessage';
 
-function PostDetail() {
+function QuestionDetail() {
   const theme = useTheme();
-  const [commentInput, setCommentInput] = useState('');
-  const [selectedCommentId, setSelectedCommentId] = useState('');
-  const commentInputElement = useRef<HTMLInputElement>(null);
-  const { isTargetOpen, changeTargetOpenState, isBeforeTargetClose } = useTranslateAnimation(0.2);
-  const [isMyComment, setIsMyComment] = useState(false);
+  const [answerInput, setAnswerInput] = useState('');
+  const [selectedAnswerId, setSelectedAnswerId] = useState('');
+  const answerInputElement = useRef<HTMLInputElement>(null);
   const [showReportModal, setShowReportModal] = useState(false);
   const [showPreparationModal, setShowPreparationModal] = useState(false);
   const router = useRouter();
-  const postId = router.query?.postId as string;
+  const questionId = router.query?.questionId as string;
 
   const {
-    data: post,
-    isError: isPostError,
-    isLoading: isPostLoading,
-  } = useQuery<Post>([POST, postId], getQuestionDetail);
-
-  const {
-    data: comments,
-    isError: isCommentError,
-    isLoading: isCommentLoading,
-  } = useQuery<Comment[]>([COMMENTS, postId], getCommentList);
+    data: question,
+    isError: isQuestionError,
+    isLoading: isQuestionLoading,
+  } = useQuery<Question>([GET_QUESTION, questionId], getQuestionDetail);
 
   const { data: userInfo } = useQuery([USER_INFO], getUserInfo);
+  const { mutate: mutateAnswerCreate } = useAnswerCreator(questionId);
 
-  const { mutate: mutateUnlikeCount } = usePostUnlikeCreator(postId);
-  const { mutate: mutateLikeCount } = usePostLikeCreator(postId);
-  const { mutate: mutateCommentCreate } = useCommentCreator(postId);
-  const { mutate: mutateCommentUpdate } = useCommentUpdater();
-  const { mutate: mutateCommentDelete } = useCommentDeleter();
-
-  if (!post || isPostLoading || isCommentLoading) return <div />;
-  if (isPostError || isCommentError) return <div />;
-
-  const handleLikeButtonClick = () => {
-    if (post?.userLiked) mutateUnlikeCount();
-    else mutateLikeCount();
-  };
+  if (!question || isQuestionLoading || isQuestionError) return <div />;
 
   const handleCommentInputChange = (e: ChangeEvent<HTMLInputElement>) => {
-    setCommentInput(e.target.value);
+    setAnswerInput(e.target.value);
   };
 
   const handleCommentInputSubmit = () => {
-    const isCreating = !selectedCommentId;
-    const isUpdating = !isCreating;
-    const { latitude, longitude } = post;
+    navigator.geolocation.getCurrentPosition((position) => {
+      const { latitude } = position.coords;
+      const { longitude } = position.coords;
 
-    const commentDataToCreate = {
-      content: commentInput,
-      latitude,
-      longitude,
-    };
-    const commentDataToUpdate = {
-      commentId: selectedCommentId,
-      content: commentInput,
-      latitude,
-      longitude,
-    };
+      const answerDataToCreate = {
+        content: answerInput,
+        latitude,
+        longitude,
+      };
 
-    if (isCreating) mutateCommentCreate(commentDataToCreate);
-    if (isUpdating) mutateCommentUpdate(commentDataToUpdate);
-    setCommentInput('');
-  };
-
-  const handleCommentKebabMenuClick = (event: MouseEvent, commentId: string) => {
-    setCommentInput('');
-    togglePopupMenu();
-    setSelectedCommentId(commentId);
-    const selectedComment = comments?.find(({ id }: { id: string }) => id === commentId);
-    setIsMyComment(userInfo?.userId === selectedComment?.user?.id);
-  };
-
-  const togglePopupMenu = () => {
-    if (isTargetOpen) changeTargetOpenState(false);
-    else changeTargetOpenState(true);
-  };
-
-  const handleCommentEditButtonClick = () => {
-    togglePopupMenu();
-    if (!commentInputElement.current) return;
-    commentInputElement.current.focus();
-    const selectedComment = comments?.find(({ id }: { id: string }) => id === selectedCommentId);
-    if (selectedComment) setCommentInput(selectedComment.content);
-  };
-
-  const handleCommentDeleteButtonClick = () => {
-    togglePopupMenu();
-    mutateCommentDelete({ commentId: selectedCommentId });
-    setSelectedCommentId('');
-  };
-
-  const handleCommentAnonymousButtonClick = () => {
-    togglePopupMenu();
-
-    const { latitude, longitude } = post;
-    const selectedComment = comments?.find(({ id }: { id: string }) => id === selectedCommentId);
-
-    const commentDataToUpdate = {
-      commentId: selectedCommentId,
-      content: selectedComment?.content ?? '',
-      latitude,
-      longitude,
-      anonymous: true,
-    };
-
-    mutateCommentUpdate(commentDataToUpdate);
-    setSelectedCommentId('');
+      mutateAnswerCreate(answerDataToCreate);
+      setAnswerInput('');
+    });
   };
 
   const handleDeepLinkClick = (page: 'mypage_other' | 'question') => () => {
     sendPostMessage({
-      value: `doridori://main/${page}?userId=${post.user?.id}`,
+      value: `doridori://main/${page}?userId=${question.fromUser.id}`,
     });
-  };
-
-  const handleCommentReportButtonClick = () => {
-    togglePopupMenu();
-    setShowReportModal(true);
-  };
-
-  const handleCommentReplyButtonClick = () => {
-    setShowPreparationModal(true);
   };
 
   const handleShareButtonClick = () => {
@@ -161,19 +74,19 @@ function PostDetail() {
         {/* Header */}
         <Flex direction="row" align="center">
           <ProfileImage
-            src={post.user?.profileImageUrl}
+            src={question.fromUser.profileImageUrl}
             onClick={handleDeepLinkClick('mypage_other')}
           />
           <Flex direction="row" justify="space-between" style={{ flexGrow: 1 }}>
             <Flex direction="column">
               <Flex direction="row" style={{ marginBottom: '6px' }}>
                 <Nickname onClick={handleDeepLinkClick('mypage_other')}>
-                  {post.user?.nickname}
+                  {question.fromUser.nickname}
                 </Nickname>
-                <LevelTag>Lv.1</LevelTag>
+                <LevelTag>Lv.{question.fromUser.level}</LevelTag>
               </Flex>
               <Flex direction="row" style={{ minWidth: '130px' }}>
-                {post.user?.tags.map((tag: string) => (
+                {question.fromUser?.tags.map((tag: string) => (
                   <InterestTag key={v4()}>{tag}</InterestTag>
                 ))}
               </Flex>
@@ -185,24 +98,17 @@ function PostDetail() {
         </Flex>
         <Divider />
         {/* Content */}
-        <Content>{post.content}</Content>
-        <Flex direction="row">
-          <LocatedAt>{post.representativeAddress}</LocatedAt>
-          <CreatedAt>{dateTime.fromNow(post.createdAt)}</CreatedAt>
+        <Content>{question.content}</Content>
+        <Flex direction="row" align="center">
+          <LocatedAt>{question.representativeAddress || ''}</LocatedAt>
+          {question.representativeAddress && <VerticalDivider />}
+          <CreatedAt>{dateTime.fromNow(question.createdAt)}</CreatedAt>
         </Flex>
         {/* Menu Group */}
         <MenuGroupPosition>
           <MenuGroup>
-            <LeftIcon
-              name="hand"
-              color={post.userLiked ? theme.color.primary.Lime300 : theme.color.gray.Gray500}
-              size={20}
-              onClick={handleLikeButtonClick}
-            >
-              {post.likeCount === 0 ? '궁금해요' : post.likeCount}
-            </LeftIcon>
             <CenterIcon name="chat" color={theme.color.gray.Gray500} size={20} onClick={() => {}}>
-              {post.commentCount || '댓글'}
+              {question.answer ? '1' : '0'}
             </CenterIcon>
             <RightIcon
               name="share"
@@ -218,58 +124,27 @@ function PostDetail() {
       {/* Bottom Section */}
       <BottomSection>
         <CommentList>
-          {comments?.map((commentItem: Comment) => (
-            <CommentItem
-              key={commentItem.id}
-              comment={commentItem}
-              onMenuClick={handleCommentKebabMenuClick}
-              onReplyClick={() => {
-                handleCommentReplyButtonClick();
-              }}
-            />
-          ))}
+          <AnswerItem key={question.answer.id} answer={question.answer} />
         </CommentList>
-        <CommentInputWrapper>
-          <Flex direction="row" align="center">
-            <CommentInput
-              type="text"
-              placeholder="댓글을 남겨주세요."
-              value={commentInput}
-              onChange={handleCommentInputChange}
-              ref={commentInputElement}
-            />
-            <CommentSubmitButton onClick={handleCommentInputSubmit}>
-              <LargeLineButton buttonType="primary" onClick={() => {}}>
-                등록
-              </LargeLineButton>
-            </CommentSubmitButton>
-          </Flex>
-        </CommentInputWrapper>
+        {userInfo?.userId === question.toUser.id && (
+          <CommentInputWrapper>
+            <Flex direction="row" align="center">
+              <CommentInput
+                type="text"
+                placeholder="답변을 남겨주세요."
+                value={answerInput}
+                onChange={handleCommentInputChange}
+                ref={answerInputElement}
+              />
+              <CommentSubmitButton onClick={handleCommentInputSubmit}>
+                <LargeLineButton buttonType="primary" onClick={() => {}}>
+                  등록
+                </LargeLineButton>
+              </CommentSubmitButton>
+            </Flex>
+          </CommentInputWrapper>
+        )}
       </BottomSection>
-      {isTargetOpen && (
-        <PopupMenu onClose={togglePopupMenu} isBeforeClose={isBeforeTargetClose}>
-          {isMyComment
-            ? [
-                <div key={v4()} onClick={handleCommentEditButtonClick}>
-                  수정하기
-                </div>,
-                <div key={v4()} onClick={handleCommentDeleteButtonClick}>
-                  삭제하기
-                </div>,
-                <div key={v4()} onClick={handleCommentAnonymousButtonClick}>
-                  익명으로 변경
-                </div>,
-              ]
-            : [
-                <div key={v4()} onClick={handleCommentReportButtonClick}>
-                  신고하기
-                </div>,
-                <div key={v4()} onClick={handleCommentReplyButtonClick}>
-                  대댓글 쓰기
-                </div>,
-              ]}
-        </PopupMenu>
-      )}
       {showReportModal && (
         <ConfirmModal
           title={
@@ -277,22 +152,22 @@ function PostDetail() {
               style={{ marginTop: 14, marginBottom: 8, textAlign: 'center', fontSize: 18 }}
             >
               <p style={{ marginBottom: 6 }}>
-                <span>댓글을 </span>
+                <span>답변을 </span>
                 <span style={{ color: theme.color.primary.Lime300 }}>신고</span>하시겠어요?
               </p>
             </TitleWrapper>
           }
-          subTitle="신고된 댓글은 블라인드 처리됩니다."
+          subTitle="신고된 답변은 블라인드 처리됩니다."
           confirmButtonTxt="신고하기"
           cancelButtonTxt="취소하기"
           onConfirm={async () => {
             setShowReportModal(false);
 
             await api.post({
-              url: `/api/report/comment/${selectedCommentId}`,
+              url: `/api/report/comment/${selectedAnswerId}`,
             });
 
-            setSelectedCommentId('');
+            setSelectedAnswerId('');
           }}
           onCancel={() => {
             setShowReportModal(false);
@@ -312,7 +187,6 @@ function PostDetail() {
           confirmButtonTxt="도리도리 계속 이용하기"
           onConfirm={async () => {
             setShowPreparationModal(false);
-            if (isTargetOpen) changeTargetOpenState(false);
           }}
         />
       )}
@@ -346,6 +220,8 @@ const ProfileImage = styled.img`
 const Nickname = styled.div`
   ${typography.Body_Medium_14}
   margin-right: 8px;
+  overflow: hidden;
+  white-space: nowrap;
 `;
 
 const LevelTag = styled.div`
@@ -394,12 +270,6 @@ const LocatedAt = styled.div`
   color: ${({ theme }) => theme.color.gray.Gray600};
   font-weight: 400;
   ${typography.Caption2_Regular_12}
-  ::after {
-    height: 10px;
-    margin: 0 10px;
-    border-right: 1px solid ${({ theme }) => theme.color.gray.Gray700};
-    content: '';
-  }
 `;
 
 const CreatedAt = styled.div`
@@ -427,19 +297,11 @@ const MenuGroup = styled.div`
   margin-bottom: 20px;
 `;
 
-const LeftIcon = styled(IconTextButton)`
-  display: flex;
-  flex-grow: 1;
-  justify-content: center;
-  max-width: 32%;
-  height: 24px;
-`;
-
 const CenterIcon = styled(IconTextButton)`
   display: flex;
   flex-grow: 1;
   justify-content: center;
-  max-width: 32%;
+  max-width: 50%;
   height: 24px;
   border-right: ${({ theme }) => `1px solid ${theme.color.gray.Gray800}`};
   border-left: ${({ theme }) => `1px solid ${theme.color.gray.Gray800}`};
@@ -450,7 +312,7 @@ const RightIcon = styled(IconTextButton)`
   display: flex;
   flex-grow: 1;
   justify-content: center;
-  max-width: 32%;
+  max-width: 50%;
   height: 24px;
 `;
 
@@ -507,4 +369,10 @@ const TitleWrapper = styled.div`
   font-size: 18px;
 `;
 
-export default PostDetail;
+const VerticalDivider = styled.div`
+  height: 10px;
+  margin: 0 10px 0 10px;
+  border-right: 1px solid ${({ theme }) => theme.color.gray.Gray800};
+`;
+
+export default QuestionDetail;

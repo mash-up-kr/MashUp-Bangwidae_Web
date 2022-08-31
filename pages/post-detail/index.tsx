@@ -59,7 +59,7 @@ export interface Comment {
 // eslint-disable-next-line consistent-return,@typescript-eslint/ban-ts-comment
 // @ts-ignore
 // eslint-disable-next-line consistent-return
-export function getPostDetail({ queryKey }: { queryKey: QueryKey }): Promise<Post> {
+export function getQuestionDetail({ queryKey }: { queryKey: QueryKey }): Promise<Post> {
   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   // @ts-ignore
   const [, postId] = queryKey;
