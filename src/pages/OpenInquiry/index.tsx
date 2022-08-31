@@ -19,11 +19,17 @@ import QuestionContainer from './components/QuestionContainer';
 import TendencyContainer from './components/TendencyContainer';
 import TwoLayerContainer from './components/TwoLayerComponent';
 import { getAnsweredQuestion, getMyInfo } from '@/pages/open-inquiry';
+import { sendPostMessage } from '@/src/utils/sendPostMessage';
 
 function OpenInquiry() {
   const { data: userData } = useQuery(['openInquiry/getMyInfo'], getMyInfo);
   const { data: questionData } = useQuery(['openInquiry/getAnsweredQuestion'], getAnsweredQuestion);
 
+  const handleDeepLinkClick = (page: 'mypage_other' | 'question') => () => {
+    sendPostMessage({
+      value: `doridori://main/${page}?userId=${userData?.userId}`,
+    });
+  };
   return (
     <>
       {userData && (
@@ -55,7 +61,7 @@ function OpenInquiry() {
 
       {questionData && (
         <Footer>
-          <QuestionButton onClick={() => {}}>질문하기</QuestionButton>
+          <QuestionButton onClick={() => handleDeepLinkClick('question')}>질문하기</QuestionButton>
           <StyledCarousel>
             <TendencyContainer title="성향" tags={userData.tags} />
             {questionData.questions.map(
