@@ -39,7 +39,7 @@ function Mission({
       default:
         return `${policyText} ${totalCount ?? '-'}개 작성하기`;
     }
-  }, [currentLevel]);
+  }, [currentLevel, totalCount, policyText]);
 
   const calcPercent = () => {
     if (myLevel > currentLevel) {
