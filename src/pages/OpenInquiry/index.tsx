@@ -1,8 +1,5 @@
 /* eslint-disable react/no-unused-prop-types */
-import Image from 'next/image';
-
 import { useQuery } from 'react-query';
-import thumbNail from '@/src/asset/image/thumbNail.png';
 import Flex from '@/src/components/Flex';
 import Tag from '@/src/components/Tag';
 import {
@@ -14,6 +11,10 @@ import {
   StyledSpan,
   Title,
   StyledCarousel,
+  ProfileImageWrapper,
+  ProfileImage,
+  Shadow,
+  Wing,
 } from './components/styledComponent';
 import QuestionContainer from './components/QuestionContainer';
 import TendencyContainer from './components/TendencyContainer';
@@ -44,7 +45,17 @@ function OpenInquiry() {
           </Header>
 
           <Section>
-            <Image src={thumbNail} alt="유저 이미지" width={250} height={250} />
+            <ProfileImageWrapper>
+              <ProfileImage
+                src={userData.profileImageUrl}
+                alt="유저 이미지"
+                width={250}
+                height={250}
+              />
+              <Shadow />
+              <Wing isLeft />
+              <Wing />
+            </ProfileImageWrapper>
             <Flex direction="column" align="center" style={{ marginTop: 20, width: '200px' }}>
               <TwoLayerContainer
                 top={
