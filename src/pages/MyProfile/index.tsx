@@ -327,7 +327,7 @@ const TagGroupWrapper = styled.div`
 `;
 
 const StyledImg = styled.img`
-  object-fit: contain;
+  object-fit: cover;
   border-radius: 100px;
 `;
 
