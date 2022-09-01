@@ -27,7 +27,7 @@ function MyLevel() {
 
   // 현재 선택된 값이 이전 레벨인지 앞으로의 레벨인지 판단하는 값 필요 -> 따라서 메세지 표출
 
-  const { data: myLevelInfo } = useQuery(MY_LEVEL, getMyLevel);
+  const { data: myLevelInfo, isLoading: isLoadingMyLevelInfo } = useQuery(MY_LEVEL, getMyLevel);
   const { data: levelpolicy } = useQuery(
     [LEVEL_POLICY, selectedLevel],
     getLevelPolicy(selectedLevel),
@@ -45,7 +45,7 @@ function MyLevel() {
       setSelectedLevel(currentLevel);
       setPlicyArr(currentLevel > STANDARD_LEVEL ? MISSION_TITLE_ARR : undefined);
     },
-    [setSelectedLevel],
+    [],
   );
 
   const getLevelBoxIcon = (currentLevel: number) => {
@@ -57,6 +57,10 @@ function MyLevel() {
     }
     return <CheckIcon />;
   };
+
+  if (isLoadingMyLevelInfo) {
+    return null;
+  }
 
   return (
     <>

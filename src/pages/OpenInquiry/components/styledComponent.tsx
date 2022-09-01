@@ -117,6 +117,7 @@ export const ProfileImage = styled.img`
   top: 0;
   z-index: 10;
   padding: 10px;
+  object-fit: cover;
   background: ${({ theme }) => theme.color.gray.Gray900};
   border-radius: 250px;
   animation: ${doridori} 1s 1s infinite linear alternate;
