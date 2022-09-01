@@ -130,6 +130,8 @@ function MyProfile() {
     (event: ChangeEvent<HTMLInputElement>) => {
       event.preventDefault();
       const file = event.target.files?.[0];
+      alert(`event.target.files: ${event.target.files}`);
+      alert(`file.name: ${file.name}`);
       if (!file) {
         return;
       }
