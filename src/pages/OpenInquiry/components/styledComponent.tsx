@@ -52,7 +52,10 @@ export const Title = styled.p`
   ${typography.Title1_Bold_18}
 `;
 
-export const Description = styled.p`
+export const Description = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
   width: 200px;
   margin-top: 8px;
   color: #767676;
