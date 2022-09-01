@@ -1,4 +1,6 @@
-import styled from 'styled-components';
+import styled, { css, keyframes } from 'styled-components';
+import ShadowSvg from 'public/images/shadow.svg';
+import WingSvg from 'public/images/wing.svg';
 import { typography } from '@/styles';
 import Carousel from '@/src/components/Carousel';
 
@@ -15,8 +17,8 @@ export const Section = styled.div`
   flex-direction: column;
   align-items: center;
   justify-content: center;
-
   height: 68vh;
+  overflow: hidden;
 `;
 
 export const Footer = styled.div`
@@ -60,6 +62,7 @@ export const Description = styled.div`
   margin-top: 8px;
   color: #767676;
   white-space: pre-line;
+  text-align: center;
   ${typography.Body_Regular_14}
 `;
 
@@ -92,4 +95,91 @@ export const QuestionButton = styled.button`
 export const StyledCarousel = styled(Carousel)`
   width: calc(100% - 16px);
   white-space: no-wrap;
+`;
+
+export const ProfileImageWrapper = styled.div`
+  position: relative;
+  width: 250px;
+  height: 250px;
+`;
+
+const doridori = keyframes`
+  0% {
+    transform: rotateY(0deg);
+  }
+  100%{
+    transform: rotateY(45deg);
+  }
+`;
+
+export const ProfileImage = styled.img`
+  position: absolute;
+  top: 0;
+  z-index: 10;
+  padding: 10px;
+  background: ${({ theme }) => theme.color.gray.Gray900};
+  border-radius: 250px;
+  animation: ${doridori} 1s 1s infinite linear alternate;
+`;
+
+const shadow = keyframes`
+  0% {
+    left: -10px;
+  }
+  100% {
+    left: 77px;
+  }
+`;
+
+export const Shadow = styled(ShadowSvg)`
+  position: absolute;
+  top: 15px;
+  transition: left 1.5s ease;
+  animation: ${shadow} 2s infinite linear alternate;
+`;
+
+const rightWing = keyframes`
+  0% {
+    right: 0px;
+    opacity: 0;
+  }
+  30% {
+    opacity: 1;
+  }
+  70% {
+    opacity: 0
+  }
+  100% {
+    right: calc((100vw - 100%) * -1);
+    opacity: 0;
+  }
+`;
+
+const leftWing = keyframes`
+  0% {
+    left: -12px;
+    opacity: 0;
+  }
+  30% {
+    opacity: 1;
+  }
+  70% {
+    opacity: 0
+  }
+  100% {
+    left: calc((100vw - 100%) * -1);
+    opacity: 0
+  }
+`;
+
+export const Wing = styled(WingSvg)<{ isLeft?: boolean }>`
+  position: absolute;
+  opacity: 1;
+  animation: ${rightWing} 2s infinite;
+  ${({ isLeft }) =>
+    isLeft &&
+    css`
+      transform: rotate(180deg);
+      animation: ${leftWing} 2s infinite;
+    `}
 `;
