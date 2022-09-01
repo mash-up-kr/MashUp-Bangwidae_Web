@@ -63,6 +63,18 @@ function QuestionDetail() {
     });
   };
 
+  const handleCommentKebabMenuClick = () => {
+    // setCommentInput('');
+    // togglePopupMenu();
+    // setSelectedCommentId(commentId);
+    // const selectedComment = comments?.find(({ id }: { id: string }) => id === commentId);
+    // setIsMyComment(userInfo?.userId === selectedComment?.user?.id);
+  };
+
+  const handleCommentReplyButtonClick = () => {
+    // setShowPreparationModal(true);
+  };
+
   const handleShareButtonClick = () => {
     setShowPreparationModal(true);
   };
@@ -124,7 +136,14 @@ function QuestionDetail() {
       {/* Bottom Section */}
       <BottomSection>
         <CommentList>
-          <AnswerItem key={question.answer.id} answer={question.answer} />
+          <AnswerItem
+            key={question.answer.id}
+            answer={question.answer}
+            onMenuClick={handleCommentKebabMenuClick}
+            onReplyClick={() => {
+              handleCommentReplyButtonClick();
+            }}
+          />
         </CommentList>
         {userInfo?.userId === question.toUser.id && (
           <CommentInputWrapper>
