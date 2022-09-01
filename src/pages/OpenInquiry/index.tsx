@@ -2,6 +2,7 @@
 import Image from 'next/image';
 
 import { useQuery } from 'react-query';
+import { useRouter } from 'next/router';
 import thumbNail from '@/src/asset/image/thumbNail.png';
 import Flex from '@/src/components/Flex';
 import Tag from '@/src/components/Tag';
@@ -24,6 +25,9 @@ import { sendPostMessage } from '@/src/utils/sendPostMessage';
 function OpenInquiry() {
   const { data: userData } = useQuery(['openInquiry/getMyInfo'], getMyInfo);
   const { data: questionData } = useQuery(['openInquiry/getAnsweredQuestion'], getAnsweredQuestion);
+
+  const router = useRouter();
+  const userId = router.query?.userId as string;
 
   const handleDeepLinkClick = (page: 'mypage_other' | 'question') => () => {
     sendPostMessage({
@@ -62,7 +66,11 @@ function OpenInquiry() {
 
       {questionData && (
         <Footer>
-          <QuestionButton onClick={() => handleDeepLinkClick('question')}>질문하기</QuestionButton>
+          {userId !== userData.userId && (
+            <QuestionButton onClick={() => handleDeepLinkClick('question')}>
+              질문하기
+            </QuestionButton>
+          )}
           <StyledCarousel>
             <TendencyContainer title="성향" tags={userData.tags} />
             {questionData.questions.map(
