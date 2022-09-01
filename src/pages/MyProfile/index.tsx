@@ -58,7 +58,7 @@ function MyProfile() {
               Cookies.get('accessToken') ?? `Bearer ${process.env.NEXT_PUBLIC_MOCK_TOKEN}`,
           },
         });
-      } catch (e) {
+      } catch (e: any) {
         alert(`error: ${e.message}`);
       }
       handleComplete();
