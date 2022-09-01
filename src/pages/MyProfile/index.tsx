@@ -155,7 +155,7 @@ function MyProfile() {
   };
 
   if (isLoadingProfileInfo || isLoadingWardList) {
-    return <div>Loading...</div>;
+    return null;
   }
 
   return (
