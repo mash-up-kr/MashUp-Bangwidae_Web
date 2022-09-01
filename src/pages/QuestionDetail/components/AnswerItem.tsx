@@ -2,6 +2,7 @@ import React from 'react';
 import styled, { useTheme } from 'styled-components';
 import { IconTextButton } from 'src/components';
 import { sendPostMessage } from 'src/utils/sendPostMessage';
+import { useAnswerLikeCreator, useAnswerUnlikeCreator } from 'pages/QuestionDetail/mutations';
 import Flex from '@/src/components/Flex';
 import { typography } from '@/styles';
 import { dateTime } from '@/src/utils/DateTime';
@@ -17,12 +18,12 @@ interface AnswerItemProps {
 
 function AnswerItem({ answer, onMenuClick, onReplyClick }: AnswerItemProps) {
   const theme = useTheme();
-  // const { mutate: mutateLikeCount } = useCommentLikeCreator(comment.id);
-  // const { mutate: mutateUnlikeCount } = useCommentUnlikeCreator(comment.id);
+  const { mutate: mutateLikeCount } = useAnswerLikeCreator(answer.id);
+  const { mutate: mutateUnlikeCount } = useAnswerUnlikeCreator(answer.id);
 
   const handleLikeButtonClick = () => {
     // eslint-disable-next-line @typescript-eslint/no-unused-expressions
-    // comment.userLiked ? mutateUnlikeCount() : mutateLikeCount();
+    answer.userLiked ? mutateUnlikeCount() : mutateLikeCount();
   };
 
   const handleDeepLinkClick = () => {
