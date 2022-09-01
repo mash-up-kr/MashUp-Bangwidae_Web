@@ -4,6 +4,7 @@ import { useQuery } from 'react-query';
 import axios from 'axios';
 import FormData from 'form-data';
 import Cancel from 'public/icons/cancel.svg';
+import Cookies from 'js-cookie';
 import TextField from '@/src/components/TextField';
 import { typography } from '@/styles';
 import { LargeLineButton } from '@/src/components';
@@ -43,16 +44,23 @@ function MyProfile() {
 
   const updateProfileImage = async () => {
     if (profileImage.file) {
+      alert(`cookie: ${Cookies.get('accessToken')}`);
+      alert(Cookies.get('accessToken') ?? `Bearer ${process.env.NEXT_PUBLIC_MOCK_TOKEN}`);
       // FIXME: react-qeury로 변경 필요
       const formData = new FormData();
       formData.append('image', profileImage.file);
-      await axios.post(`/api/user/profile/image`, formData, {
-        headers: {
-          'Content-Type': 'multipart/form-data',
-          'Cache-Control': 'no-cache',
-          Authorization: `Bearer ${process.env.NEXT_PUBLIC_MOCK_TOKEN}`,
-        },
-      });
+      try {
+        await axios.post(`/api/user/profile/image`, formData, {
+          headers: {
+            'Content-Type': 'multipart/form-data',
+            'Cache-Control': 'no-cache',
+            Authorization:
+              Cookies.get('accessToken') ?? `Bearer ${process.env.NEXT_PUBLIC_MOCK_TOKEN}`,
+          },
+        });
+      } catch (e) {
+        alert(`error: ${e.message}`);
+      }
       handleComplete();
       return;
     }
