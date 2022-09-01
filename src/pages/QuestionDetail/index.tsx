@@ -72,7 +72,7 @@ function QuestionDetail() {
   };
 
   const handleCommentReplyButtonClick = () => {
-    // setShowPreparationModal(true);
+    setShowPreparationModal(true);
   };
 
   const handleShareButtonClick = () => {
