@@ -45,6 +45,7 @@ export const getServerSideProps: GetServerSideProps = async ({ query }) => {
   const { questionId } = query;
   const requestPageType = await api.get({
     url: `${process.env.NEXT_PUBLIC_BASE_URL}/qa/type/${questionId}`,
+    baseURL: '',
   });
   if (requestPageType === 'POST') {
     return {
