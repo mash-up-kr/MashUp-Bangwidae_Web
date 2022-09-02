@@ -4,24 +4,23 @@ import styled, { useTheme } from 'styled-components';
 import { useQuery } from 'react-query';
 import { GET_QUESTION, USER_INFO } from 'src/consts/query';
 import { dateTime } from 'src/utils/DateTime';
-import api from 'src/api/core';
+import { useTranslateAnimation } from 'src/hooks';
 import { v4 } from 'uuid';
-import ConfirmModal from 'components/Modal/ConfirmModal';
 import InPreparationModal from 'components/Modal/InPreparationModal';
+import { PopupMenu } from 'pages/PostDetail/components';
 import { LargeLineButton, IconTextButton } from '@/src/components';
 import Flex from '@/src/components/Flex';
 import { typography } from '@/styles';
 import { AnswerItem } from './components';
 import { getQuestionDetail, getUserInfo, Question } from '@/pages/question-detail';
-import { useAnswerCreator } from './mutations';
+import { useAnswerCreator, useAnswerUpdater, useAnswerDeleter } from './mutations';
 import { sendPostMessage } from '@/src/utils/sendPostMessage';
 
 function QuestionDetail() {
   const theme = useTheme();
   const [answerInput, setAnswerInput] = useState('');
-  const [selectedAnswerId, setSelectedAnswerId] = useState('');
   const answerInputElement = useRef<HTMLInputElement>(null);
-  const [showReportModal, setShowReportModal] = useState(false);
+  const { isTargetOpen, changeTargetOpenState, isBeforeTargetClose } = useTranslateAnimation(0.2);
   const [showPreparationModal, setShowPreparationModal] = useState(false);
   const router = useRouter();
   const questionId = router.query?.questionId as string;
@@ -34,6 +33,8 @@ function QuestionDetail() {
 
   const { data: userInfo } = useQuery([USER_INFO], getUserInfo);
   const { mutate: mutateAnswerCreate } = useAnswerCreator(questionId);
+  const { mutate: mutateAnswerUpdate } = useAnswerUpdater();
+  const { mutate: mutateAnswerDelete } = useAnswerDeleter();
 
   if (!question || isQuestionLoading || isQuestionError) return <div />;
 
@@ -42,6 +43,9 @@ function QuestionDetail() {
   };
 
   const handleCommentInputSubmit = () => {
+    const isCreating = !question.answer?.id;
+    const isUpdating = !isCreating;
+
     navigator.geolocation.getCurrentPosition((position) => {
       const { latitude } = position.coords;
       const { longitude } = position.coords;
@@ -51,8 +55,15 @@ function QuestionDetail() {
         latitude,
         longitude,
       };
+      const commentDataToUpdate = {
+        answerId: question.answer.id,
+        content: answerInput,
+        latitude,
+        longitude,
+      };
 
-      mutateAnswerCreate(answerDataToCreate);
+      if (isCreating) mutateAnswerCreate(answerDataToCreate);
+      if (isUpdating) mutateAnswerUpdate(commentDataToUpdate);
       setAnswerInput('');
     });
   };
@@ -63,9 +74,38 @@ function QuestionDetail() {
     });
   };
 
+  const handleCommentKebabMenuClick = () => {
+    setAnswerInput('');
+    togglePopupMenu();
+  };
+
+  const togglePopupMenu = () => {
+    if (isTargetOpen) changeTargetOpenState(false);
+    else changeTargetOpenState(true);
+  };
+
+  const handleCommentReplyButtonClick = () => {
+    setShowPreparationModal(true);
+  };
+
   const handleShareButtonClick = () => {
     setShowPreparationModal(true);
   };
+
+  const handleAnswerEditButtonClick = () => {
+    togglePopupMenu();
+    if (!answerInputElement.current) return;
+    answerInputElement.current.focus();
+    const selectedComment = question.answer;
+    if (selectedComment) setAnswerInput(selectedComment.content);
+  };
+
+  const handleAnswerDeleteButtonClick = () => {
+    togglePopupMenu();
+    mutateAnswerDelete({ answerId: question.answer?.id });
+  };
+
+  const isMyQuestion = userInfo?.userId === question.toUser.id;
 
   return (
     <Layout>
@@ -124,14 +164,24 @@ function QuestionDetail() {
       {/* Bottom Section */}
       <BottomSection>
         <CommentList>
-          <AnswerItem key={question.answer.id} answer={question.answer} />
+          <AnswerItem
+            key={question.answer.id}
+            answer={question.answer}
+            isMyQuestion={isMyQuestion}
+            onMenuClick={handleCommentKebabMenuClick}
+            onReplyClick={() => {
+              handleCommentReplyButtonClick();
+            }}
+          />
         </CommentList>
-        {userInfo?.userId === question.toUser.id && (
+        {isMyQuestion && (
           <CommentInputWrapper>
             <Flex direction="row" align="center">
               <CommentInput
                 type="text"
-                placeholder="답변을 남겨주세요."
+                placeholder={`${
+                  question.answer?.id ? '답변을 수정해주세요.' : '답변을 남겨주세요.'
+                }`}
                 value={answerInput}
                 onChange={handleCommentInputChange}
                 ref={answerInputElement}
@@ -145,34 +195,17 @@ function QuestionDetail() {
           </CommentInputWrapper>
         )}
       </BottomSection>
-      {showReportModal && (
-        <ConfirmModal
-          title={
-            <TitleWrapper
-              style={{ marginTop: 14, marginBottom: 8, textAlign: 'center', fontSize: 18 }}
-            >
-              <p style={{ marginBottom: 6 }}>
-                <span>답변을 </span>
-                <span style={{ color: theme.color.primary.Lime300 }}>신고</span>하시겠어요?
-              </p>
-            </TitleWrapper>
-          }
-          subTitle="신고된 답변은 블라인드 처리됩니다."
-          confirmButtonTxt="신고하기"
-          cancelButtonTxt="취소하기"
-          onConfirm={async () => {
-            setShowReportModal(false);
-
-            await api.post({
-              url: `/api/report/comment/${selectedAnswerId}`,
-            });
-
-            setSelectedAnswerId('');
-          }}
-          onCancel={() => {
-            setShowReportModal(false);
-          }}
-        />
+      {isTargetOpen && (
+        <PopupMenu onClose={togglePopupMenu} isBeforeClose={isBeforeTargetClose}>
+          {[
+            <div key={v4()} onClick={handleAnswerEditButtonClick}>
+              수정하기
+            </div>,
+            <div key={v4()} onClick={handleAnswerDeleteButtonClick}>
+              삭제하기
+            </div>,
+          ]}
+        </PopupMenu>
       )}
       {showPreparationModal && (
         <InPreparationModal

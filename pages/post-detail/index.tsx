@@ -33,6 +33,7 @@ export interface Comment {
     tags: string[];
     nickname: string;
     profileImageUrl: string;
+    level: number;
   };
   content: string;
   likeCount: number;

@@ -45,7 +45,7 @@ function CommentItem({ comment, onMenuClick, onReplyClick }: CommentItemProps) {
           <Flex direction="column">
             <Flex direction="row">
               <Nickname>{comment.user.nickname}</Nickname>
-              <LevelTag>Lv.1</LevelTag>
+              <LevelTag>Lv.{comment.user.level}</LevelTag>
             </Flex>
           </Flex>
         </Flex>
