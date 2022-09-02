@@ -13,7 +13,7 @@ import Flex from '@/src/components/Flex';
 import { typography } from '@/styles';
 import { AnswerItem } from './components';
 import { getQuestionDetail, getUserInfo, Question } from '@/pages/question-detail';
-import { useAnswerCreator } from './mutations';
+import { useAnswerCreator, useAnswerUpdater, useAnswerDeleter } from './mutations';
 import { sendPostMessage } from '@/src/utils/sendPostMessage';
 
 function QuestionDetail() {
@@ -33,6 +33,8 @@ function QuestionDetail() {
 
   const { data: userInfo } = useQuery([USER_INFO], getUserInfo);
   const { mutate: mutateAnswerCreate } = useAnswerCreator(questionId);
+  const { mutate: mutateAnswerUpdate } = useAnswerUpdater();
+  const { mutate: mutateAnswerDelete } = useAnswerDeleter();
 
   if (!question || isQuestionLoading || isQuestionError) return <div />;
 
@@ -41,6 +43,9 @@ function QuestionDetail() {
   };
 
   const handleCommentInputSubmit = () => {
+    const isCreating = !question.answer?.id;
+    const isUpdating = !isCreating;
+
     navigator.geolocation.getCurrentPosition((position) => {
       const { latitude } = position.coords;
       const { longitude } = position.coords;
@@ -50,8 +55,15 @@ function QuestionDetail() {
         latitude,
         longitude,
       };
+      const commentDataToUpdate = {
+        answerId: question.answer.id,
+        content: answerInput,
+        latitude,
+        longitude,
+      };
 
-      mutateAnswerCreate(answerDataToCreate);
+      if (isCreating) mutateAnswerCreate(answerDataToCreate);
+      if (isUpdating) mutateAnswerUpdate(commentDataToUpdate);
       setAnswerInput('');
     });
   };
@@ -65,9 +77,6 @@ function QuestionDetail() {
   const handleCommentKebabMenuClick = () => {
     setAnswerInput('');
     togglePopupMenu();
-    // setSelectedAnswerId(commentId);
-    // const selectedComment = comments?.find(({ id }: { id: string }) => id === commentId);
-    // setIsMyComment(userInfo?.userId === selectedComment?.user?.id);
   };
 
   const togglePopupMenu = () => {
@@ -83,9 +92,20 @@ function QuestionDetail() {
     setShowPreparationModal(true);
   };
 
-  const handleAnswerEditButtonClick = () => {};
+  const handleAnswerEditButtonClick = () => {
+    togglePopupMenu();
+    if (!answerInputElement.current) return;
+    answerInputElement.current.focus();
+    const selectedComment = question.answer;
+    if (selectedComment) setAnswerInput(selectedComment.content);
+  };
 
-  const handleAnswerDeleteButtonClick = () => {};
+  const handleAnswerDeleteButtonClick = () => {
+    togglePopupMenu();
+    mutateAnswerDelete({ answerId: question.answer?.id });
+  };
+
+  const isMyQuestion = userInfo?.userId === question.toUser.id;
 
   return (
     <Layout>
@@ -147,18 +167,21 @@ function QuestionDetail() {
           <AnswerItem
             key={question.answer.id}
             answer={question.answer}
+            isMyQuestion={isMyQuestion}
             onMenuClick={handleCommentKebabMenuClick}
             onReplyClick={() => {
               handleCommentReplyButtonClick();
             }}
           />
         </CommentList>
-        {userInfo?.userId !== question.toUser.id && (
+        {isMyQuestion && (
           <CommentInputWrapper>
             <Flex direction="row" align="center">
               <CommentInput
                 type="text"
-                placeholder="답변을 남겨주세요."
+                placeholder={`${
+                  question.answer?.id ? '답변을 수정해주세요.' : '답변을 남겨주세요.'
+                }`}
                 value={answerInput}
                 onChange={handleCommentInputChange}
                 ref={answerInputElement}

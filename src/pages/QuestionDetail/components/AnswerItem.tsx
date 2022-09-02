@@ -12,11 +12,12 @@ const DEFAULT_IMAGE_URL = process.env.NEXT_PUBLIC_DEFAULT_IMAGE;
 
 interface AnswerItemProps {
   answer: Answer;
-  onMenuClick: (event: MouseEvent, selectedId: string) => void;
+  isMyQuestion: boolean;
+  onMenuClick: (event: React.MouseEvent<Element, MouseEvent>, selectedId: string) => void;
   onReplyClick: () => void;
 }
 
-function AnswerItem({ answer, onMenuClick, onReplyClick }: AnswerItemProps) {
+function AnswerItem({ answer, isMyQuestion, onMenuClick, onReplyClick }: AnswerItemProps) {
   const theme = useTheme();
   const { mutate: mutateLikeCount } = useAnswerLikeCreator(answer.id);
   const { mutate: mutateUnlikeCount } = useAnswerUnlikeCreator(answer.id);
@@ -52,12 +53,16 @@ function AnswerItem({ answer, onMenuClick, onReplyClick }: AnswerItemProps) {
           <VerticalDivider />
           <CreatedAt>{dateTime.fromNow(answer.createdAt)}</CreatedAt>
           <IconPosition>
-            <IconTextButton
-              name="more"
-              color="#767676"
-              size={24}
-              onClick={(event) => onMenuClick(event, answer.id)}
-            />
+            {isMyQuestion && (
+              <IconTextButton
+                name="more"
+                color="#767676"
+                size={24}
+                onClick={(event: React.MouseEvent<Element, MouseEvent>) =>
+                  onMenuClick(event, answer.id)
+                }
+              />
+            )}
           </IconPosition>
         </Flex>
       </Flex>
