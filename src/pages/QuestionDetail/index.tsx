@@ -1,4 +1,4 @@
-import { useState, ChangeEvent, useRef } from 'react';
+import { useState, ChangeEvent, useRef, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import styled, { useTheme } from 'styled-components';
 import { useQuery } from 'react-query';
@@ -8,6 +8,7 @@ import { useTranslateAnimation } from 'src/hooks';
 import { v4 } from 'uuid';
 import InPreparationModal from 'components/Modal/InPreparationModal';
 import { PopupMenu } from 'pages/PostDetail/components';
+import api from 'src/api/core';
 import { LargeLineButton, IconTextButton } from '@/src/components';
 import Flex from '@/src/components/Flex';
 import { typography } from '@/styles';
@@ -15,6 +16,20 @@ import { AnswerItem } from './components';
 import { getQuestionDetail, getUserInfo, Question } from '@/pages/question-detail';
 import { useAnswerCreator, useAnswerUpdater, useAnswerDeleter } from './mutations';
 import { sendPostMessage } from '@/src/utils/sendPostMessage';
+
+// iOS URL 오기입 임시 대응
+let isURLException = false;
+async function handleURLException() {
+  const searchParams = new URLSearchParams(window.location.search);
+  const articleId = searchParams.get('questionId');
+  const requestPageType = await api.get({
+    url: `api/qa/type/${articleId}`,
+  });
+  if (requestPageType === 'POST') {
+    window.location.href = `https://dori-dori.netlify.app/post-detail?postId=${articleId}`;
+    isURLException = true;
+  }
+}
 
 function QuestionDetail() {
   const theme = useTheme();
@@ -24,6 +39,10 @@ function QuestionDetail() {
   const [showPreparationModal, setShowPreparationModal] = useState(false);
   const router = useRouter();
   const questionId = router.query?.questionId as string;
+
+  useEffect(() => {
+    handleURLException();
+  }, []);
 
   const {
     data: question,
@@ -37,6 +56,7 @@ function QuestionDetail() {
   const { mutate: mutateAnswerDelete } = useAnswerDeleter();
 
   if (!question || isQuestionLoading || isQuestionError) return <div />;
+  if (isURLException) return null;
 
   const handleCommentInputChange = (e: ChangeEvent<HTMLInputElement>) => {
     setAnswerInput(e.target.value);
