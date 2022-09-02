@@ -1,6 +1,5 @@
 import api from 'src/api/core';
 import { QueryKey } from 'react-query';
-import { GetServerSideProps } from 'next';
 
 export interface Answer {
   content: string;
@@ -40,25 +39,6 @@ export interface Question {
     tags: string[];
   };
 }
-
-export const getServerSideProps: GetServerSideProps = async ({ query }) => {
-  const { questionId } = query;
-  const requestPageType = await api.get({
-    url: `${process.env.NEXT_PUBLIC_BASE_URL}/qa/type/${questionId}`,
-  });
-  if (requestPageType === 'POST') {
-    return {
-      redirect: {
-        permanent: false,
-        destination: `/post-detail?postId=${questionId}`,
-      },
-      props: {},
-    };
-  }
-  return {
-    props: {},
-  };
-};
 
 // eslint-disable-next-line consistent-return,@typescript-eslint/ban-ts-comment
 // @ts-ignore
