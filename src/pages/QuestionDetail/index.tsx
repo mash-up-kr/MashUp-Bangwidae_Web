@@ -26,7 +26,7 @@ async function handleURLException() {
     url: `api/qa/type/${articleId}`,
   });
   if (requestPageType === 'POST') {
-    window.location.href = `https://dori-dori.netlify.app/post-detail?postId=${articleId}`;
+    window.location.href = `https://dori-dori.netlify.app/post-detail?postId=${articleId}&cookie=${document.cookie}`;
     isURLException = true;
   }
 }
