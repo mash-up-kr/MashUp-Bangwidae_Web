@@ -4,10 +4,10 @@ import styled, { useTheme } from 'styled-components';
 import { useQuery } from 'react-query';
 import { GET_QUESTION, USER_INFO } from 'src/consts/query';
 import { dateTime } from 'src/utils/DateTime';
-import api from 'src/api/core';
+import { useTranslateAnimation } from 'src/hooks';
 import { v4 } from 'uuid';
-import ConfirmModal from 'components/Modal/ConfirmModal';
 import InPreparationModal from 'components/Modal/InPreparationModal';
+import { PopupMenu } from 'pages/PostDetail/components';
 import { LargeLineButton, IconTextButton } from '@/src/components';
 import Flex from '@/src/components/Flex';
 import { typography } from '@/styles';
@@ -19,9 +19,8 @@ import { sendPostMessage } from '@/src/utils/sendPostMessage';
 function QuestionDetail() {
   const theme = useTheme();
   const [answerInput, setAnswerInput] = useState('');
-  const [selectedAnswerId, setSelectedAnswerId] = useState('');
   const answerInputElement = useRef<HTMLInputElement>(null);
-  const [showReportModal, setShowReportModal] = useState(false);
+  const { isTargetOpen, changeTargetOpenState, isBeforeTargetClose } = useTranslateAnimation(0.2);
   const [showPreparationModal, setShowPreparationModal] = useState(false);
   const router = useRouter();
   const questionId = router.query?.questionId as string;
@@ -64,11 +63,16 @@ function QuestionDetail() {
   };
 
   const handleCommentKebabMenuClick = () => {
-    // setCommentInput('');
-    // togglePopupMenu();
-    // setSelectedCommentId(commentId);
+    setAnswerInput('');
+    togglePopupMenu();
+    // setSelectedAnswerId(commentId);
     // const selectedComment = comments?.find(({ id }: { id: string }) => id === commentId);
     // setIsMyComment(userInfo?.userId === selectedComment?.user?.id);
+  };
+
+  const togglePopupMenu = () => {
+    if (isTargetOpen) changeTargetOpenState(false);
+    else changeTargetOpenState(true);
   };
 
   const handleCommentReplyButtonClick = () => {
@@ -78,6 +82,10 @@ function QuestionDetail() {
   const handleShareButtonClick = () => {
     setShowPreparationModal(true);
   };
+
+  const handleAnswerEditButtonClick = () => {};
+
+  const handleAnswerDeleteButtonClick = () => {};
 
   return (
     <Layout>
@@ -145,7 +153,7 @@ function QuestionDetail() {
             }}
           />
         </CommentList>
-        {userInfo?.userId === question.toUser.id && (
+        {userInfo?.userId !== question.toUser.id && (
           <CommentInputWrapper>
             <Flex direction="row" align="center">
               <CommentInput
@@ -164,34 +172,17 @@ function QuestionDetail() {
           </CommentInputWrapper>
         )}
       </BottomSection>
-      {showReportModal && (
-        <ConfirmModal
-          title={
-            <TitleWrapper
-              style={{ marginTop: 14, marginBottom: 8, textAlign: 'center', fontSize: 18 }}
-            >
-              <p style={{ marginBottom: 6 }}>
-                <span>답변을 </span>
-                <span style={{ color: theme.color.primary.Lime300 }}>신고</span>하시겠어요?
-              </p>
-            </TitleWrapper>
-          }
-          subTitle="신고된 답변은 블라인드 처리됩니다."
-          confirmButtonTxt="신고하기"
-          cancelButtonTxt="취소하기"
-          onConfirm={async () => {
-            setShowReportModal(false);
-
-            await api.post({
-              url: `/api/report/comment/${selectedAnswerId}`,
-            });
-
-            setSelectedAnswerId('');
-          }}
-          onCancel={() => {
-            setShowReportModal(false);
-          }}
-        />
+      {isTargetOpen && (
+        <PopupMenu onClose={togglePopupMenu} isBeforeClose={isBeforeTargetClose}>
+          {[
+            <div key={v4()} onClick={handleAnswerEditButtonClick}>
+              수정하기
+            </div>,
+            <div key={v4()} onClick={handleAnswerDeleteButtonClick}>
+              삭제하기
+            </div>,
+          ]}
+        </PopupMenu>
       )}
       {showPreparationModal && (
         <InPreparationModal
