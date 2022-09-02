@@ -1,5 +1,7 @@
 import api from 'src/api/core';
 import { QueryKey } from 'react-query';
+import axios from 'axios';
+import { GetServerSideProps } from 'next';
 
 export interface Answer {
   content: string;
@@ -39,6 +41,18 @@ export interface Question {
     tags: string[];
   };
 }
+
+const setCookieFromIosWebView = (cookie: string) => {
+  axios.defaults.headers.common.Authorization = cookie;
+};
+
+export const getServerSideProps: GetServerSideProps = async (context) => {
+  const cookie = context.params?.cookie as string;
+  if (cookie) setCookieFromIosWebView(cookie);
+  return {
+    props: {},
+  };
+};
 
 // eslint-disable-next-line consistent-return,@typescript-eslint/ban-ts-comment
 // @ts-ignore
