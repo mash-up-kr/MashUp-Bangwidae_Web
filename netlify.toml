@@ -11,3 +11,6 @@
   to = "https://doridori.ga/api/v1/:splat"
   status = 200
   force = true
+
+[[plugins]]
+package = "@netlify/plugin-nextjs"
