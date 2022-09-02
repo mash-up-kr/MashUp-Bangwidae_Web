@@ -13,6 +13,7 @@ import { useProfileImageResetter, useProfileInfoUpdater } from './mutations';
 import SnackBar from '@/src/components/SnackBar';
 import LineChip from '@/src/components/LineChip';
 import RadioButton from '@/src/components/RadioButton';
+import InPreparationModal from '@/src/components/Modal/InPreparationModal';
 
 type MyProfileInputType = 'description' | 'interests' | 'representativeWardId';
 const NOT_APPLICABLE = 'notApplicable';
@@ -38,29 +39,24 @@ function MyProfile() {
     url: undefined,
   });
   const [snackBarText, setSnackBarText] = useState<string>();
+  const [showPreparationModal, setShowPreparationModal] = useState(false);
   const imageInput = useRef<HTMLInputElement>(null);
 
   const handleComplete = () => setSnackBarText('변경 완료!');
 
   const updateProfileImage = async () => {
     if (profileImage.file) {
-      alert(`cookie: ${Cookies.get('accessToken')}`);
-      alert(Cookies.get('accessToken') ?? `Bearer ${process.env.NEXT_PUBLIC_MOCK_TOKEN}`);
       // FIXME: react-qeury로 변경 필요
       const formData = new FormData();
       formData.append('image', profileImage.file);
-      try {
-        await axios.post(`/api/user/profile/image`, formData, {
-          headers: {
-            'Content-Type': 'multipart/form-data',
-            'Cache-Control': 'no-cache',
-            Authorization:
-              Cookies.get('accessToken') ?? `Bearer ${process.env.NEXT_PUBLIC_MOCK_TOKEN}`,
-          },
-        });
-      } catch (e: any) {
-        alert(`error: ${e.message}`);
-      }
+      await axios.post(`/api/user/profile/image`, formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+          'Cache-Control': 'no-cache',
+          Authorization:
+            Cookies.get('accessToken') ?? `Bearer ${process.env.NEXT_PUBLIC_MOCK_TOKEN}`,
+        },
+      });
       handleComplete();
       return;
     }
@@ -123,21 +119,19 @@ function MyProfile() {
   );
 
   const handleProfileUpload = useCallback(() => {
-    imageInput.current?.click();
+    // imageInput.current?.click();
+    setShowPreparationModal(true);
   }, [imageInput.current]);
 
   const handleProfileChange = useCallback(
     (event: ChangeEvent<HTMLInputElement>) => {
       event.preventDefault();
       const file = event.target.files?.[0];
-      alert(`event.target.files: ${event.target.files}`);
-      alert(`file.name: ${file?.name}`);
       if (!file) {
         return;
       }
       const reader = new FileReader();
       reader.onloadend = () => {
-        alert(`url: ${reader.result}`);
         setProfileImage({
           file,
           url: reader.result as string,
@@ -265,6 +259,24 @@ function MyProfile() {
         </StyledButton>
       </StickyButton>
       {snackBarText && <SnackBar onClose={() => setSnackBarText(undefined)} text={snackBarText} />}
+      {/* 
+        IOS 작업이 어려워 임시 대응하는 부분
+        추후에 수정 필요
+      */}
+      {showPreparationModal && (
+        <InPreparationModal
+          title={
+            <ModalTitleWrapper>
+              <div>아직 준비 중인 기능입니다.</div>
+              <div>새로운 기능을 기대해주세요!</div>
+            </ModalTitleWrapper>
+          }
+          confirmButtonTxt="도리도리 계속 이용하기"
+          onConfirm={() => {
+            setShowPreparationModal(false);
+          }}
+        />
+      )}
     </Wrapper>
   );
 }
@@ -360,4 +372,16 @@ const StickyButton = styled.div`
   bottom: 0px;
   padding: 10px 0 20px;
   background-color: ${({ theme }) => theme.color.basic.DarkGray};
+`;
+
+const ModalTitleWrapper = styled.div`
+  margin-top: 14px;
+  margin-bottom: 8px;
+  font-weight: 700;
+  font-size: 18px;
+  font-size: 16px;
+  text-align: center;
+  div:first-child {
+    margin-bottom: 12px;
+  }
 `;
