@@ -47,7 +47,6 @@
     "topojson-client": "^3.1.0"
   },
   "devDependencies": {
-    "@netlify/plugin-nextjs": "^4.21.1",
     "@splinetool/react-spline": "^2.2.1",
     "@splinetool/runtime": "^0.9.95",
     "@stylelint/postcss-css-in-js": "^0.37.2",
