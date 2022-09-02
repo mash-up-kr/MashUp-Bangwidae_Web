@@ -17,7 +17,7 @@ function TendencyContainer({ title, tags }: Props) {
           {tags.slice(0, 3).map((tag) => (
             <TendencyTag key={tag}>{tag}</TendencyTag>
           ))}
-          <TendencyTag>+{tags.length - 3}</TendencyTag>
+          {tags.length > 3 && <TendencyTag>+{tags.length - 3}</TendencyTag>}
         </Flex>
       }
       style={{ margin: '0 8px', padding: '0 16px' }}

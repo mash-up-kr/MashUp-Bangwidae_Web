@@ -67,7 +67,7 @@ function OpenInquiry() {
         </Flex>
       </Section>
       <Footer>
-        {userId !== userData.userId && (
+        {userId != null && userId !== userData.userId && (
           <QuestionButton onClick={() => handleDeepLinkClick('question')}>질문하기</QuestionButton>
         )}
         <StyledCarousel>
