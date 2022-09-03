@@ -3,7 +3,7 @@ import styled, { css } from 'styled-components';
 import CheckIcon from 'public/icons/check.svg';
 import LevelIcon from 'public/icons/level.svg';
 import RockIcon from 'public/icons/rock.svg';
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 // import Spline from '@splinetool/react-spline';
 import { useQuery } from 'react-query';
 import { typography } from '@/styles';
@@ -24,6 +24,7 @@ function MyLevel() {
   // const [showSpline, setShowSpline] = useState(false);
   const [selectedLevel, setSelectedLevel] = useState(1);
   const [policyArr, setPlicyArr] = useState<Array<string>>();
+  const levelListRef = useRef<HTMLDivElement>(null);
 
   // 현재 선택된 값이 이전 레벨인지 앞으로의 레벨인지 판단하는 값 필요 -> 따라서 메세지 표출
 
@@ -36,8 +37,13 @@ function MyLevel() {
   const myLevel = useMemo(() => (myLevelInfo?.userLevel ?? 0) + 1, [myLevelInfo]);
 
   useEffect(() => {
-    setSelectedLevel((myLevelInfo?.userLevel ?? 0) + 1);
+    const level = (myLevelInfo?.userLevel ?? 0) + 1;
+    setSelectedLevel(level);
     setPlicyArr(myLevelInfo?.userLevel > STANDARD_LEVEL ? MISSION_TITLE_ARR : undefined);
+    levelListRef.current?.scrollTo({
+      left: 70 * (level - 1),
+      behavior: 'smooth',
+    });
   }, [myLevelInfo]);
 
   const handleClick = useCallback(
@@ -64,7 +70,7 @@ function MyLevel() {
 
   return (
     <>
-      <LevelBoxWrapper>
+      <LevelBoxWrapper ref={levelListRef}>
         {[...Array(20)].map((_, index) => {
           const currentLevel = index + 1;
           return (
@@ -79,10 +85,7 @@ function MyLevel() {
       </LevelBoxWrapper>
       <Wrapper>
         <SplineWrapper>
-          <StyledImg
-            alt="level"
-            src={levelpolicy?.imageUrl ?? `${process.env.NEXT_PUBLIC_DEFAULT_PROFILE}`}
-          />
+          {levelpolicy?.imageUrl ? <StyledImg alt="level" src={levelpolicy?.imageUrl} /> : <div />}
           {/* {!showSpline && levelpolicy?.imageUrl && (
             <StyledImg alt="level" src={levelpolicy?.imageUrl} />
           )} */}
@@ -137,7 +140,7 @@ export default MyLevel;
 const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
-  height: calc(100vh - 104.2px);
+  height: calc(100vh - 156.2px);
   padding: 28px 30px 20px;
 `;
 
@@ -151,7 +154,8 @@ const LevelBoxWrapper = styled.div`
   padding: 28px 0px 0px 30px;
   overflow: scroll; /* TODO: 스크롤 안보이게 처리 필요 */
   ${LevelBox}:last-child {
-    margin-right: 30px;
+    min-width: 80px;
+    margin-right: 0px;
   }
   ::-webkit-scrollbar {
     display: none;
