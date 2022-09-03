@@ -37,7 +37,7 @@ function Mission({
       case 3:
         return '질문 1개 작성하기';
       default:
-        return `${policyText} ${totalCount ?? '-'}개 작성하기`;
+        return `${policyText ?? '-'} ${totalCount ?? '-'}개 작성하기`;
     }
   }, [currentLevel, totalCount, policyText]);
 
