@@ -7,7 +7,12 @@ function Home() {
     setCookie(document.cookie);
   }, []);
 
-  return <div>Cookie is {cookie || 'empty.'}</div>;
+  return (
+    <>
+      <div>Cookie is {cookie || 'empty.'}</div>
+      <div>Env is {process.env.NEXT_PUBLIC_BASE_URL}</div>
+    </>
+  );
 }
 
 export default Home;
