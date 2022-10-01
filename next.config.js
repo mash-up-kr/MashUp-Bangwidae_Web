@@ -1,7 +1,8 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: false,
-  experimental: {
+  experimental: {},
+  compiler: {
     styledComponents: true,
   },
   webpack: (config) => {

@@ -1,5 +1,5 @@
 /* eslint-disable react/no-unused-prop-types */
-import { useQuery } from 'react-query';
+import { useQuery } from '@tanstack/react-query';
 import { useRouter } from 'next/router';
 import Flex from '@/src/components/Flex';
 import Tag from '@/src/components/Tag';

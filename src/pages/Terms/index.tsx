@@ -1,4 +1,4 @@
-import { useQuery } from 'react-query';
+import { useQuery } from '@tanstack/react-query';
 import { useRouter } from 'next/router';
 import { TERMS } from '@/src/consts/query';
 import { dateTime } from '@/src/utils/DateTime';
@@ -17,7 +17,10 @@ type TermsType = {
 
 function Terms() {
   const { query } = useRouter();
-  const { data, isLoading }: { data?: TermsType[]; isLoading: boolean } = useQuery(TERMS, getTerms);
+  const { data, isLoading }: { data?: TermsType[]; isLoading: boolean } = useQuery(
+    [TERMS],
+    getTerms,
+  );
 
   const handleClick = (value: TermsType) => () => {
     sendPostMessage({

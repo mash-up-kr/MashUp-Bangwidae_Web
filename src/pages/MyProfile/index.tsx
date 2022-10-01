@@ -1,6 +1,6 @@
 import { ChangeEvent, useCallback, useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
-import { useQuery } from 'react-query';
+import { useQuery } from '@tanstack/react-query';
 import axios from 'axios';
 import FormData from 'form-data';
 import Cancel from 'public/icons/cancel.svg';
@@ -20,11 +20,11 @@ const NOT_APPLICABLE = 'notApplicable';
 
 function MyProfile() {
   const { data: profileInfo, isLoading: isLoadingProfileInfo } = useQuery(
-    QUERY_KEYS.MY_PROFILE,
+    [QUERY_KEYS.MY_PROFILE],
     getProfileInfo,
   );
   const { data: wardList, isLoading: isLoadingWardList } = useQuery(
-    QUERY_KEYS.WARD_LIST,
+    [QUERY_KEYS.WARD_LIST],
     getMyWardList,
   );
 

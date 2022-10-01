@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import styled, { css } from 'styled-components';
-import { useQuery } from 'react-query';
+import { useQuery } from '@tanstack/react-query';
 import { Toggle } from '@/src/components';
 import { typography } from '@/styles';
 import { GET_NOTIFICATION_INFO } from '@/src/consts/query';
@@ -9,7 +9,7 @@ import { useNotificationUpdater } from './mutations';
 import ConfirmModal from '@/src/components/Modal/ConfirmModal';
 
 function Alarm() {
-  const { data, isLoading } = useQuery(GET_NOTIFICATION_INFO, getMyNotificationSetting);
+  const { data, isLoading } = useQuery([GET_NOTIFICATION_INFO], getMyNotificationSetting);
 
   const [notification, setNotification] = useState(false);
   const [nightNotification, setNightNotification] = useState(false);

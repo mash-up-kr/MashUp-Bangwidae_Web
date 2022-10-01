@@ -1,6 +1,6 @@
 /* eslint-disable react/button-has-type */
 /* eslint-disable react/no-unused-prop-types */
-import { useQuery } from 'react-query';
+import { useQuery } from '@tanstack/react-query';
 
 import styled from 'styled-components';
 import { useEffect, useState } from 'react';

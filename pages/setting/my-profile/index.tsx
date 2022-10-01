@@ -1,5 +1,5 @@
 import api from 'src/api/core';
-// import { dehydrate, QueryClient } from 'react-query';
+// import { dehydrate, QueryClient } from '@tanstack/react-query';
 
 // TODO: 공용 const 폴더로 이동
 export const QUERY_KEYS = {

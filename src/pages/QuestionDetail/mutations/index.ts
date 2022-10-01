@@ -1,5 +1,5 @@
 import api from 'src/api/core';
-import { useMutation, useQueryClient } from 'react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import {
   LIKE_ANSWER,
   UNLIKE_ANSWER,
@@ -21,7 +21,7 @@ export const useAnswerCreator = (questionId: string) => {
         data,
       }),
     {
-      onSuccess: () => queryClient.invalidateQueries(GET_QUESTION),
+      onSuccess: () => queryClient.invalidateQueries([GET_QUESTION]),
     },
   );
 };
@@ -39,7 +39,7 @@ export const useAnswerUpdater = () => {
         },
       }),
     {
-      onSuccess: () => queryClient.invalidateQueries(GET_QUESTION),
+      onSuccess: () => queryClient.invalidateQueries([GET_QUESTION]),
     },
   );
 };
@@ -54,7 +54,7 @@ export const useAnswerDeleter = () => {
         url: `/answers/${data.answerId}`,
       }),
     {
-      onSuccess: () => queryClient.invalidateQueries(GET_QUESTION),
+      onSuccess: () => queryClient.invalidateQueries([GET_QUESTION]),
     },
   );
 };
@@ -68,7 +68,7 @@ export const useAnswerLikeCreator = (answerId: string) => {
         url: `/answers/${answerId}/like`,
       }),
     {
-      onSuccess: () => queryClient.invalidateQueries(GET_QUESTION),
+      onSuccess: () => queryClient.invalidateQueries([GET_QUESTION]),
     },
   );
 };
@@ -82,7 +82,7 @@ export const useAnswerUnlikeCreator = (answerId: string) => {
         url: `/answers/${answerId}/like`,
       }),
     {
-      onSuccess: () => queryClient.invalidateQueries(GET_QUESTION),
+      onSuccess: () => queryClient.invalidateQueries([GET_QUESTION]),
     },
   );
 };

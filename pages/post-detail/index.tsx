@@ -1,7 +1,7 @@
 import api from 'src/api/core';
-// import { dehydrate, QueryClient } from 'react-query';
+// import { dehydrate, QueryClient } from '@tanstack/react-query';
 // import { POST, COMMENTS } from 'src/consts/query';
-import { QueryKey } from 'react-query';
+import { QueryKey } from '@tanstack/react-query';
 
 const FETCHING_COMMENT_SIZE = 10;
 

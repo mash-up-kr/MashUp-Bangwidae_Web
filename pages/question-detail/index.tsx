@@ -1,5 +1,5 @@
 import api from 'src/api/core';
-import { QueryKey } from 'react-query';
+import { QueryKey } from '@tanstack/react-query';
 
 export interface Answer {
   content: string;
