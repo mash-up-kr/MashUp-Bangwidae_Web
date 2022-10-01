@@ -1,7 +1,6 @@
 import api from 'src/api/core';
 import { QueryKey } from '@tanstack/react-query';
 import { GetServerSideProps } from 'next';
-import axios from 'axios';
 
 export interface Answer {
   content: string;
@@ -43,14 +42,25 @@ export interface Question {
 }
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
-  const initialData = await axios.get(`/questions/${context.query.questionId}`, {
-    headers: { 'Content-Type': 'application/json', 'Cache-Control': 'no-cache' },
-    baseURL: 'https://doridori.ga/api/v1',
-  });
+  // eslint-disable-next-line no-console
+  console.log(context.query.questionId);
 
-  // const initialData = await api.get({
-  //   url: `/questions/${context.query.questionId}`,
+  // const initialData = await axios.get(`/questions/${context.query.questionId}`, {
+  //   headers: { 'Content-Type': 'application/json', 'Cache-Control': 'no-cache' },
+  //   baseURL: 'https://doridori.ga/api/v1',
   // });
+  let initialData;
+
+  try {
+    initialData = await api.get({
+      url: `https://doridori.ga/api/v1/questions/${context.query.questionId}`,
+      baseURL: '',
+    });
+  } catch (e) {
+    // eslint-disable-next-line no-console
+    console.log(e);
+  }
+
   return { props: { initialData } };
 };
 
