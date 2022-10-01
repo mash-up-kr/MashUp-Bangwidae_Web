@@ -9,7 +9,7 @@ const axiosInstance: AxiosInstance = axios.create({
 });
 
 const accessToken = Cookies.get('accessToken') || '';
-const accessTokenForTest = `Bearer ${process.env.NEXT_PUBLIC_MOCK_TOKEN}`;
+const accessTokenForTest = `Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJiYW5nd2lkYWUiLCJleHAiOjE3NTQyMzE0MTQsInVzZXJJZCI6IjYyZDdmNDc3NmFkOTZjNTFkNDMzMGVhMiJ9.qYld9Je775prztT4oGWZ-4FDYg27TVJ24h1mQZG0fiE`;
 
 const createApiMethod =
   (_axiosInstance: AxiosInstance, methodType: Method) =>
