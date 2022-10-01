@@ -7,7 +7,7 @@ export const ALARM_QUERY_KEY = {
 
 export function fetchAlarmList() {
   return api.get({
-    url: `/api/notifications?size=20`,
+    url: `/notifications?size=20`,
   });
 }
 
@@ -17,7 +17,7 @@ export const useUpdateReadState = (id: string) => {
     ['postNotification'],
     () =>
       api.post({
-        url: `/api/notifications/${id}/read`,
+        url: `/notifications/${id}/read`,
       }),
     {
       onSuccess: () => queryClient.invalidateQueries(ALARM_QUERY_KEY.ALRAM),

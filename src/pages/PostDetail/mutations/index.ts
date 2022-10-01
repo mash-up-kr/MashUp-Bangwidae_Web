@@ -8,7 +8,7 @@ export const usePostLikeCreator = (postId: string) => {
     [LIKE],
     () =>
       api.post({
-        url: `/api/posts/${postId}/like`,
+        url: `/posts/${postId}/like`,
       }),
     {
       onSuccess: () => queryClient.invalidateQueries(POST),
@@ -22,7 +22,7 @@ export const usePostUnlikeCreator = (postId: string) => {
     [UNLIKE],
     () =>
       api.delete({
-        url: `/api/posts/${postId}/like`,
+        url: `/posts/${postId}/like`,
       }),
     {
       onSuccess: () => queryClient.invalidateQueries(POST),
@@ -37,7 +37,7 @@ export const useCommentCreator = (postId: string) => {
     ['COMMENT_CREATE'],
     (data: { content: string; latitude: number; longitude: number }) =>
       api.post({
-        url: `/api/posts/${postId}/comment`,
+        url: `/posts/${postId}/comment`,
         data,
       }),
     {
@@ -59,7 +59,7 @@ export const useCommentUpdater = () => {
       anonymous?: boolean;
     }) =>
       api.patch({
-        url: `/api/comments/${data.commentId}`,
+        url: `/comments/${data.commentId}`,
         data,
       }),
     {
@@ -75,7 +75,7 @@ export const useCommentDeleter = () => {
     ['COMMENT_DELETE'],
     (data: { commentId: string }) =>
       api.delete({
-        url: `/api/comments/${data.commentId}`,
+        url: `/comments/${data.commentId}`,
         data,
       }),
     {
@@ -90,7 +90,7 @@ export const useCommentLikeCreator = (commentId: string) => {
     [COMMENT_LIKE],
     () =>
       api.post({
-        url: `/api/comments/${commentId}/like`,
+        url: `/comments/${commentId}/like`,
       }),
     {
       onSuccess: () => queryClient.invalidateQueries(COMMENTS),
@@ -104,7 +104,7 @@ export const useCommentUnlikeCreator = (commentId: string) => {
     [COMMENT_UNLIKE],
     () =>
       api.delete({
-        url: `/api/comments/${commentId}/like`,
+        url: `/comments/${commentId}/like`,
       }),
     {
       onSuccess: () => queryClient.invalidateQueries(COMMENTS),

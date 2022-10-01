@@ -2,7 +2,7 @@ import api from 'src/api/core';
 
 export function getMyNotificationSetting() {
   return api.get({
-    url: `/api/user/settings`,
+    url: `/user/settings`,
   });
 }
 
