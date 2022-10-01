@@ -5,6 +5,7 @@ import { HTTP_METHODS } from '@/src/consts';
 const axiosInstance: AxiosInstance = axios.create({
   timeout: 10000,
   headers: { 'Content-Type': 'application/json', 'Cache-Control': 'no-cache' },
+  baseURL: 'https://doridori.ga/api/v1/',
 });
 
 const accessToken = Cookies.get('accessToken') || '';

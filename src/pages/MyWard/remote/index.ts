@@ -23,7 +23,7 @@ export function getRealAddress({ latitude, longitude }: { latitude: number; long
   if (latitude == null || longitude == null) return null;
 
   return api.get({
-    url: `/api/place/reverse/geocode?latitude=${latitude}&longitude=${longitude}`,
+    url: `/place/reverse/geocode?latitude=${latitude}&longitude=${longitude}`,
   }) as Promise<AddressResponse>;
 }
 
@@ -40,7 +40,7 @@ export const usePlantWard = ({
     [QUERY_KEYS.EXPAND_WARD_PERIOD],
     (wardName?: string) =>
       api.post({
-        url: '/api/ward',
+        url: '/ward',
         data: { name: wardName, latitude, longitude },
       }),
     {
@@ -61,7 +61,7 @@ export const useExpandWardPeriod = (targetId?: string) => {
     [QUERY_KEYS.EXPAND_WARD_PERIOD],
     () =>
       api.post({
-        url: `/api/ward/${targetId}/extend-period`,
+        url: `/ward/${targetId}/extend-period`,
         data: { period: 10 },
       }),
     {
@@ -82,7 +82,7 @@ export const useDeleteWard = (targetId?: string) => {
     [QUERY_KEYS.DELETE_WARD],
     () =>
       api.delete({
-        url: `/api/ward/${targetId}`,
+        url: `/ward/${targetId}`,
       }),
     {
       onSuccess: () => {

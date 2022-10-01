@@ -10,7 +10,7 @@ export const useProfileInfoUpdater = (
     [QUERY_KEYS.UPDATE_PROFILE],
     () =>
       api.post({
-        url: `/api/user/profile`,
+        url: `/user/profile`,
         data,
       }),
     {
@@ -26,7 +26,7 @@ export const useProfileInfoUpdater = (
 //     [QUERY_KEYS.UPDATE_PROFILE_IMAGE],
 //     () =>
 //       api.post({
-//         url: `/api/user/profile/image`,
+//         url: `/user/profile/image`,
 //         data: formData,
 //         headers: {
 //           'Content-Type': 'multipart/form-data',
@@ -52,7 +52,7 @@ export const useProfileImageResetter = (onComplete: () => void) => {
     [QUERY_KEYS.RESET_PROFILE_IMAGE],
     () =>
       api.post({
-        url: `/api/user/profile/image/default`,
+        url: `/user/profile/image/default`,
       }),
     {
       onSuccess: () => {

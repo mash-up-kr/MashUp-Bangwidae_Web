@@ -16,5 +16,5 @@ export { default } from 'pages/MyWard';
 // }
 
 export function getMyWard() {
-  return api.get({ url: '/api/ward' });
+  return api.get({ url: '/ward' });
 }

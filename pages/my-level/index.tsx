@@ -18,11 +18,11 @@ export { default } from 'pages/MyLevel';
 
 export function getMyLevel() {
   return api.get({
-    url: `/api/level-policy/achievement`,
+    url: `/level-policy/achievement`,
   });
 }
 
 export const getLevelPolicy = (level: number) => () =>
   api.get({
-    url: `/api/level-policy/${level}`,
+    url: `/level-policy/${level}`,
   });
