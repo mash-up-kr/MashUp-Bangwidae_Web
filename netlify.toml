@@ -2,6 +2,9 @@
   command = "yarn build"
   publish = ".next"
 
+[[plugins]]
+package = "@netlify/plugin-nextjs"
+
 [context.production.environment]
   TOML_ENV_VAR = "From netlify.toml"
   NEXT_PUBLIC_TOML_ENV_VAR = "From netlify.toml (NEXT_PUBLIC_)"
