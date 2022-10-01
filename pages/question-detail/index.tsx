@@ -43,8 +43,7 @@ export interface Question {
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const initialData = await api.get({
-    url: `https://doridori.ga/api/v1/questions/${context.query.questionId}`,
-    baseURL: '',
+    url: `/questions/${context.query.questionId}`,
   });
   return { props: { initialData } };
 };
