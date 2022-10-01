@@ -58,6 +58,7 @@ export function getQuestionDetail({ queryKey }: { queryKey: QueryKey }): Promise
   if (questionId) {
     return api.get({
       url: `/questions/${questionId}`,
+      baseURL: `https://doridori.ga/api/v1`,
     });
   }
 }
