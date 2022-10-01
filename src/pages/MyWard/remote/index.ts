@@ -1,5 +1,6 @@
+/* eslint-disable no-alert */
 /* eslint-disable import/prefer-default-export */
-import { useMutation, useQueryClient } from 'react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import api from '@/src/api/core';
 
 interface AddressResponse {
@@ -45,7 +46,7 @@ export const usePlantWard = ({
       }),
     {
       onSuccess: () => {
-        queryClient.invalidateQueries('myWard/getMyWard');
+        queryClient.invalidateQueries(['myWard/getMyWard']);
       },
       onError: () => {
         alert(COMMON_ERROR_MESSAGE);
@@ -66,7 +67,7 @@ export const useExpandWardPeriod = (targetId?: string) => {
       }),
     {
       onSuccess: () => {
-        queryClient.invalidateQueries('myWard/getMyWard');
+        queryClient.invalidateQueries(['myWard/getMyWard']);
       },
       onError: () => {
         alert(COMMON_ERROR_MESSAGE);
@@ -86,7 +87,7 @@ export const useDeleteWard = (targetId?: string) => {
       }),
     {
       onSuccess: () => {
-        queryClient.invalidateQueries('myWard/getMyWard');
+        queryClient.invalidateQueries(['myWard/getMyWard']);
       },
       onError: () => {
         alert(COMMON_ERROR_MESSAGE);

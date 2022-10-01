@@ -1,4 +1,4 @@
-import { useMutation, useQueryClient } from 'react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import api from 'src/api/core';
 import { QUERY_KEYS } from '@/pages/setting/my-profile';
 
@@ -56,7 +56,7 @@ export const useProfileImageResetter = (onComplete: () => void) => {
       }),
     {
       onSuccess: () => {
-        queryClient.invalidateQueries(QUERY_KEYS.MY_PROFILE);
+        queryClient.invalidateQueries([QUERY_KEYS.MY_PROFILE]);
         onComplete();
       },
     },

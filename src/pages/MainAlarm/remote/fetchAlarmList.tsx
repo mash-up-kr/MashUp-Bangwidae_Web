@@ -1,4 +1,4 @@
-import { useMutation, useQueryClient } from 'react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import api from '@/src/api/core';
 
 export const ALARM_QUERY_KEY = {
@@ -20,7 +20,7 @@ export const useUpdateReadState = (id: string) => {
         url: `/api/notifications/${id}/read`,
       }),
     {
-      onSuccess: () => queryClient.invalidateQueries(ALARM_QUERY_KEY.ALRAM),
+      onSuccess: () => queryClient.invalidateQueries([ALARM_QUERY_KEY.ALRAM]),
     },
   );
 };

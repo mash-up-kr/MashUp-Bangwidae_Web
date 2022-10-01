@@ -1,6 +1,6 @@
 import { COMMENTS, LIKE, POST, UNLIKE, COMMENT_LIKE, COMMENT_UNLIKE } from 'src/consts/query';
 import api from 'src/api/core';
-import { useMutation, useQueryClient } from 'react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 
 export const usePostLikeCreator = (postId: string) => {
   const queryClient = useQueryClient();
@@ -11,7 +11,7 @@ export const usePostLikeCreator = (postId: string) => {
         url: `/api/posts/${postId}/like`,
       }),
     {
-      onSuccess: () => queryClient.invalidateQueries(POST),
+      onSuccess: () => queryClient.invalidateQueries([[POST]]),
     },
   );
 };
@@ -25,7 +25,7 @@ export const usePostUnlikeCreator = (postId: string) => {
         url: `/api/posts/${postId}/like`,
       }),
     {
-      onSuccess: () => queryClient.invalidateQueries(POST),
+      onSuccess: () => queryClient.invalidateQueries([POST]),
     },
   );
 };
@@ -41,7 +41,7 @@ export const useCommentCreator = (postId: string) => {
         data,
       }),
     {
-      onSuccess: () => queryClient.invalidateQueries(COMMENTS),
+      onSuccess: () => queryClient.invalidateQueries([COMMENTS]),
     },
   );
 };
@@ -63,7 +63,7 @@ export const useCommentUpdater = () => {
         data,
       }),
     {
-      onSuccess: () => queryClient.invalidateQueries(COMMENTS),
+      onSuccess: () => queryClient.invalidateQueries([COMMENTS]),
     },
   );
 };
@@ -79,7 +79,7 @@ export const useCommentDeleter = () => {
         data,
       }),
     {
-      onSuccess: () => queryClient.invalidateQueries(COMMENTS),
+      onSuccess: () => queryClient.invalidateQueries([COMMENTS]),
     },
   );
 };
@@ -93,7 +93,7 @@ export const useCommentLikeCreator = (commentId: string) => {
         url: `/api/comments/${commentId}/like`,
       }),
     {
-      onSuccess: () => queryClient.invalidateQueries(COMMENTS),
+      onSuccess: () => queryClient.invalidateQueries([COMMENTS]),
     },
   );
 };
@@ -107,7 +107,7 @@ export const useCommentUnlikeCreator = (commentId: string) => {
         url: `/api/comments/${commentId}/like`,
       }),
     {
-      onSuccess: () => queryClient.invalidateQueries(COMMENTS),
+      onSuccess: () => queryClient.invalidateQueries([COMMENTS]),
     },
   );
 };

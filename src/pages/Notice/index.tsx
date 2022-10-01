@@ -1,4 +1,4 @@
-import { useQuery } from 'react-query';
+import { useQuery } from '@tanstack/react-query';
 import { useRouter } from 'next/router';
 import { NOTICE_LIST } from '@/src/consts/query';
 import { getNoticeList } from '@/pages/setting/notice';
@@ -16,7 +16,7 @@ type NoticeType = {
 function Notice() {
   const { query } = useRouter();
   const { data, isLoading }: { data?: { values: NoticeType[] }; isLoading: boolean } = useQuery(
-    NOTICE_LIST,
+    [NOTICE_LIST],
     getNoticeList,
   );
 

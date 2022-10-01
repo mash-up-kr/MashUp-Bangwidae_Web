@@ -5,7 +5,7 @@ import LevelIcon from 'public/icons/level.svg';
 import RockIcon from 'public/icons/rock.svg';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 // import Spline from '@splinetool/react-spline';
-import { useQuery } from 'react-query';
+import { useQuery } from '@tanstack/react-query';
 import { typography } from '@/styles';
 import { getLevelPolicy, getMyLevel } from '@/pages/my-level';
 import Mission from './components/Mission';
@@ -28,7 +28,7 @@ function MyLevel() {
 
   // 현재 선택된 값이 이전 레벨인지 앞으로의 레벨인지 판단하는 값 필요 -> 따라서 메세지 표출
 
-  const { data: myLevelInfo, isLoading: isLoadingMyLevelInfo } = useQuery(MY_LEVEL, getMyLevel);
+  const { data: myLevelInfo, isLoading: isLoadingMyLevelInfo } = useQuery([MY_LEVEL], getMyLevel);
   const { data: levelpolicy } = useQuery(
     [LEVEL_POLICY, selectedLevel],
     getLevelPolicy(selectedLevel),

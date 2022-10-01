@@ -1,4 +1,4 @@
-import { useMutation } from 'react-query';
+import { useMutation } from '@tanstack/react-query';
 import api from 'src/api/core';
 import { SET_NOTIFICATION_INFO } from '@/src/consts/query';
 

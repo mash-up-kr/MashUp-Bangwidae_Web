@@ -1,10 +1,10 @@
-import { useQuery } from 'react-query';
+import { useQuery } from '@tanstack/react-query';
 import AlarmListRow from './components/ListRow';
 import { ALARM_QUERY_KEY, fetchAlarmList } from './remote/fetchAlarmList';
 import { Alarm } from './utils/types';
 
 function MainAlarm() {
-  const { data, isLoading } = useQuery(ALARM_QUERY_KEY.ALRAM, fetchAlarmList);
+  const { data, isLoading } = useQuery([ALARM_QUERY_KEY.ALRAM], fetchAlarmList);
 
   if (isLoading) return null;
 

@@ -1,7 +1,7 @@
 import { useState, ChangeEvent, useRef } from 'react';
 import { useRouter } from 'next/router';
 import styled, { useTheme } from 'styled-components';
-import { useQuery } from 'react-query';
+import { useQuery } from '@tanstack/react-query';
 import { GET_QUESTION, USER_INFO } from 'src/consts/query';
 import { dateTime } from 'src/utils/DateTime';
 import { useTranslateAnimation } from 'src/hooks';

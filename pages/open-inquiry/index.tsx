@@ -1,4 +1,4 @@
-// import { dehydrate, QueryClient } from 'react-query';
+// import { dehydrate, QueryClient } from '@tanstack/react-query';
 import api from '@/src/api/core';
 
 // eslint-disable-next-line no-restricted-exports
