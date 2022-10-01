@@ -25,6 +25,8 @@
     ]
   },
   "dependencies": {
+    "@tanstack/react-query": "^4.6.1",
+    "@tanstack/react-query-devtools": "^4.8.0",
     "@types/form-data": "^2.5.0",
     "@types/geojson": "^7946.0.10",
     "@types/nanoid": "^3.0.0",
@@ -41,7 +43,6 @@
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "react-is": "^18.2.0",
-    "react-query": "^3.39.1",
     "react-spinners": "^0.13.4",
     "styled-components": "^5.3.5",
     "topojson-client": "^3.1.0"
