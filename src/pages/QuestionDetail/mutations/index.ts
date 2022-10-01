@@ -17,7 +17,7 @@ export const useAnswerCreator = (questionId: string) => {
     [POST_ANSWER],
     (data: { content: string; latitude: number; longitude: number }) =>
       api.post({
-        url: `/api/questions/${questionId}/answer`,
+        url: `/questions/${questionId}/answer`,
         data,
       }),
     {
@@ -33,7 +33,7 @@ export const useAnswerUpdater = () => {
     [PATCH_ANSWER],
     (data: { answerId: string; content: string }) =>
       api.patch({
-        url: `/api/answers/${data.answerId}`,
+        url: `/answers/${data.answerId}`,
         data: {
           content: data.content,
         },
@@ -51,7 +51,7 @@ export const useAnswerDeleter = () => {
     [DELETE_ANSWER],
     (data: { answerId: string }) =>
       api.delete({
-        url: `/api/answers/${data.answerId}`,
+        url: `/answers/${data.answerId}`,
       }),
     {
       onSuccess: () => queryClient.invalidateQueries([GET_QUESTION]),
@@ -65,7 +65,7 @@ export const useAnswerLikeCreator = (answerId: string) => {
     [LIKE_ANSWER],
     () =>
       api.post({
-        url: `/api/answers/${answerId}/like`,
+        url: `/answers/${answerId}/like`,
       }),
     {
       onSuccess: () => queryClient.invalidateQueries([GET_QUESTION]),
@@ -79,7 +79,7 @@ export const useAnswerUnlikeCreator = (answerId: string) => {
     [UNLIKE_ANSWER],
     () =>
       api.delete({
-        url: `/api/answers/${answerId}/like`,
+        url: `/answers/${answerId}/like`,
       }),
     {
       onSuccess: () => queryClient.invalidateQueries([GET_QUESTION]),

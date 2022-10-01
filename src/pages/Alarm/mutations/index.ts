@@ -12,7 +12,7 @@ export const useNotificationUpdater = (data: {
     [SET_NOTIFICATION_INFO],
     () =>
       api.put({
-        url: `/api/user/settings`,
+        url: `/user/settings`,
         data,
       }),
     {

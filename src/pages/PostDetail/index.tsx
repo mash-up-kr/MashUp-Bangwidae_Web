@@ -289,7 +289,7 @@ function PostDetail() {
             setShowReportModal(false);
 
             await api.post({
-              url: `/api/report/comment/${selectedCommentId}`,
+              url: `/report/comment/${selectedCommentId}`,
             });
 
             setSelectedCommentId('');

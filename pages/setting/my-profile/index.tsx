@@ -25,13 +25,13 @@ export const QUERY_KEYS = {
 
 export function getProfileInfo() {
   return api.get({
-    url: `/api/user/me`,
+    url: `/user/me`,
   });
 }
 
 export function getMyWardList() {
   return api.get({
-    url: `/api/ward`,
+    url: `/ward`,
   });
 }
 

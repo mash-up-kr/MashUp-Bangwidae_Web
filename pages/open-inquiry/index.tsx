@@ -17,9 +17,9 @@ export { default } from 'pages/OpenInquiry';
 // }
 
 export function getMyInfo() {
-  return api.get({ url: '/api/user/me' });
+  return api.get({ url: '/user/me' });
 }
 
 export function getAnsweredQuestion() {
-  return api.get({ url: '/api/user/answered-questions?size=3' });
+  return api.get({ url: '/user/answered-questions?size=3' });
 }

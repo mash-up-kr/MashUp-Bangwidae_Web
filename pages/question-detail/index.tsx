@@ -49,14 +49,14 @@ export function getQuestionDetail({ queryKey }: { queryKey: QueryKey }): Promise
   const [, questionId] = queryKey;
   if (questionId) {
     return api.get({
-      url: `/api/questions/${questionId}`,
+      url: `/questions/${questionId}`,
     });
   }
 }
 
 export function getUserInfo() {
   return api.get({
-    url: `/api/user/me`,
+    url: `/user/me`,
   });
 }
 

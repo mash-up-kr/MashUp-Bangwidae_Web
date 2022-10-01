@@ -66,7 +66,7 @@ export function getQuestionDetail({ queryKey }: { queryKey: QueryKey }): Promise
   const [, postId] = queryKey;
   if (postId) {
     return api.get({
-      url: `/api/posts/${postId}`,
+      url: `/posts/${postId}`,
     });
   }
 }
@@ -81,7 +81,7 @@ export async function getCommentList({ queryKey }: { queryKey: QueryKey }): Prom
   if (postId) {
     return (
       await api.get({
-        url: `/api/posts/${postId}/comment?size=${FETCHING_COMMENT_SIZE}`,
+        url: `/posts/${postId}/comment?size=${FETCHING_COMMENT_SIZE}`,
       })
     ).values;
   }
@@ -89,7 +89,7 @@ export async function getCommentList({ queryKey }: { queryKey: QueryKey }): Prom
 
 export function getUserInfo() {
   return api.get({
-    url: `/api/user/me`,
+    url: `/user/me`,
   });
 }
 
