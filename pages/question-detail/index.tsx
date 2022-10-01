@@ -43,7 +43,8 @@ export interface Question {
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const initialData = await api.get({
-    url: `/questions/${context.query.questionId}`,
+    url: `{process.env.NEXT_PUBLIC_BASE_URL}/questions/${context.query.questionId}`,
+    baseURL: '',
   });
   return { props: { initialData } };
 };
