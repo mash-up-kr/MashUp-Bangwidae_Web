@@ -154,7 +154,7 @@ function PostDetail() {
   };
 
   const handleCommentReplyButtonClick = () => {
-    togglePopupMenu();
+    changeTargetOpenState(false);
     setShowPreparationModal(true);
   };
 
