@@ -41,6 +41,7 @@ function PostDetail() {
   const router = useRouter();
   const queryClient = useQueryClient();
   const postId = (router.query?.postId as string) || '';
+  const commentListElement = useRef<HTMLUListElement>(null);
 
   const {
     data: post,
@@ -97,6 +98,15 @@ function PostDetail() {
     if (isCreating) mutateCommentCreate(commentDataToCreate);
     if (isUpdating) mutateCommentUpdate(commentDataToUpdate);
     setCommentInput('');
+    scrollToTopComment();
+  };
+
+  const scrollToTopComment = () => {
+    if (!commentListElement.current) return;
+    commentListElement.current.scroll({
+      top: 0,
+      behavior: 'smooth',
+    });
   };
 
   const handleCommentKebabMenuClick = (event: MouseEvent, commentId: string) => {
@@ -234,7 +244,7 @@ function PostDetail() {
       {/* Bottom Section */}
       <BottomSection>
         {/* 댓글 목록 */}
-        <CommentList>
+        <CommentList ref={commentListElement}>
           {comments?.map((commentItem: Comment) => (
             <CommentItem
               key={commentItem.id}
@@ -509,7 +519,7 @@ const BottomSection = styled.div`
   border-top: 1px solid ${({ theme }) => theme.color.gray.Gray800};
 `;
 
-const CommentList = styled.div`
+const CommentList = styled.ul`
   height: 100%;
   padding-bottom: 128px;
   overflow-y: scroll;
