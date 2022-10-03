@@ -16,7 +16,11 @@ import { getQuestionDetail, getUserInfo, Question } from '@/pages/question-detai
 import { useAnswerCreator, useAnswerUpdater, useAnswerDeleter } from './mutations';
 import { sendPostMessage } from '@/src/utils/sendPostMessage';
 
-function QuestionDetail() {
+interface QuestionDetailProps {
+  initialData: Question;
+}
+
+function QuestionDetail({ initialData }: QuestionDetailProps) {
   const theme = useTheme();
   const [answerInput, setAnswerInput] = useState('');
   const answerInputElement = useRef<HTMLInputElement>(null);
@@ -29,7 +33,7 @@ function QuestionDetail() {
     data: question,
     isError: isQuestionError,
     isLoading: isQuestionLoading,
-  } = useQuery<Question>([GET_QUESTION, questionId], getQuestionDetail);
+  } = useQuery<Question>([GET_QUESTION, questionId], getQuestionDetail, { initialData });
 
   const { data: userInfo } = useQuery([USER_INFO], getUserInfo);
   const { mutate: mutateAnswerCreate } = useAnswerCreator(questionId);
