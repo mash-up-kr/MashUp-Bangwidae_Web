@@ -80,6 +80,7 @@ function CommentItem({ comment, onMenuClick, onReplyClick }: CommentItemProps) {
             color={comment.userLiked ? theme.color.primary.Lime300 : theme.color.gray.Gray500}
             size={24}
             onClick={handleLikeButtonClick}
+            disabled={isReportedComment}
           >
             좋아요
           </IconTextButton>
