@@ -37,19 +37,19 @@ function PostDetail() {
   const [showBlockCompleteModal, setShowBlockCompleteModal] = useState(false);
   const router = useRouter();
   const queryClient = useQueryClient();
-  const postId = router.query?.postId as string;
+  const postId = router.query?.postId || '';
 
   const {
     data: post,
     isError: isPostError,
     isLoading: isPostLoading,
-  } = useQuery<Post>([POST, postId], getQuestionDetail);
+  } = useQuery<Post | null>([POST, postId], getQuestionDetail);
 
   const {
     data: comments,
     isError: isCommentError,
     isLoading: isCommentLoading,
-  } = useQuery<Comment[]>([COMMENTS, postId], getCommentList);
+  } = useQuery<Comment[] | null>([COMMENTS, postId], getCommentList);
 
   const { data: userInfo } = useQuery([USER_INFO], getUserInfo);
 
