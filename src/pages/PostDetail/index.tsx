@@ -25,6 +25,8 @@ import {
 } from './mutations';
 import { sendPostMessage } from '@/src/utils/sendPostMessage';
 
+const REPORTED_POST = '신고된 글입니다';
+
 function PostDetail() {
   const theme = useTheme();
   const [commentInput, setCommentInput] = useState('');
@@ -61,6 +63,8 @@ function PostDetail() {
 
   if (!post || isPostLoading || isCommentLoading) return <div />;
   if (isPostError || isCommentError) return <div />;
+
+  const isReportedPost = post.content === REPORTED_POST;
 
   const handleLikeButtonClick = () => {
     if (post?.userLiked) mutateUnlikeCount();
@@ -207,6 +211,7 @@ function PostDetail() {
               color={post.userLiked ? theme.color.primary.Lime300 : theme.color.gray.Gray500}
               size={20}
               onClick={handleLikeButtonClick}
+              disabled={isReportedPost}
             >
               {post.likeCount === 0 ? '궁금해요' : post.likeCount}
             </LeftIcon>
