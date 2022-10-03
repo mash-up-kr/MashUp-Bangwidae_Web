@@ -10,6 +10,7 @@ import InPreparationModal from 'components/Modal/InPreparationModal';
 import { PopupMenu } from 'pages/PostDetail/components';
 import ConfirmModal from 'components/Modal/ConfirmModal';
 import api from 'src/api/core';
+import BlockCompleteModal from 'components/Modal/BlockCompleteModal';
 import { LargeLineButton, IconTextButton } from '@/src/components';
 import Flex from '@/src/components/Flex';
 import { typography } from '@/styles';
@@ -26,6 +27,8 @@ function QuestionDetail() {
   const { isTargetOpen, changeTargetOpenState, isBeforeTargetClose } = useTranslateAnimation(0.2);
   const [showReportModal, setShowReportModal] = useState(false);
   const [showPreparationModal, setShowPreparationModal] = useState(false);
+  const [showBlockCompleteModal, setShowBlockCompleteModal] = useState(false);
+
   const router = useRouter();
   const questionId = router.query?.questionId as string;
 
@@ -91,6 +94,7 @@ function QuestionDetail() {
 
   const handleCommentReplyButtonClick = () => {
     setShowPreparationModal(true);
+    changeTargetOpenState(false);
   };
 
   const handleShareButtonClick = () => {
@@ -113,6 +117,12 @@ function QuestionDetail() {
   const handleCommentReportButtonClick = () => {
     togglePopupMenu();
     setShowReportModal(true);
+  };
+
+  const handleUserBlockButtonClick = () => {
+    togglePopupMenu();
+    // 차단
+    setShowBlockCompleteModal(true);
   };
 
   const isMyQuestion = userInfo?.userId === question.toUser.id;
@@ -219,11 +229,15 @@ function QuestionDetail() {
                 </div>,
               ]
             : [
-                <div key={v4()}>공유하기</div>,
+                <div key={v4()} onClick={handleCommentReplyButtonClick}>
+                  공유하기
+                </div>,
                 <div key={v4()} onClick={handleCommentReportButtonClick}>
                   신고하기
                 </div>,
-                <div key={v4()}>글쓴이 차단하기</div>,
+                <div key={v4()} onClick={handleUserBlockButtonClick}>
+                  글쓴이 차단하기
+                </div>,
               ]}
         </PopupMenu>
       )}
@@ -257,6 +271,16 @@ function QuestionDetail() {
           }}
         />
       )}
+      {/* 차단 완료 모달 */}
+      {showBlockCompleteModal && (
+        <BlockCompleteModal
+          title={<div style={{ marginTop: 6, marginBottom: 12 }}>해당 글쓴이를 차단했습니다.</div>}
+          confirmButtonTxt="도리도리 계속 이용하기"
+          onConfirm={async () => {
+            setShowBlockCompleteModal(false);
+          }}
+        />
+      )}
       {/* 준비중 모달 */}
       {showPreparationModal && (
         <InPreparationModal
@@ -269,7 +293,7 @@ function QuestionDetail() {
             </TitleWrapper>
           }
           confirmButtonTxt="도리도리 계속 이용하기"
-          onConfirm={async () => {
+          onConfirm={() => {
             setShowPreparationModal(false);
           }}
         />
