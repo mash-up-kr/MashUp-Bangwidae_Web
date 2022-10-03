@@ -8,6 +8,7 @@ import { useTranslateAnimation } from 'src/hooks';
 import { v4 } from 'uuid';
 import InPreparationModal from 'components/Modal/InPreparationModal';
 import { PopupMenu } from 'pages/PostDetail/components';
+import ConfirmModal from 'components/Modal/ConfirmModal';
 import { LargeLineButton, IconTextButton } from '@/src/components';
 import Flex from '@/src/components/Flex';
 import { typography } from '@/styles';
@@ -15,12 +16,14 @@ import { AnswerItem } from './components';
 import { getQuestionDetail, getUserInfo, Question } from '@/pages/question-detail';
 import { useAnswerCreator, useAnswerUpdater, useAnswerDeleter } from './mutations';
 import { sendPostMessage } from '@/src/utils/sendPostMessage';
+// import api from 'src/api/core';
 
 function QuestionDetail() {
   const theme = useTheme();
   const [answerInput, setAnswerInput] = useState('');
   const answerInputElement = useRef<HTMLInputElement>(null);
   const { isTargetOpen, changeTargetOpenState, isBeforeTargetClose } = useTranslateAnimation(0.2);
+  const [showReportModal, setShowReportModal] = useState(false);
   const [showPreparationModal, setShowPreparationModal] = useState(false);
   const router = useRouter();
   const questionId = router.query?.questionId as string;
@@ -103,6 +106,11 @@ function QuestionDetail() {
   const handleAnswerDeleteButtonClick = () => {
     togglePopupMenu();
     mutateAnswerDelete({ answerId: question.answer?.id });
+  };
+
+  const handleCommentReportButtonClick = () => {
+    togglePopupMenu();
+    setShowReportModal(true);
   };
 
   const isMyQuestion = userInfo?.userId === question.toUser.id;
@@ -210,10 +218,42 @@ function QuestionDetail() {
               ]
             : [
                 <div key={v4()}>공유하기</div>,
-                <div key={v4()}>신고하기</div>,
+                <div key={v4()} onClick={handleCommentReportButtonClick}>
+                  신고하기
+                </div>,
                 <div key={v4()}>글쓴이 차단하기</div>,
               ]}
         </PopupMenu>
+      )}
+      {/* 신고 모달 */}
+      {showReportModal && (
+        <ConfirmModal
+          title={
+            <TitleWrapper
+              style={{ marginTop: 14, marginBottom: 8, textAlign: 'center', fontSize: 18 }}
+            >
+              <p style={{ marginBottom: 6 }}>
+                <span>댓글을 </span>
+                <span style={{ color: theme.color.primary.Lime300 }}>신고</span>하시겠어요?
+              </p>
+            </TitleWrapper>
+          }
+          subTitle="신고된 댓글은 블라인드 처리됩니다."
+          confirmButtonTxt="신고하기"
+          cancelButtonTxt="취소하기"
+          onConfirm={async () => {
+            setShowReportModal(false);
+
+            // await api.post({
+            //   url: `/report/comment/${selectedCommentId}`,
+            // });
+            //
+            // setSelectedCommentId('');
+          }}
+          onCancel={() => {
+            setShowReportModal(false);
+          }}
+        />
       )}
       {/* 준비중 모달 */}
       {showPreparationModal && (
