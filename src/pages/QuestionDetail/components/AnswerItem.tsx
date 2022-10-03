@@ -52,6 +52,7 @@ function AnswerItem({ answer, isMyQuestion, onMenuClick, onReplyClick }: AnswerI
           <LocatedAt>{answer.representativeAddress}</LocatedAt>
           <VerticalDivider />
           <CreatedAt>{dateTime.fromNow(answer.createdAt)}</CreatedAt>
+          {/* 댓글 메뉴 버튼 */}
           <IconPosition>
             {isMyQuestion && (
               <IconTextButton
