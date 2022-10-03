@@ -9,6 +9,7 @@ import Flex from '@/src/components/Flex';
 import type { Comment } from '@/pages/post-detail';
 
 const DEFAULT_IMAGE_URL = process.env.NEXT_PUBLIC_DEFAULT_IMAGE;
+const REPORTED_COMMENT = '신고된 댓글입니다';
 
 interface CommentItemProps {
   comment: Comment;
@@ -34,6 +35,8 @@ function CommentItem({ comment, onMenuClick, onReplyClick }: CommentItemProps) {
     }
   };
 
+  const isReportedComment = comment.content === REPORTED_COMMENT;
+
   return (
     <Layout>
       <Flex direction="row" align="center">
@@ -53,13 +56,16 @@ function CommentItem({ comment, onMenuClick, onReplyClick }: CommentItemProps) {
           <LocatedAt>{comment.representativeAddress}</LocatedAt>
           <VerticalDivider />
           <CreatedAt>{dateTime.fromNow(comment.createdAt)}</CreatedAt>
+          {/* 댓글 메뉴 버튼 */}
           <IconPosition>
-            <IconTextButton
-              name="more"
-              color={theme.color.gray.Gray700}
-              size={24}
-              onClick={(event) => onMenuClick(event, comment.id)}
-            />
+            {!isReportedComment && (
+              <IconTextButton
+                name="more"
+                color={theme.color.gray.Gray700}
+                size={24}
+                onClick={(event) => onMenuClick(event, comment.id)}
+              />
+            )}
           </IconPosition>
         </Flex>
       </Flex>
