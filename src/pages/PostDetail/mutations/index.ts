@@ -11,7 +11,7 @@ export const usePostLikeCreator = (postId: string) => {
         url: `/posts/${postId}/like`,
       }),
     {
-      onSuccess: () => queryClient.invalidateQueries([[POST]]),
+      onSuccess: () => queryClient.invalidateQueries([POST]),
     },
   );
 };
