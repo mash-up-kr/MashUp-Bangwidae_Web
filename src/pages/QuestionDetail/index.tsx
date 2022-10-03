@@ -93,8 +93,8 @@ function QuestionDetail() {
   };
 
   const handleCommentReplyButtonClick = () => {
+    togglePopupMenu();
     setShowPreparationModal(true);
-    changeTargetOpenState(false);
   };
 
   const handleShareButtonClick = () => {
@@ -121,7 +121,6 @@ function QuestionDetail() {
 
   const handleUserBlockButtonClick = () => {
     togglePopupMenu();
-    // 차단
     setShowBlockCompleteModal(true);
   };
 

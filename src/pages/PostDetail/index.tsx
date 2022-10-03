@@ -1,7 +1,7 @@
 import { useState, ChangeEvent, MouseEvent, useRef } from 'react';
 import { useRouter } from 'next/router';
 import styled, { useTheme } from 'styled-components';
-import { useQuery } from '@tanstack/react-query';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { POST, COMMENTS, USER_INFO } from 'src/consts/query';
 import { dateTime } from 'src/utils/DateTime';
 import { useTranslateAnimation } from 'src/hooks';
@@ -9,6 +9,7 @@ import api from 'src/api/core';
 import { v4 } from 'uuid';
 import ConfirmModal from 'components/Modal/ConfirmModal';
 import InPreparationModal from 'components/Modal/InPreparationModal';
+import BlockCompleteModal from 'components/Modal/BlockCompleteModal';
 import type { Post, Comment } from '@/pages/post-detail';
 import { LargeLineButton, IconTextButton } from '@/src/components';
 import Flex from '@/src/components/Flex';
@@ -33,7 +34,9 @@ function PostDetail() {
   const [isMyComment, setIsMyComment] = useState(false);
   const [showReportModal, setShowReportModal] = useState(false);
   const [showPreparationModal, setShowPreparationModal] = useState(false);
+  const [showBlockCompleteModal, setShowBlockCompleteModal] = useState(false);
   const router = useRouter();
+  const queryClient = useQueryClient();
   const postId = router.query?.postId as string;
 
   const {
@@ -147,11 +150,17 @@ function PostDetail() {
   };
 
   const handleCommentReplyButtonClick = () => {
+    togglePopupMenu();
     setShowPreparationModal(true);
   };
 
   const handleShareButtonClick = () => {
     setShowPreparationModal(true);
+  };
+
+  const handleUserBlockButtonClick = () => {
+    togglePopupMenu();
+    setShowBlockCompleteModal(true);
   };
 
   return (
@@ -217,6 +226,7 @@ function PostDetail() {
       </TopSection>
       {/* Bottom Section */}
       <BottomSection>
+        {/* 댓글 목록 */}
         <CommentList>
           {comments?.map((commentItem: Comment) => (
             <CommentItem
@@ -229,6 +239,7 @@ function PostDetail() {
             />
           ))}
         </CommentList>
+        {/* 댓글 입력 */}
         <CommentInputWrapper>
           <Flex direction="row" align="center">
             <CommentInput
@@ -246,6 +257,7 @@ function PostDetail() {
           </Flex>
         </CommentInputWrapper>
       </BottomSection>
+      {/* 댓글 팝업 메뉴 */}
       {isTargetOpen && (
         <PopupMenu onClose={togglePopupMenu} isBeforeClose={isBeforeTargetClose}>
           {isMyComment
@@ -261,15 +273,19 @@ function PostDetail() {
                 </div>,
               ]
             : [
+                <div key={v4()} onClick={handleCommentReplyButtonClick}>
+                  공유하기
+                </div>,
                 <div key={v4()} onClick={handleCommentReportButtonClick}>
                   신고하기
                 </div>,
-                <div key={v4()} onClick={handleCommentReplyButtonClick}>
-                  대댓글 쓰기
+                <div key={v4()} onClick={handleUserBlockButtonClick}>
+                  글쓴이 차단하기
                 </div>,
               ]}
         </PopupMenu>
       )}
+      {/* 신고 모달 */}
       {showReportModal && (
         <ConfirmModal
           title={
@@ -292,6 +308,8 @@ function PostDetail() {
               url: `/report/comment/${selectedCommentId}`,
             });
 
+            await queryClient.invalidateQueries([COMMENTS]);
+
             setSelectedCommentId('');
           }}
           onCancel={() => {
@@ -299,6 +317,17 @@ function PostDetail() {
           }}
         />
       )}
+      {/* 차단 완료 모달 */}
+      {showBlockCompleteModal && (
+        <BlockCompleteModal
+          title={<div style={{ marginTop: 6, marginBottom: 12 }}>해당 글쓴이를 차단했습니다.</div>}
+          confirmButtonTxt="도리도리 계속 이용하기"
+          onConfirm={async () => {
+            setShowBlockCompleteModal(false);
+          }}
+        />
+      )}
+      {/* 준비중 모달 */}
       {showPreparationModal && (
         <InPreparationModal
           title={
@@ -312,7 +341,6 @@ function PostDetail() {
           confirmButtonTxt="도리도리 계속 이용하기"
           onConfirm={async () => {
             setShowPreparationModal(false);
-            if (isTargetOpen) changeTargetOpenState(false);
           }}
         />
       )}
