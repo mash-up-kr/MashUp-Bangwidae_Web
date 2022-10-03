@@ -55,7 +55,7 @@ function AnswerItem({ answer, onMenuClick, onReplyClick }: AnswerItemProps) {
           <IconPosition>
             <IconTextButton
               name="more"
-              color="#767676"
+              color={theme.color.gray.Gray700}
               size={24}
               onClick={(event: React.MouseEvent<Element, MouseEvent>) =>
                 onMenuClick(event, answer.id)
@@ -139,6 +139,7 @@ const CreatedAt = styled.div`
 `;
 
 const IconPosition = styled.div`
+  margin-left: 8px;
   padding-top: 4px;
 `;
 

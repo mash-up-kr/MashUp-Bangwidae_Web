@@ -199,14 +199,20 @@ function QuestionDetail() {
       {/* 댓글 팝업 메뉴 */}
       {isTargetOpen && (
         <PopupMenu onClose={togglePopupMenu} isBeforeClose={isBeforeTargetClose}>
-          {[
-            <div key={v4()} onClick={handleAnswerEditButtonClick}>
-              수정하기
-            </div>,
-            <div key={v4()} onClick={handleAnswerDeleteButtonClick}>
-              삭제하기
-            </div>,
-          ]}
+          {isMyQuestion
+            ? [
+                <div key={v4()} onClick={handleAnswerEditButtonClick}>
+                  수정하기
+                </div>,
+                <div key={v4()} onClick={handleAnswerDeleteButtonClick}>
+                  삭제하기
+                </div>,
+              ]
+            : [
+                <div key={v4()}>공유하기</div>,
+                <div key={v4()}>신고하기</div>,
+                <div key={v4()}>글쓴이 차단하기</div>,
+              ]}
         </PopupMenu>
       )}
       {/* 준비중 모달 */}
