@@ -179,7 +179,7 @@ function PostDetail() {
                 <Nickname onClick={handleDeepLinkClick('mypage_other')}>
                   {post.user?.nickname}
                 </Nickname>
-                <LevelTag>Lv.1</LevelTag>
+                <LevelTag>Lv.{post.user.level}</LevelTag>
               </Flex>
               <Flex direction="row" style={{ minWidth: '130px' }}>
                 {post.user?.tags.map((tag: string) => (
