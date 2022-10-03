@@ -336,7 +336,7 @@ function PostDetail() {
               url: `/user/block/${targetUserId}`,
             });
 
-            await queryClient.invalidateQueries([COMMENTS]);
+            await queryClient.invalidateQueries([POST, COMMENTS]);
 
             setShowBlockCompleteModal(false);
           }}
