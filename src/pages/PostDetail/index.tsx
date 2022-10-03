@@ -26,6 +26,7 @@ import {
 import { sendPostMessage } from '@/src/utils/sendPostMessage';
 
 const REPORTED_POST = '신고된 글입니다';
+const BLOCKED_USER = '차단된 사용자의 글입니다';
 
 function PostDetail() {
   const theme = useTheme();
@@ -65,6 +66,7 @@ function PostDetail() {
   if (isPostError || isCommentError) return <div />;
 
   const isReportedPost = post.content === REPORTED_POST;
+  const isBlockedUser = post.content === BLOCKED_USER;
 
   const handleLikeButtonClick = () => {
     if (post?.userLiked) mutateUnlikeCount();
@@ -211,7 +213,7 @@ function PostDetail() {
               color={post.userLiked ? theme.color.primary.Lime300 : theme.color.gray.Gray500}
               size={20}
               onClick={handleLikeButtonClick}
-              disabled={isReportedPost}
+              disabled={isReportedPost || isBlockedUser}
             >
               {post.likeCount === 0 ? '궁금해요' : post.likeCount}
             </LeftIcon>
