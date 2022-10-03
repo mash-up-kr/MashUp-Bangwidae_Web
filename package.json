@@ -64,6 +64,7 @@
     "@typescript-eslint/eslint-plugin": "latest",
     "@typescript-eslint/parser": "latest",
     "@yarnpkg/sdks": "^3.0.0-rc.11",
+    "babel-plugin-styled-components": "^2.0.7",
     "eslint": "8.18.0",
     "eslint-config-airbnb": "^19.0.4",
     "eslint-config-airbnb-typescript": "^17.0.0",

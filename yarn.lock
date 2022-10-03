@@ -4500,7 +4500,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"babel-plugin-styled-components@npm:>= 1.12.0":
+"babel-plugin-styled-components@npm:>= 1.12.0, babel-plugin-styled-components@npm:^2.0.7":
   version: 2.0.7
   resolution: "babel-plugin-styled-components@npm:2.0.7"
   dependencies:
@@ -12015,6 +12015,7 @@ __metadata:
     "@typescript-eslint/parser": latest
     "@yarnpkg/sdks": ^3.0.0-rc.11
     axios: ^0.27.2
+    babel-plugin-styled-components: ^2.0.7
     d3: ^7.6.1
     d3-geo: ^3.0.1
     dayjs: ^1.11.4
