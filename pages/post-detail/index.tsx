@@ -1,10 +1,6 @@
 import api from 'src/api/core';
-// import { dehydrate, QueryClient } from '@tanstack/react-query';
-// import { POST, COMMENTS } from 'src/consts/query';
 import { QueryKey } from '@tanstack/react-query';
 import { GetServerSideProps } from 'next';
-
-const FETCHING_COMMENT_SIZE = 10;
 
 export interface Post {
   anonymous: boolean;
@@ -54,7 +50,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   });
 
   const initialCommentData = await api.get({
-    url: `/posts/${postId}/comment?size=${FETCHING_COMMENT_SIZE}`,
+    url: `/posts/${postId}/comment?size=10`,
   });
 
   return { props: { initialPostData, initialCommentData: initialCommentData.values } };
@@ -89,7 +85,7 @@ export async function getCommentList({
   if (postId) {
     return (
       await api.get({
-        url: `/posts/${postId}/comment?size=${FETCHING_COMMENT_SIZE}`,
+        url: `/posts/${postId}/comment?size=10`,
       })
     ).values;
   }
@@ -104,4 +100,3 @@ export function getUserInfo() {
 
 // eslint-disable-next-line no-restricted-exports
 export { default } from 'pages/PostDetail';
-export const TEST_ID = '62e5417127d0d407aaeedb39';

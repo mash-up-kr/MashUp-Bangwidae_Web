@@ -70,9 +70,9 @@ function PostDetail({ initialPostData, initialCommentData }: PostDetailProps) {
   const { mutate: mutateCommentUpdate } = useCommentUpdater();
   const { mutate: mutateCommentDelete } = useCommentDeleter();
 
+  /* ------ Fix: Text content does not match server-rendered HTML ------- */
   const [hydrated, setHydrated] = useState(false);
 
-  /* ------ Fix: Text content does not match server-rendered HTML ------- */
   useEffect(() => {
     setHydrated(true);
   }, []);

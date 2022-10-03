@@ -1,5 +1,6 @@
 import api from 'src/api/core';
 import { QueryKey } from '@tanstack/react-query';
+import { GetServerSideProps } from 'next';
 
 export interface Answer {
   content: string;
@@ -39,6 +40,16 @@ export interface Question {
     tags: string[];
   };
 }
+
+export const getServerSideProps: GetServerSideProps = async (context) => {
+  const { questionId } = context.query;
+
+  const initialData = await api.get({
+    url: `/questions/${questionId}`,
+  });
+
+  return { props: { initialData } };
+};
 
 // eslint-disable-next-line consistent-return,@typescript-eslint/ban-ts-comment
 // @ts-ignore

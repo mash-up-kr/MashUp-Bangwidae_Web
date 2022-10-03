@@ -1,4 +1,4 @@
-import { useState, ChangeEvent, useRef, MouseEvent } from 'react';
+import { useState, ChangeEvent, useRef, MouseEvent, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import styled, { useTheme } from 'styled-components';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
@@ -19,7 +19,11 @@ import { getQuestionDetail, getUserInfo, Question } from '@/pages/question-detai
 import { useAnswerCreator, useAnswerUpdater, useAnswerDeleter } from './mutations';
 import { sendPostMessage } from '@/src/utils/sendPostMessage';
 
-function QuestionDetail() {
+interface QuestionDetailProps {
+  initialData: Question;
+}
+
+function QuestionDetail({ initialData }: QuestionDetailProps) {
   const theme = useTheme();
   const [answerInput, setAnswerInput] = useState('');
   const [selectedAnswerId, setSelectedAnswerId] = useState('');
@@ -37,12 +41,22 @@ function QuestionDetail() {
     data: question,
     isError: isQuestionError,
     isLoading: isQuestionLoading,
-  } = useQuery<Question | null>([GET_QUESTION, questionId], getQuestionDetail);
+  } = useQuery<Question | null>([GET_QUESTION, questionId], getQuestionDetail, { initialData });
 
   const { data: userInfo } = useQuery([USER_INFO], getUserInfo);
   const { mutate: mutateAnswerCreate } = useAnswerCreator(questionId);
   const { mutate: mutateAnswerUpdate } = useAnswerUpdater();
   const { mutate: mutateAnswerDelete } = useAnswerDeleter();
+
+  /* ------ Fix: Text content does not match server-rendered HTML ------- */
+  const [hydrated, setHydrated] = useState(false);
+
+  useEffect(() => {
+    setHydrated(true);
+  }, []);
+
+  if (!hydrated) return null;
+  /* -------------------------------------------------------------------- */
 
   if (!question || isQuestionLoading || isQuestionError) return null;
 
