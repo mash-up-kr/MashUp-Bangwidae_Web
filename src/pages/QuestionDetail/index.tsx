@@ -278,6 +278,16 @@ function QuestionDetail() {
           title={<div style={{ marginTop: 6, marginBottom: 12 }}>해당 글쓴이를 차단했습니다.</div>}
           confirmButtonTxt="도리도리 계속 이용하기"
           onConfirm={async () => {
+            const targetUserId = question.answer.user.id;
+
+            if (!targetUserId) return;
+
+            await api.post({
+              url: `/user/block/${targetUserId}`,
+            });
+
+            await queryClient.invalidateQueries([GET_QUESTION]);
+
             setShowBlockCompleteModal(false);
           }}
         />
