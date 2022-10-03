@@ -163,6 +163,7 @@ function QuestionDetail() {
       </TopSection>
       {/* Bottom Section */}
       <BottomSection>
+        {/* 답변 목록 */}
         <CommentList>
           <AnswerItem
             key={question.answer.id}
@@ -173,6 +174,7 @@ function QuestionDetail() {
             }}
           />
         </CommentList>
+        {/* 댓글 입력 */}
         {isMyQuestion && (
           <CommentInputWrapper>
             <Flex direction="row" align="center">
@@ -194,6 +196,7 @@ function QuestionDetail() {
           </CommentInputWrapper>
         )}
       </BottomSection>
+      {/* 댓글 팝업 메뉴 */}
       {isTargetOpen && (
         <PopupMenu onClose={togglePopupMenu} isBeforeClose={isBeforeTargetClose}>
           {[
@@ -206,6 +209,7 @@ function QuestionDetail() {
           ]}
         </PopupMenu>
       )}
+      {/* 준비중 모달 */}
       {showPreparationModal && (
         <InPreparationModal
           title={
