@@ -15,7 +15,7 @@ import { LargeLineButton, IconTextButton } from '@/src/components';
 import Flex from '@/src/components/Flex';
 import { typography } from '@/styles';
 import { CommentItem, PopupMenu } from './components';
-import { getQuestionDetail, getCommentList, getUserInfo } from '@/pages/post-detail';
+import { getPostDetail, getCommentList, getUserInfo } from '@/pages/post-detail';
 import {
   usePostLikeCreator,
   usePostUnlikeCreator,
@@ -28,7 +28,12 @@ import { sendPostMessage } from '@/src/utils/sendPostMessage';
 const REPORTED_POST = '신고된 글입니다';
 const BLOCKED_USER = '차단된 사용자의 글입니다';
 
-function PostDetail() {
+interface PostDetailProps {
+  initialPostData: Post;
+  initialCommentData: Comment[];
+}
+
+function PostDetail({ initialPostData, initialCommentData }: PostDetailProps) {
   const theme = useTheme();
   const [commentInput, setCommentInput] = useState('');
   const [selectedCommentId, setSelectedCommentId] = useState('');
@@ -47,13 +52,15 @@ function PostDetail() {
     data: post,
     isError: isPostError,
     isLoading: isPostLoading,
-  } = useQuery<Post | null>([POST, postId], getQuestionDetail);
+  } = useQuery<Post | null>([POST, postId], getPostDetail, { initialData: initialPostData });
 
   const {
     data: comments,
     isError: isCommentError,
     isLoading: isCommentLoading,
-  } = useQuery<Comment[] | null>([COMMENTS, postId], getCommentList);
+  } = useQuery<Comment[] | null>([COMMENTS, postId], getCommentList, {
+    initialData: initialCommentData,
+  });
 
   const { data: userInfo } = useQuery([USER_INFO], getUserInfo);
 
