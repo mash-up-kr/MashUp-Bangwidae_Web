@@ -56,7 +56,7 @@ function CommentItem({ comment, onMenuClick, onReplyClick }: CommentItemProps) {
           <IconPosition>
             <IconTextButton
               name="more"
-              color="#767676"
+              color={theme.color.gray.Gray700}
               size={24}
               onClick={(event) => onMenuClick(event, comment.id)}
             />
