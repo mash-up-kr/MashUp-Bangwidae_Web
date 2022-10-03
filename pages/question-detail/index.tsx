@@ -43,7 +43,11 @@ export interface Question {
 // eslint-disable-next-line consistent-return,@typescript-eslint/ban-ts-comment
 // @ts-ignore
 // eslint-disable-next-line consistent-return
-export function getQuestionDetail({ queryKey }: { queryKey: QueryKey }): Promise<Question> {
+export async function getQuestionDetail({
+  queryKey,
+}: {
+  queryKey: QueryKey;
+}): Promise<Question | null> {
   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   // @ts-ignore
   const [, questionId] = queryKey;
@@ -52,6 +56,7 @@ export function getQuestionDetail({ queryKey }: { queryKey: QueryKey }): Promise
       url: `/questions/${questionId}`,
     });
   }
+  return null;
 }
 
 export function getUserInfo() {
