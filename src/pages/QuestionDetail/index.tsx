@@ -37,7 +37,7 @@ function QuestionDetail() {
     data: question,
     isError: isQuestionError,
     isLoading: isQuestionLoading,
-  } = useQuery<Question>([GET_QUESTION, questionId], getQuestionDetail);
+  } = useQuery<Question | null>([GET_QUESTION, questionId], getQuestionDetail);
 
   const { data: userInfo } = useQuery([USER_INFO], getUserInfo);
   const { mutate: mutateAnswerCreate } = useAnswerCreator(questionId);
