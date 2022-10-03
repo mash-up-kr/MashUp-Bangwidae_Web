@@ -94,7 +94,7 @@ function QuestionDetail() {
   };
 
   const handleCommentReplyButtonClick = () => {
-    togglePopupMenu();
+    if (isTargetOpen) changeTargetOpenState(false);
     setShowPreparationModal(true);
   };
 
