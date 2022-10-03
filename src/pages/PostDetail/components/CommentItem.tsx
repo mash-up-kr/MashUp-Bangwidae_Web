@@ -10,6 +10,7 @@ import type { Comment } from '@/pages/post-detail';
 
 const DEFAULT_IMAGE_URL = process.env.NEXT_PUBLIC_DEFAULT_IMAGE;
 const REPORTED_COMMENT = '신고된 댓글입니다';
+const BLOCKED_USER = '차단된 사용자의 댓글입니다';
 
 interface CommentItemProps {
   comment: Comment;
@@ -36,6 +37,7 @@ function CommentItem({ comment, onMenuClick, onReplyClick }: CommentItemProps) {
   };
 
   const isReportedComment = comment.content === REPORTED_COMMENT;
+  const isBlockedComment = comment.content === BLOCKED_USER;
 
   return (
     <Layout>
@@ -58,7 +60,7 @@ function CommentItem({ comment, onMenuClick, onReplyClick }: CommentItemProps) {
           <CreatedAt>{dateTime.fromNow(comment.createdAt)}</CreatedAt>
           {/* 댓글 메뉴 버튼 */}
           <IconPosition>
-            {!isReportedComment && (
+            {!isReportedComment && !isBlockedComment && (
               <IconTextButton
                 name="more"
                 color={theme.color.gray.Gray700}
