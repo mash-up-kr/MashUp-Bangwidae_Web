@@ -167,7 +167,6 @@ function QuestionDetail() {
           <AnswerItem
             key={question.answer.id}
             answer={question.answer}
-            isMyQuestion={isMyQuestion}
             onMenuClick={handleCommentKebabMenuClick}
             onReplyClick={() => {
               handleCommentReplyButtonClick();
