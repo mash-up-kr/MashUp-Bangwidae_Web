@@ -37,7 +37,7 @@ function PostDetail() {
   const [showBlockCompleteModal, setShowBlockCompleteModal] = useState(false);
   const router = useRouter();
   const queryClient = useQueryClient();
-  const postId = router.query?.postId || '';
+  const postId = (router.query?.postId as string) || '';
 
   const {
     data: post,
