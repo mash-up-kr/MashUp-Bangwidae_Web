@@ -1,4 +1,4 @@
-import { useState, ChangeEvent, MouseEvent, useRef } from 'react';
+import { useState, ChangeEvent, MouseEvent, useRef, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import styled, { useTheme } from 'styled-components';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
@@ -69,6 +69,16 @@ function PostDetail({ initialPostData, initialCommentData }: PostDetailProps) {
   const { mutate: mutateCommentCreate } = useCommentCreator(postId);
   const { mutate: mutateCommentUpdate } = useCommentUpdater();
   const { mutate: mutateCommentDelete } = useCommentDeleter();
+
+  const [hydrated, setHydrated] = useState(false);
+
+  /* ------ Fix: Text content does not match server-rendered HTML ------- */
+  useEffect(() => {
+    setHydrated(true);
+  }, []);
+
+  if (!hydrated) return null;
+  /* -------------------------------------------------------------------- */
 
   if (!post || isPostLoading || isCommentLoading) return <div />;
   if (isPostError || isCommentError) return <div />;
