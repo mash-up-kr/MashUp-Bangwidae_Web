@@ -44,7 +44,7 @@ function QuestionDetail() {
   const { mutate: mutateAnswerUpdate } = useAnswerUpdater();
   const { mutate: mutateAnswerDelete } = useAnswerDeleter();
 
-  if (!question || isQuestionLoading || isQuestionError) return <div />;
+  if (!question || isQuestionLoading || isQuestionError) return null;
 
   const handleCommentInputChange = (e: ChangeEvent<HTMLInputElement>) => {
     setAnswerInput(e.target.value);
@@ -184,16 +184,18 @@ function QuestionDetail() {
       {/* Bottom Section */}
       <BottomSection>
         {/* 답변 목록 */}
-        <CommentList>
-          <AnswerItem
-            key={question.answer.id}
-            answer={question.answer}
-            onMenuClick={handleCommentKebabMenuClick}
-            onReplyClick={() => {
-              handleCommentReplyButtonClick();
-            }}
-          />
-        </CommentList>
+        {question.answer && (
+          <CommentList>
+            <AnswerItem
+              key={question.answer.id}
+              answer={question.answer}
+              onMenuClick={handleCommentKebabMenuClick}
+              onReplyClick={() => {
+                handleCommentReplyButtonClick();
+              }}
+            />
+          </CommentList>
+        )}
         {/* 댓글 입력 */}
         {isMyQuestion && (
           <CommentInputWrapper>
