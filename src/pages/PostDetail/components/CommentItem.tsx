@@ -138,6 +138,7 @@ const CreatedAt = styled.div`
 `;
 
 const IconPosition = styled.div`
+  margin-left: 8px;
   padding-top: 4px;
 `;
 
