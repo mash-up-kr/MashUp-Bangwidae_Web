@@ -1,4 +1,4 @@
-import { useState, ChangeEvent, useRef } from 'react';
+import { useState, ChangeEvent, useRef, MouseEvent } from 'react';
 import { useRouter } from 'next/router';
 import styled, { useTheme } from 'styled-components';
 import { useQuery } from '@tanstack/react-query';
@@ -9,6 +9,7 @@ import { v4 } from 'uuid';
 import InPreparationModal from 'components/Modal/InPreparationModal';
 import { PopupMenu } from 'pages/PostDetail/components';
 import ConfirmModal from 'components/Modal/ConfirmModal';
+import api from 'src/api/core';
 import { LargeLineButton, IconTextButton } from '@/src/components';
 import Flex from '@/src/components/Flex';
 import { typography } from '@/styles';
@@ -16,11 +17,11 @@ import { AnswerItem } from './components';
 import { getQuestionDetail, getUserInfo, Question } from '@/pages/question-detail';
 import { useAnswerCreator, useAnswerUpdater, useAnswerDeleter } from './mutations';
 import { sendPostMessage } from '@/src/utils/sendPostMessage';
-// import api from 'src/api/core';
 
 function QuestionDetail() {
   const theme = useTheme();
   const [answerInput, setAnswerInput] = useState('');
+  const [selectedAnswerId, setSelectedAnswerId] = useState('');
   const answerInputElement = useRef<HTMLInputElement>(null);
   const { isTargetOpen, changeTargetOpenState, isBeforeTargetClose } = useTranslateAnimation(0.2);
   const [showReportModal, setShowReportModal] = useState(false);
@@ -77,8 +78,9 @@ function QuestionDetail() {
     });
   };
 
-  const handleCommentKebabMenuClick = () => {
+  const handleCommentKebabMenuClick = (event: MouseEvent, answerId: string) => {
     setAnswerInput('');
+    setSelectedAnswerId(answerId);
     togglePopupMenu();
   };
 
@@ -244,11 +246,11 @@ function QuestionDetail() {
           onConfirm={async () => {
             setShowReportModal(false);
 
-            // await api.post({
-            //   url: `/report/comment/${selectedCommentId}`,
-            // });
-            //
-            // setSelectedCommentId('');
+            await api.post({
+              url: `/report/comment/${selectedAnswerId}`,
+            });
+
+            setSelectedAnswerId('');
           }}
           onCancel={() => {
             setShowReportModal(false);
