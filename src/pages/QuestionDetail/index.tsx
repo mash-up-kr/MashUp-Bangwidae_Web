@@ -1,13 +1,16 @@
-import { useState, ChangeEvent, useRef } from 'react';
+import { useState, ChangeEvent, useRef, MouseEvent } from 'react';
 import { useRouter } from 'next/router';
 import styled, { useTheme } from 'styled-components';
-import { useQuery } from '@tanstack/react-query';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { GET_QUESTION, USER_INFO } from 'src/consts/query';
 import { dateTime } from 'src/utils/DateTime';
 import { useTranslateAnimation } from 'src/hooks';
 import { v4 } from 'uuid';
 import InPreparationModal from 'components/Modal/InPreparationModal';
 import { PopupMenu } from 'pages/PostDetail/components';
+import ConfirmModal from 'components/Modal/ConfirmModal';
+import api from 'src/api/core';
+import BlockCompleteModal from 'components/Modal/BlockCompleteModal';
 import { LargeLineButton, IconTextButton } from '@/src/components';
 import Flex from '@/src/components/Flex';
 import { typography } from '@/styles';
@@ -19,9 +22,14 @@ import { sendPostMessage } from '@/src/utils/sendPostMessage';
 function QuestionDetail() {
   const theme = useTheme();
   const [answerInput, setAnswerInput] = useState('');
+  const [selectedAnswerId, setSelectedAnswerId] = useState('');
   const answerInputElement = useRef<HTMLInputElement>(null);
   const { isTargetOpen, changeTargetOpenState, isBeforeTargetClose } = useTranslateAnimation(0.2);
+  const [showReportModal, setShowReportModal] = useState(false);
   const [showPreparationModal, setShowPreparationModal] = useState(false);
+  const [showBlockCompleteModal, setShowBlockCompleteModal] = useState(false);
+  const queryClient = useQueryClient();
+
   const router = useRouter();
   const questionId = router.query?.questionId as string;
 
@@ -74,8 +82,9 @@ function QuestionDetail() {
     });
   };
 
-  const handleCommentKebabMenuClick = () => {
+  const handleCommentKebabMenuClick = (event: MouseEvent, answerId: string) => {
     setAnswerInput('');
+    setSelectedAnswerId(answerId);
     togglePopupMenu();
   };
 
@@ -85,6 +94,7 @@ function QuestionDetail() {
   };
 
   const handleCommentReplyButtonClick = () => {
+    if (isTargetOpen) changeTargetOpenState(false);
     setShowPreparationModal(true);
   };
 
@@ -103,6 +113,16 @@ function QuestionDetail() {
   const handleAnswerDeleteButtonClick = () => {
     togglePopupMenu();
     mutateAnswerDelete({ answerId: question.answer?.id });
+  };
+
+  const handleCommentReportButtonClick = () => {
+    togglePopupMenu();
+    setShowReportModal(true);
+  };
+
+  const handleUserBlockButtonClick = () => {
+    togglePopupMenu();
+    setShowBlockCompleteModal(true);
   };
 
   const isMyQuestion = userInfo?.userId === question.toUser.id;
@@ -163,17 +183,18 @@ function QuestionDetail() {
       </TopSection>
       {/* Bottom Section */}
       <BottomSection>
+        {/* 답변 목록 */}
         <CommentList>
           <AnswerItem
             key={question.answer.id}
             answer={question.answer}
-            isMyQuestion={isMyQuestion}
             onMenuClick={handleCommentKebabMenuClick}
             onReplyClick={() => {
               handleCommentReplyButtonClick();
             }}
           />
         </CommentList>
+        {/* 댓글 입력 */}
         {isMyQuestion && (
           <CommentInputWrapper>
             <Flex direction="row" align="center">
@@ -195,18 +216,83 @@ function QuestionDetail() {
           </CommentInputWrapper>
         )}
       </BottomSection>
+      {/* 댓글 팝업 메뉴 */}
       {isTargetOpen && (
         <PopupMenu onClose={togglePopupMenu} isBeforeClose={isBeforeTargetClose}>
-          {[
-            <div key={v4()} onClick={handleAnswerEditButtonClick}>
-              수정하기
-            </div>,
-            <div key={v4()} onClick={handleAnswerDeleteButtonClick}>
-              삭제하기
-            </div>,
-          ]}
+          {isMyQuestion
+            ? [
+                <div key={v4()} onClick={handleAnswerEditButtonClick}>
+                  수정하기
+                </div>,
+                <div key={v4()} onClick={handleAnswerDeleteButtonClick}>
+                  삭제하기
+                </div>,
+              ]
+            : [
+                <div key={v4()} onClick={handleCommentReplyButtonClick}>
+                  공유하기
+                </div>,
+                <div key={v4()} onClick={handleCommentReportButtonClick}>
+                  신고하기
+                </div>,
+                <div key={v4()} onClick={handleUserBlockButtonClick}>
+                  글쓴이 차단하기
+                </div>,
+              ]}
         </PopupMenu>
       )}
+      {/* 신고 모달 */}
+      {showReportModal && (
+        <ConfirmModal
+          title={
+            <TitleWrapper
+              style={{ marginTop: 14, marginBottom: 8, textAlign: 'center', fontSize: 18 }}
+            >
+              <p style={{ marginBottom: 6 }}>
+                <span>댓글을 </span>
+                <span style={{ color: theme.color.primary.Lime300 }}>신고</span>하시겠어요?
+              </p>
+            </TitleWrapper>
+          }
+          subTitle="신고된 댓글은 블라인드 처리됩니다."
+          confirmButtonTxt="신고하기"
+          cancelButtonTxt="취소하기"
+          onConfirm={async () => {
+            setShowReportModal(false);
+
+            await api.post({
+              url: `/report/comment/${selectedAnswerId}`,
+            });
+
+            await queryClient.invalidateQueries([GET_QUESTION]);
+            setSelectedAnswerId('');
+          }}
+          onCancel={() => {
+            setShowReportModal(false);
+          }}
+        />
+      )}
+      {/* 차단 완료 모달 */}
+      {showBlockCompleteModal && (
+        <BlockCompleteModal
+          title={<div style={{ marginTop: 6, marginBottom: 12 }}>해당 글쓴이를 차단했습니다.</div>}
+          confirmButtonTxt="도리도리 계속 이용하기"
+          onConfirm={async () => {
+            const targetUserId = question.answer.user.id;
+
+            if (!targetUserId) return;
+
+            await api.post({
+              url: `/user/block/${targetUserId}`,
+            });
+
+            await queryClient.invalidateQueries([GET_QUESTION]);
+
+            setShowBlockCompleteModal(false);
+          }}
+        />
+      )}
+      {/* 준비중 모달 */}
       {showPreparationModal && (
         <InPreparationModal
           title={
@@ -218,7 +304,7 @@ function QuestionDetail() {
             </TitleWrapper>
           }
           confirmButtonTxt="도리도리 계속 이용하기"
-          onConfirm={async () => {
+          onConfirm={() => {
             setShowPreparationModal(false);
           }}
         />

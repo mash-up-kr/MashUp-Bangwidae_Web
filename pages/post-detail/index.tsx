@@ -2,6 +2,7 @@ import api from 'src/api/core';
 // import { dehydrate, QueryClient } from '@tanstack/react-query';
 // import { POST, COMMENTS } from 'src/consts/query';
 import { QueryKey } from '@tanstack/react-query';
+import { GetServerSideProps } from 'next';
 
 const FETCHING_COMMENT_SIZE = 10;
 
@@ -45,22 +46,24 @@ export interface Comment {
   updatedAt: string;
 }
 
-// export async function getServerSideProps() {
-//   const queryClient = new QueryClient();
-//   await queryClient.prefetchQuery([POST], getPostDetail);
-//   await queryClient.prefetchQuery([COMMENTS], getCommentList);
+export const getServerSideProps: GetServerSideProps = async (context) => {
+  const { postId } = context.query;
 
-//   return {
-//     props: {
-//       dehydratedState: dehydrate(queryClient),
-//     },
-//   };
-// }
+  const initialPostData = await api.get({
+    url: `/posts/${postId}`,
+  });
+
+  const initialCommentData = await api.get({
+    url: `/posts/${postId}/comment?size=${FETCHING_COMMENT_SIZE}`,
+  });
+
+  return { props: { initialPostData, initialCommentData: initialCommentData.values } };
+};
 
 // eslint-disable-next-line consistent-return,@typescript-eslint/ban-ts-comment
 // @ts-ignore
 // eslint-disable-next-line consistent-return
-export function getQuestionDetail({ queryKey }: { queryKey: QueryKey }): Promise<Post> {
+export async function getPostDetail({ queryKey }: { queryKey: QueryKey }): Promise<Post | null> {
   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   // @ts-ignore
   const [, postId] = queryKey;
@@ -69,12 +72,17 @@ export function getQuestionDetail({ queryKey }: { queryKey: QueryKey }): Promise
       url: `/posts/${postId}`,
     });
   }
+  return null;
 }
 
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
 // eslint-disable-next-line consistent-return
-export async function getCommentList({ queryKey }: { queryKey: QueryKey }): Promise<Comment[]> {
+export async function getCommentList({
+  queryKey,
+}: {
+  queryKey: QueryKey;
+}): Promise<Comment[] | null> {
   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   // @ts-ignore
   const [, postId] = queryKey;
@@ -85,6 +93,7 @@ export async function getCommentList({ queryKey }: { queryKey: QueryKey }): Prom
       })
     ).values;
   }
+  return null;
 }
 
 export function getUserInfo() {

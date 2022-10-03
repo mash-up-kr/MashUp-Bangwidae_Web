@@ -19,6 +19,7 @@ export interface IconProps {
   className?: string;
   iconPosition?: IconPosition;
   onClick: React.MouseEventHandler<HTMLButtonElement>;
+  disabled?: boolean;
 }
 
 const icons = {
@@ -37,10 +38,11 @@ function IconTextButton({
   className,
   iconPosition,
   onClick,
+  disabled,
 }: IconProps) {
   if (iconPosition === 'right') {
     return (
-      <Button name={name} color={color} onClick={onClick} className={className}>
+      <Button name={name} color={color} onClick={onClick} className={className} disabled={disabled}>
         <TextContent>{children}</TextContent>
         {name && (
           <SvgWrap color={color} size={size} includesText={!!children}>
@@ -52,7 +54,7 @@ function IconTextButton({
   }
 
   return (
-    <Button name={name} color={color} onClick={onClick} className={className}>
+    <Button name={name} color={color} onClick={onClick} className={className} disabled={disabled}>
       {name && (
         <SvgWrap color={color} size={size} includesText={!!children}>
           {icons[name]}
@@ -94,6 +96,10 @@ const Button = styled.button<{
   border: 0;
   cursor: pointer;
   ${typography.Caption2_Bold_12}
+
+  &:disabled {
+    cursor: not-allowed;
+  }
 `;
 
 const TextContent = styled.span`

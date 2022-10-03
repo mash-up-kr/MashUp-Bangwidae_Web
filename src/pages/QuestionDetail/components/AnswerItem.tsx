@@ -12,12 +12,11 @@ const DEFAULT_IMAGE_URL = process.env.NEXT_PUBLIC_DEFAULT_IMAGE;
 
 interface AnswerItemProps {
   answer: Answer;
-  isMyQuestion: boolean;
   onMenuClick: (event: React.MouseEvent<Element, MouseEvent>, selectedId: string) => void;
   onReplyClick: () => void;
 }
 
-function AnswerItem({ answer, isMyQuestion, onMenuClick, onReplyClick }: AnswerItemProps) {
+function AnswerItem({ answer, onMenuClick, onReplyClick }: AnswerItemProps) {
   const theme = useTheme();
   const { mutate: mutateLikeCount } = useAnswerLikeCreator(answer.id);
   const { mutate: mutateUnlikeCount } = useAnswerUnlikeCreator(answer.id);
@@ -52,17 +51,16 @@ function AnswerItem({ answer, isMyQuestion, onMenuClick, onReplyClick }: AnswerI
           <LocatedAt>{answer.representativeAddress}</LocatedAt>
           <VerticalDivider />
           <CreatedAt>{dateTime.fromNow(answer.createdAt)}</CreatedAt>
+          {/* 댓글 메뉴 버튼 */}
           <IconPosition>
-            {isMyQuestion && (
-              <IconTextButton
-                name="more"
-                color="#767676"
-                size={24}
-                onClick={(event: React.MouseEvent<Element, MouseEvent>) =>
-                  onMenuClick(event, answer.id)
-                }
-              />
-            )}
+            <IconTextButton
+              name="more"
+              color={theme.color.gray.Gray700}
+              size={24}
+              onClick={(event: React.MouseEvent<Element, MouseEvent>) =>
+                onMenuClick(event, answer.id)
+              }
+            />
           </IconPosition>
         </Flex>
       </Flex>
@@ -141,6 +139,7 @@ const CreatedAt = styled.div`
 `;
 
 const IconPosition = styled.div`
+  margin-left: 8px;
   padding-top: 4px;
 `;
 

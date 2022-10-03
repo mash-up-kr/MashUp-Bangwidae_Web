@@ -9,6 +9,8 @@ import Flex from '@/src/components/Flex';
 import type { Comment } from '@/pages/post-detail';
 
 const DEFAULT_IMAGE_URL = process.env.NEXT_PUBLIC_DEFAULT_IMAGE;
+const REPORTED_COMMENT = '신고된 댓글입니다';
+const BLOCKED_USER = '차단된 사용자의 댓글입니다';
 
 interface CommentItemProps {
   comment: Comment;
@@ -34,6 +36,9 @@ function CommentItem({ comment, onMenuClick, onReplyClick }: CommentItemProps) {
     }
   };
 
+  const isReportedComment = comment.content === REPORTED_COMMENT;
+  const isBlockedComment = comment.content === BLOCKED_USER;
+
   return (
     <Layout>
       <Flex direction="row" align="center">
@@ -53,13 +58,16 @@ function CommentItem({ comment, onMenuClick, onReplyClick }: CommentItemProps) {
           <LocatedAt>{comment.representativeAddress}</LocatedAt>
           <VerticalDivider />
           <CreatedAt>{dateTime.fromNow(comment.createdAt)}</CreatedAt>
+          {/* 댓글 메뉴 버튼 */}
           <IconPosition>
-            <IconTextButton
-              name="more"
-              color="#767676"
-              size={24}
-              onClick={(event) => onMenuClick(event, comment.id)}
-            />
+            {!isReportedComment && !isBlockedComment && (
+              <IconTextButton
+                name="more"
+                color={theme.color.gray.Gray700}
+                size={24}
+                onClick={(event) => onMenuClick(event, comment.id)}
+              />
+            )}
           </IconPosition>
         </Flex>
       </Flex>
@@ -74,6 +82,7 @@ function CommentItem({ comment, onMenuClick, onReplyClick }: CommentItemProps) {
             color={comment.userLiked ? theme.color.primary.Lime300 : theme.color.gray.Gray500}
             size={24}
             onClick={handleLikeButtonClick}
+            disabled={isReportedComment}
           >
             좋아요
           </IconTextButton>
@@ -138,6 +147,7 @@ const CreatedAt = styled.div`
 `;
 
 const IconPosition = styled.div`
+  margin-left: 8px;
   padding-top: 4px;
 `;
 

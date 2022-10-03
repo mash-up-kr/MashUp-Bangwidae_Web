@@ -1,7 +1,7 @@
-import { useState, ChangeEvent, MouseEvent, useRef } from 'react';
+import { useState, ChangeEvent, MouseEvent, useRef, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import styled, { useTheme } from 'styled-components';
-import { useQuery } from '@tanstack/react-query';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { POST, COMMENTS, USER_INFO } from 'src/consts/query';
 import { dateTime } from 'src/utils/DateTime';
 import { useTranslateAnimation } from 'src/hooks';
@@ -9,12 +9,13 @@ import api from 'src/api/core';
 import { v4 } from 'uuid';
 import ConfirmModal from 'components/Modal/ConfirmModal';
 import InPreparationModal from 'components/Modal/InPreparationModal';
+import BlockCompleteModal from 'components/Modal/BlockCompleteModal';
 import type { Post, Comment } from '@/pages/post-detail';
 import { LargeLineButton, IconTextButton } from '@/src/components';
 import Flex from '@/src/components/Flex';
 import { typography } from '@/styles';
 import { CommentItem, PopupMenu } from './components';
-import { getQuestionDetail, getCommentList, getUserInfo } from '@/pages/post-detail';
+import { getPostDetail, getCommentList, getUserInfo } from '@/pages/post-detail';
 import {
   usePostLikeCreator,
   usePostUnlikeCreator,
@@ -24,7 +25,15 @@ import {
 } from './mutations';
 import { sendPostMessage } from '@/src/utils/sendPostMessage';
 
-function PostDetail() {
+const REPORTED_POST = '신고된 글입니다';
+const BLOCKED_USER = '차단된 사용자의 글입니다';
+
+interface PostDetailProps {
+  initialPostData: Post;
+  initialCommentData: Comment[];
+}
+
+function PostDetail({ initialPostData, initialCommentData }: PostDetailProps) {
   const theme = useTheme();
   const [commentInput, setCommentInput] = useState('');
   const [selectedCommentId, setSelectedCommentId] = useState('');
@@ -33,20 +42,25 @@ function PostDetail() {
   const [isMyComment, setIsMyComment] = useState(false);
   const [showReportModal, setShowReportModal] = useState(false);
   const [showPreparationModal, setShowPreparationModal] = useState(false);
+  const [showBlockCompleteModal, setShowBlockCompleteModal] = useState(false);
   const router = useRouter();
-  const postId = router.query?.postId as string;
+  const queryClient = useQueryClient();
+  const postId = (router.query?.postId as string) || '';
+  const commentListElement = useRef<HTMLUListElement>(null);
 
   const {
     data: post,
     isError: isPostError,
     isLoading: isPostLoading,
-  } = useQuery<Post>([POST, postId], getQuestionDetail);
+  } = useQuery<Post | null>([POST, postId], getPostDetail, { initialData: initialPostData });
 
   const {
     data: comments,
     isError: isCommentError,
     isLoading: isCommentLoading,
-  } = useQuery<Comment[]>([COMMENTS, postId], getCommentList);
+  } = useQuery<Comment[] | null>([COMMENTS, postId], getCommentList, {
+    initialData: initialCommentData,
+  });
 
   const { data: userInfo } = useQuery([USER_INFO], getUserInfo);
 
@@ -56,8 +70,21 @@ function PostDetail() {
   const { mutate: mutateCommentUpdate } = useCommentUpdater();
   const { mutate: mutateCommentDelete } = useCommentDeleter();
 
+  const [hydrated, setHydrated] = useState(false);
+
+  /* ------ Fix: Text content does not match server-rendered HTML ------- */
+  useEffect(() => {
+    setHydrated(true);
+  }, []);
+
+  if (!hydrated) return null;
+  /* -------------------------------------------------------------------- */
+
   if (!post || isPostLoading || isCommentLoading) return <div />;
   if (isPostError || isCommentError) return <div />;
+
+  const isReportedPost = post.content === REPORTED_POST;
+  const isBlockedUser = post.content === BLOCKED_USER;
 
   const handleLikeButtonClick = () => {
     if (post?.userLiked) mutateUnlikeCount();
@@ -88,6 +115,15 @@ function PostDetail() {
     if (isCreating) mutateCommentCreate(commentDataToCreate);
     if (isUpdating) mutateCommentUpdate(commentDataToUpdate);
     setCommentInput('');
+    scrollToTopComment();
+  };
+
+  const scrollToTopComment = () => {
+    if (!commentListElement.current) return;
+    commentListElement.current.scroll({
+      top: 0,
+      behavior: 'smooth',
+    });
   };
 
   const handleCommentKebabMenuClick = (event: MouseEvent, commentId: string) => {
@@ -147,11 +183,17 @@ function PostDetail() {
   };
 
   const handleCommentReplyButtonClick = () => {
+    changeTargetOpenState(false);
     setShowPreparationModal(true);
   };
 
   const handleShareButtonClick = () => {
     setShowPreparationModal(true);
+  };
+
+  const handleUserBlockButtonClick = () => {
+    togglePopupMenu();
+    setShowBlockCompleteModal(true);
   };
 
   return (
@@ -170,7 +212,7 @@ function PostDetail() {
                 <Nickname onClick={handleDeepLinkClick('mypage_other')}>
                   {post.user?.nickname}
                 </Nickname>
-                <LevelTag>Lv.1</LevelTag>
+                <LevelTag>Lv.{post.user.level}</LevelTag>
               </Flex>
               <Flex direction="row" style={{ minWidth: '130px' }}>
                 {post.user?.tags.map((tag: string) => (
@@ -198,6 +240,7 @@ function PostDetail() {
               color={post.userLiked ? theme.color.primary.Lime300 : theme.color.gray.Gray500}
               size={20}
               onClick={handleLikeButtonClick}
+              disabled={isReportedPost || isBlockedUser}
             >
               {post.likeCount === 0 ? '궁금해요' : post.likeCount}
             </LeftIcon>
@@ -217,7 +260,8 @@ function PostDetail() {
       </TopSection>
       {/* Bottom Section */}
       <BottomSection>
-        <CommentList>
+        {/* 댓글 목록 */}
+        <CommentList ref={commentListElement}>
           {comments?.map((commentItem: Comment) => (
             <CommentItem
               key={commentItem.id}
@@ -229,6 +273,7 @@ function PostDetail() {
             />
           ))}
         </CommentList>
+        {/* 댓글 입력 */}
         <CommentInputWrapper>
           <Flex direction="row" align="center">
             <CommentInput
@@ -246,6 +291,7 @@ function PostDetail() {
           </Flex>
         </CommentInputWrapper>
       </BottomSection>
+      {/* 댓글 팝업 메뉴 */}
       {isTargetOpen && (
         <PopupMenu onClose={togglePopupMenu} isBeforeClose={isBeforeTargetClose}>
           {isMyComment
@@ -261,15 +307,19 @@ function PostDetail() {
                 </div>,
               ]
             : [
+                <div key={v4()} onClick={handleCommentReplyButtonClick}>
+                  공유하기
+                </div>,
                 <div key={v4()} onClick={handleCommentReportButtonClick}>
                   신고하기
                 </div>,
-                <div key={v4()} onClick={handleCommentReplyButtonClick}>
-                  대댓글 쓰기
+                <div key={v4()} onClick={handleUserBlockButtonClick}>
+                  글쓴이 차단하기
                 </div>,
               ]}
         </PopupMenu>
       )}
+      {/* 신고 모달 */}
       {showReportModal && (
         <ConfirmModal
           title={
@@ -292,6 +342,8 @@ function PostDetail() {
               url: `/report/comment/${selectedCommentId}`,
             });
 
+            await queryClient.invalidateQueries([COMMENTS]);
+
             setSelectedCommentId('');
           }}
           onCancel={() => {
@@ -299,6 +351,27 @@ function PostDetail() {
           }}
         />
       )}
+      {/* 차단 완료 모달 */}
+      {showBlockCompleteModal && (
+        <BlockCompleteModal
+          title={<div style={{ marginTop: 6, marginBottom: 12 }}>해당 글쓴이를 차단했습니다.</div>}
+          confirmButtonTxt="도리도리 계속 이용하기"
+          onConfirm={async () => {
+            const targetUserId = comments?.find(({ id }) => id === selectedCommentId)?.user?.id;
+
+            if (!targetUserId) return;
+
+            await api.post({
+              url: `/user/block/${targetUserId}`,
+            });
+
+            await queryClient.invalidateQueries([POST, COMMENTS]);
+
+            setShowBlockCompleteModal(false);
+          }}
+        />
+      )}
+      {/* 준비중 모달 */}
       {showPreparationModal && (
         <InPreparationModal
           title={
@@ -312,7 +385,6 @@ function PostDetail() {
           confirmButtonTxt="도리도리 계속 이용하기"
           onConfirm={async () => {
             setShowPreparationModal(false);
-            if (isTargetOpen) changeTargetOpenState(false);
           }}
         />
       )}
@@ -464,7 +536,7 @@ const BottomSection = styled.div`
   border-top: 1px solid ${({ theme }) => theme.color.gray.Gray800};
 `;
 
-const CommentList = styled.div`
+const CommentList = styled.ul`
   height: 100%;
   padding-bottom: 128px;
   overflow-y: scroll;
